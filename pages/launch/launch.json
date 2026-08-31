@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "SmartCup",
+  "navigationStyle": "custom",
+  "navigationBarBackgroundColor": "#F7F9FA",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F7F9FA",
+  "usingComponents": {}
+}

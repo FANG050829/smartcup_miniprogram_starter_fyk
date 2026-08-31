@@ -1,0 +1,90 @@
+<view class="page">
+    <view class="bgBlob b1"></view>
+    <view class="bgBlob b2"></view>
+    <view class="bgBlob b3"></view>
+    <view class="card sectionCard" id="recordSection">
+        <view class="sectionHead">
+            <text class="sectionTitle">今日记录</text>
+            <view bindtap="clearTodayRecords" class="clearBtn" hoverClass="press" hoverStayTime="80" wx:if="{{todayRecords.length}}">清空</view>
+        </view>
+        <view class="emptyState" wx:if="{{!todayRecords.length}}">今日还没有打卡，先记录第一杯水吧。</view>
+        <view class="recordList" wx:if="{{todayRecords.length}}">
+            <view class="recordItem" wx:for="{{todayRecords}}" wx:key="id">
+                <view class="recordInfo">
+                    <text class="recordAmount">+{{item.amount}}ml</text>
+                    <text class="recordTime">{{item.timeLabel}}</text>
+                </view>
+                <view bindtap="onDeleteRecord" class="recordDelete" data-id="{{item.id}}" hoverClass="press" hoverStayTime="80">删除</view>
+            </view>
+        </view>
+    </view>
+    <view class="card sectionCard">
+        <view class="sectionHead">
+            <text class="sectionTitle">近7天趋势</text>
+            <text class="sectionSub">按日累计饮水量</text>
+        </view>
+        <view class="trendRow">
+            <view class="trendCol" wx:for="{{trendPoints}}" wx:key="dateKey">
+                <view class="trendWrap">
+                    <view class="trendBar {{item.completed?'done':''}}" style="height:{{item.barHeight}}rpx;"></view>
+                </view>
+                <text class="trendValue">{{item.total}}</text>
+                <text class="trendLabel">{{item.label}}</text>
+            </view>
+        </view>
+    </view>
+    <view class="card sectionCard">
+        <view class="monthTrendHead">
+            <view class="monthTrendTitleGroup">
+                <text class="sectionTitle">月趋势</text>
+                <text class="monthTrendSub">近30天按日累计饮水量</text>
+            </view>
+            <view class="monthTrendMeta">峰值 {{monthTrendMaxMl}}ml</view>
+        </view>
+        <view class="monthTrendPlot" style="width:{{monthTrendChartWidthPx}}px;">
+            <view class="monthTrendChart" style="height:{{monthTrendChartHeightPx}}px;">
+                <view class="monthTrendGuide" style="{{item.style}}" wx:for="{{monthTrendGuides}}" wx:key="key"></view>
+                <view class="monthTrendGoalLine" style="{{monthTrendGoalLineStyle}}" wx:if="{{monthTrendGoalLineStyle}}">
+                    <text class="monthTrendGoalTag">目标 {{dailyGoalMl}}ml</text>
+                </view>
+                <view class="monthTrendSegment {{item.completed?'done':''}}" style="{{item.style}}" wx:for="{{monthTrendSegments}}" wx:key="key"></view>
+                <view class="monthTrendPoint {{item.completed?'done':''}}" style="{{item.style}}" wx:for="{{monthTrendPoints}}" wx:key="dateKey"></view>
+            </view>
+            <view class="monthTrendLabels">
+                <text class="monthTrendDate" style="{{item.style}}" wx:for="{{monthTrendLabels}}" wx:key="key">{{item.label}}</text>
+            </view>
+        </view>
+    </view>
+    <view class="card sectionCard calendarCard">
+        <view class="calendarHead">
+            <text class="sectionTitle">打卡日历</text>
+            <view class="calendarNav">
+                <view bindtap="onPrevMonth" class="monthBtn" hoverClass="press" hoverStayTime="80">‹</view>
+                <text class="monthText">{{displayYear}}年{{displayMonth}}月</text>
+                <view bindtap="onNextMonth" class="monthBtn" hoverClass="press" hoverStayTime="80">›</view>
+            </view>
+        </view>
+        <view class="monthStats">
+            <text>打卡 {{monthCheckedInDays}} 天</text>
+            <text>达标 {{monthCompletedDays}} 天</text>
+            <text>总量 {{monthTotalMl}}ml</text>
+            <text>日均 {{monthAverageMl}}ml</text>
+        </view>
+        <view class="weekHeader">
+            <text>一</text>
+            <text>二</text>
+            <text>三</text>
+            <text>四</text>
+            <text>五</text>
+            <text>六</text>
+            <text>日</text>
+        </view>
+        <view class="calendarGrid">
+            <view class="dayCell {{item.isCurrentMonth?'':'out'}} {{item.checkedIn?'checked':''}} {{item.completed?'completed':''}} {{item.isToday?'today':''}} {{item.isFuture?'future':''}}" wx:for="{{calendarDays}}" wx:key="key">
+                <text class="dayNum">{{item.day}}</text>
+                <text class="dayMl" wx:if="{{item.checkedIn}}">{{item.totalLabel}}</text>
+            </view>
+        </view>
+        <view bindtap="backToCurrentMonth" class="backNowBtn" hoverClass="press" hoverStayTime="80">返回本月</view>
+    </view>
+</view>

@@ -1,0 +1,201 @@
+page {
+    --bg: #F7F9FA;
+    --fg: #1a1a1a;
+    --muted: rgba(26, 26, 26, 0.56);
+    --card: rgba(255, 255, 255, 0.86);
+    --card2: rgba(255, 255, 255, 0.94);
+    --line: rgba(0, 0, 0, 0.06);
+    --shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+    --r: 18px;
+    --accent: #8fbfff;
+    --accent2: #5a90eb;
+    --ok: #22c55e;
+    --warn: #f59e0b;
+    --bad: #ef4444;
+    background: var(--bg);
+    color: var(--fg);
+    /* 关闭所有元素的 WebView 默认点按高亮（否则点按处出现方形色块） */
+    -webkit-tap-highlight-color: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+wx-view, wx-text, wx-button, wx-input, wx-textarea, wx-scroll-view, wx-image, wx-navigator, wx-map {
+    box-sizing: border-box;
+}
+
+wx-button {
+    background: transparent;
+}
+
+wx-button::after {
+    border: none;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    box-shadow: var(--shadow);
+}
+
+.page {
+    animation: pageEnter 320ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* 不能留 will-change: transform —— 会让本页所有 position:fixed 元素
+     * 会让本页所有 position:fixed 元素相对 .page 而非视口定位 */
+    will-change: auto;
+}
+
+/* 底栏切换时：各模块/按钮错峰淡入淡出，由页面 onShow/onHide 通过 pageAnim(fx-on/fx-on2/fx-out) 触发，可重复播放 */
+.page.fx-on,
+.page.fx-on2,
+.page.fx-out {
+    animation: none;
+    will-change: auto;
+}
+
+.page.fx-on .fx,
+.page.fx-on2 .fx,
+.page.fx-out .fx {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    animation-fill-mode: both;
+    /* 不能留 will-change / 动画结束后的 transform 残留 ——
+     * fixed 定位元素要求祖先链上没有包含块 */
+    will-change: auto;
+}
+
+.page.fx-on .fx {
+    animation-name: moduleFadeIn;
+}
+
+.page.fx-on2 .fx {
+    animation-name: moduleFadeIn2;
+}
+
+.page.fx-out .fx {
+    animation-name: moduleFadeOut;
+    animation-duration: 260ms;
+}
+
+.fx-d1 { animation-delay: 0ms !important; }
+.fx-d2 { animation-delay: 80ms !important; }
+.fx-d3 { animation-delay: 160ms !important; }
+.fx-d4 { animation-delay: 240ms !important; }
+.fx-d5 { animation-delay: 320ms !important; }
+.fx-d6 { animation-delay: 400ms !important; }
+.fx-d7 { animation-delay: 480ms !important; }
+.fx-d8 { animation-delay: 560ms !important; }
+
+@keyframes moduleFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(18rpx);
+    }
+
+    100% {
+        opacity: 1;
+        /* fill-mode: both 会把 100% 帧定格为最终态：必须是 none，
+         * 留 translateY(0) 会让模块持续成为 fixed 后代的包含块 */
+        transform: none;
+    }
+}
+
+@keyframes moduleFadeIn2 {
+    0% {
+        opacity: 0;
+        transform: translateY(18rpx);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes moduleFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(18rpx);
+    }
+}
+
+@keyframes pageEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(12rpx) scale(0.995);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 表情球融合页面过渡：球所在 .fx 模块的入场/退场带 18rpx 平移（祖先
+ * transform 对同层 canvas 生效，这就是"球在移动"的来源），这里用反向
+ * 平移逐帧抵消——观感上球原地不动。淡入淡出本身由引擎像素 alpha 实现
+ * （components/pet-ball/pet-ball.js 的 _startFade：部分内核不吃祖先 CSS
+ * opacity，CSS 淡入淡出对 canvas 无效）。时长/曲线同模块，
+ * 延迟经 animation-delay: inherit 继承宿主元素上的 fx-dN 类 */
+.page.fx-on .ballWrap,
+.page.fx-on2 .ballWrap {
+    animation: ballFuseIn 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: inherit;
+}
+
+.page.fx-on2 .ballWrap {
+    animation-name: ballFuseIn2;
+}
+
+.page.fx-out .ballWrap {
+    animation: ballFuseOut 260ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: inherit;
+}
+
+@keyframes ballFuseIn {
+    from {
+        transform: translateY(-18rpx);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes ballFuseIn2 {
+    from {
+        transform: translateY(-18rpx);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes ballFuseOut {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-18rpx);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page,
+    .page.fx-on .fx,
+    .page.fx-on2 .fx,
+    .page.fx-out .fx,
+    .page.fx-on .ballWrap,
+    .page.fx-on2 .ballWrap,
+    .page.fx-out .ballWrap {
+        animation: none;
+        will-change: auto;
+    }
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>map preview · 全幅水图 · 量杯刻度板（反AI打磨版）</title>
+<style>
+    /* 镜像 pages/map/map.wxss，rpx→px 按 750 设计稿 → 390px 视口（×0.52）
+       地图为 SVG 示意替身（仅用于构图验收，不代表真实瓦片） */
+    html, body { margin: 0; padding: 0; background: #E3E9EE; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .toolbar { padding: 14px 16px 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .toolbar button { border: 1px solid #C6D4DD; background: #fff; color: #27466d; border-radius: 8px; padding: 7px 14px; font-size: 13px; cursor: pointer; }
+    .toolbar button.on { background: #0F8EA8; border-color: #0F8EA8; color: #fff; }
+    .stage { display: flex; gap: 20px; padding: 0 16px 24px; flex-wrap: wrap; }
+    .phone { position: relative; width: 390px; height: 844px; border-radius: 28px; overflow: hidden; box-shadow: 0 18px 44px rgba(16,42,67,0.18); background: #dce9f2; flex-shrink: 0; }
+    .note { max-width: 300px; font-size: 12px; line-height: 1.7; color: #56748a; }
+
+    /* ===== 镜像 wxss 开始 ===== */
+    :root {
+        --accent: #0f8ea8; --accent-deep: #0b6e86; --ink: #102a43; --muted: #5a7084;
+        --faint: #5f7589; --hairline: rgba(16,42,67,0.08);
+        --ok: #1f9e6b; --ok-ink: #0e7a5f; --warn: #d99a3d; --warn-ink: #8a6420;
+    }
+    .page { position: relative; width: 100%; height: 844px; overflow: hidden; }
+    .map { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+
+    .topBar { position: absolute; left: 0; right: 0; top: 0; z-index: 10; display: flex; align-items: center; gap: 8.3px; padding: 10px 12.5px 0; box-sizing: border-box; pointer-events: none; }
+    .topBar > * { pointer-events: auto; }
+    .backBtn { width: 43.7px; height: 43.7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: rgba(255,255,255,0.96); border: 1px solid rgba(31,57,89,0.1); box-sizing: border-box; }
+    .backChevron { width: 9.4px; height: 9.4px; margin-left: 3.1px; border-left: 2.1px solid #27466d; border-bottom: 2.1px solid #27466d; transform: rotate(45deg); }
+    .titlePill { display: flex; align-items: center; height: 43.7px; padding: 0 14.6px; border-radius: 999px; background: rgba(255,255,255,0.96); border: 1px solid rgba(31,57,89,0.1); }
+    .titlePillText { font-size: 13.5px; font-weight: 700; letter-spacing: 0.5px; color: var(--ink); }
+    #northWrap { margin-left: auto; }
+    .northBtn { width: 43.7px; height: 43.7px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.1px; border-radius: 999px; background: rgba(255,255,255,0.96); border: 1px solid rgba(31,57,89,0.1); box-sizing: border-box; }
+    .northNeedle { position: relative; width: 14.6px; height: 14.6px; }
+    .needleHead { position: absolute; left: 5.2px; top: 0; width: 0; height: 0; border-left: 2.1px solid transparent; border-right: 2.1px solid transparent; border-bottom: 7.3px solid #c9554b; }
+    .needleTail { position: absolute; left: 5.2px; top: 7.3px; width: 0; height: 0; border-left: 2.1px solid transparent; border-right: 2.1px solid transparent; border-top: 7.3px solid rgba(16,42,67,0.4); }
+    .northTxt { font-size: 8.3px; font-weight: 700; line-height: 1; color: var(--muted); }
+
+    .dock { position: absolute; left: 0; right: 0; bottom: 0; z-index: 10; padding: 7.3px 16.6px 0; border-radius: 12.5px 12.5px 0 0; background: #fbfdfe; border-top: 1px solid rgba(15,142,168,0.45); box-shadow: 0 -5.2px 15.6px rgba(13,70,92,0.1); box-sizing: border-box; }
+    .dockGrab { width: 37.4px; height: 4.2px; margin: 0 auto; border-radius: 999px; background: rgba(16,42,67,0.14); }
+    .dockHead { display: flex; align-items: center; justify-content: space-between; gap: 8.3px; margin-top: 10.4px; }
+    .dockHeadLeft { display: flex; align-items: baseline; gap: 7.3px; min-width: 0; }
+    .dockTitle { flex-shrink: 0; font-size: 13.5px; font-weight: 700; letter-spacing: 0.5px; color: var(--ink); }
+    .dockMeta { font-size: 10.4px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .stateLine { flex-shrink: 0; display: flex; align-items: center; gap: 5.2px; font-size: 11.4px; font-weight: 700; }
+    .stateDot { width: 6.2px; height: 6.2px; border-radius: 50%; }
+    .stLive { color: var(--ok-ink); }
+    .stLive .stateDot { background: var(--ok); }
+    .stWait { color: var(--warn-ink); }
+    .stWait .stateDot { background: var(--warn); animation: pulseDot 1.4s ease-in-out infinite; }
+    .stOff { color: var(--muted); }
+    .stOff .stateDot { background: #97a8b6; }
+
+    .statusLine { display: flex; align-items: baseline; justify-content: space-between; gap: 8.3px; margin-top: 8.3px; }
+    .statusText { font-size: 11.4px; font-weight: 500; color: #4a6272; }
+    .statusFresh { flex-shrink: 0; font-size: 10.4px; font-weight: 600; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
+    .gauge { margin-top: 7.3px; }
+    .gaugeTrack { position: relative; height: 6.2px; border-radius: 999px; background-color: rgba(15,142,168,0.1); background-image: repeating-linear-gradient(to right, transparent 0, transparent calc(12.5% - 1px), rgba(251,253,254,0.65) calc(12.5% - 1px), rgba(251,253,254,0.65) 12.5%); overflow: hidden; }
+    .gaugeFill { position: relative; height: 100%; border-radius: 999px; background: var(--accent); transition: width 600ms cubic-bezier(0.22,0.61,0.36,1); }
+    .gaugeFill::after { content: ''; position: absolute; right: 0; top: 0; width: 1px; height: 100%; background: rgba(255,255,255,0.7); }
+    .gaugeTick { position: absolute; top: 0; width: 1px; height: 100%; background: rgba(251,253,254,0.9); }
+    .gaugeTick.t1 { left: 25%; } .gaugeTick.t2 { left: 50%; } .gaugeTick.t3 { left: 75%; }
+    .gaugeScale { display: flex; align-items: center; justify-content: space-between; margin-top: 4.2px; }
+    .gaugeScaleTxt { font-size: 10.4px; font-weight: 500; color: var(--faint); font-variant-numeric: tabular-nums; }
+
+    .dockGrid { display: flex; align-items: center; gap: 8.3px; margin-top: 11.4px; }
+    .dockPicker { flex: 1; min-width: 0; }
+    .devicePill { display: flex; align-items: center; gap: 7.3px; height: 43.7px; padding: 0 11.4px; border-radius: 8.3px; background: #fff; border: 1px solid rgba(16,42,67,0.1); box-sizing: border-box; }
+    .deviceDot { flex-shrink: 0; width: 8.3px; height: 8.3px; border-radius: 50%; background: var(--accent); }
+    .deviceName { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chevDown { flex-shrink: 0; width: 6.2px; height: 6.2px; margin-right: 2.1px; border-right: 1.6px solid rgba(15,142,168,0.8); border-bottom: 1.6px solid rgba(15,142,168,0.8); transform: rotate(45deg) translateY(-1px); }
+    .seg { display: flex; align-items: center; flex-shrink: 0; padding: 3.1px; border-radius: 8.3px; background: rgba(15,142,168,0.08); }
+    .segItem { display: flex; align-items: center; justify-content: center; height: 37.4px; padding: 0 13.5px; border-radius: 6.2px; font-size: 11.4px; font-weight: 600; color: var(--faint); }
+    .segItem.segOn { background: #fff; color: var(--accent-deep); border: 1px solid rgba(15,142,168,0.28); }
+    .modeHint { flex-shrink: 0; padding: 0 9.4px; font-size: 10.4px; font-weight: 500; color: var(--faint); }
+
+    .landmark { display: flex; align-items: center; justify-content: space-between; gap: 8.3px; margin-top: 12.5px; padding: 10.4px 2.1px 0; border-top: 1px solid var(--hairline); }
+    .landmarkLabel { flex-shrink: 0; font-size: 10.4px; font-weight: 500; color: var(--muted); }
+    .landmarkValue { flex: 1; min-width: 0; font-size: 11.4px; font-weight: 600; color: var(--ink); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .primaryBtn { display: flex; align-items: center; justify-content: center; height: 45.8px; margin-top: 12.5px; border-radius: 8.3px; background: var(--accent); }
+    .primaryBtnText { font-size: 13.5px; font-weight: 700; color: #fff; }
+
+    .emptyState { display: flex; align-items: center; gap: 12.5px; margin-top: 12.5px; padding: 2.1px 2.1px 0; }
+    .emptyRipple { position: relative; flex-shrink: 0; width: 62.4px; height: 62.4px; }
+    .rippleRing { position: absolute; left: 50%; top: 50%; width: 31.2px; height: 31.2px; margin: -15.6px 0 0 -15.6px; border-radius: 50%; border: 1px solid rgba(15,142,168,0.5); animation: rippleOut 2.6s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+    .rippleRing.r2 { animation-delay: 1.3s; }
+    @keyframes rippleOut { 0% { transform: scale(0.5); opacity: 0.9; } 100% { transform: scale(1.9); opacity: 0; } }
+    .emptyCore { position: absolute; left: 50%; top: 50%; width: 20.8px; height: 20.8px; margin: -10.4px 0 0 -10.4px; border-radius: 50%; background: var(--accent); border: 2.6px solid #fff; box-shadow: 0 2.1px 5.2px rgba(13,70,92,0.14); box-sizing: border-box; }
+    .emptyCopy { display: flex; flex-direction: column; gap: 4.2px; min-width: 0; }
+    .emptyTitle { font-size: 14.6px; font-weight: 700; color: var(--ink); }
+    .emptySub { font-size: 11.4px; font-weight: 400; line-height: 1.6; color: var(--muted); }
+    .dockSafe { height: 24px; }
+
+    .state-wait .locatedOnly, .state-off .locatedOnly { display: none; }
+    .offOnly { display: none; }
+    .state-off .offOnly { display: block; }
+    .state-wait .offOnly, .state-off .connectedOnly { display: none; }
+    /* ===== 镜像结束 ===== */
+
+    /* 地图替身与覆盖物 */
+    .overlayCup { position: absolute; left: 195px; top: 400px; z-index: 3; transform: translate(-50%,-50%); }
+    .overlayCup img { width: 36px; height: 36px; display: block; }
+    .overlayCircle { position: absolute; left: 195px; top: 400px; border-radius: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+    .callout { position: absolute; z-index: 4; transform: translate(-50%, -130%); background: #fff; border: 1px solid #D8E6EE; border-radius: 5.2px; padding: 3.1px 6.2px; font-size: 12px; color: #102a43; white-space: nowrap; box-shadow: 0 3px 8px rgba(13,70,92,0.12); }
+    .callout::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 7px; height: 7px; background: #fff; border-right: 1px solid #D8E6EE; border-bottom: 1px solid #D8E6EE; transform: translateX(-50%) rotate(45deg); }
+    .poiDot { position: absolute; z-index: 3; transform: translate(-50%,-50%); }
+    .poiDot img { width: 20px; height: 20px; display: block; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+    <button id="b-located" class="on" onclick="setState('located')">已连接·已定位</button>
+    <button id="b-wait" onclick="setState('wait')">已连接·等待GPS</button>
+    <button id="b-off" onclick="setState('off')">未连接</button>
+    <button id="b-rotated" onclick="setState('rotated')">已定位·地图旋转</button>
+    <span style="font-size:12px;color:#56748a;">地图为 SVG 示意替身，仅用于构图验收</span>
+</div>
+<div class="stage">
+    <div class="phone" id="phone">
+        <!-- SVG 地图替身 -->
+        <svg class="map" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice">
+            <rect width="390" height="844" fill="#EFF2EC"/>
+            <polygon points="0,690 130,640 220,700 180,844 0,844" fill="#D9E9D2"/>
+            <path d="M -10 250 C 80 230, 150 300, 240 280 S 380 240, 400 260" stroke="#BFDFEF" stroke-width="26" fill="none" stroke-linecap="round"/>
+            <g stroke="#E2E2DC" stroke-width="1" fill="#E7E7E1">
+                <rect x="30" y="60" width="52" height="38" rx="2"/>
+                <rect x="100" y="52" width="40" height="46" rx="2"/>
+                <rect x="36" y="120" width="60" height="30" rx="2"/>
+                <rect x="290" y="90" width="56" height="42" rx="2"/>
+                <rect x="300" y="330" width="48" height="40" rx="2"/>
+                <rect x="60" y="330" width="46" height="36" rx="2"/>
+                <rect x="150" y="520" width="52" height="42" rx="2"/>
+                <rect x="290" y="520" width="60" height="36" rx="2"/>
+            </g>
+            <g stroke="#FFFFFF" fill="none">
+                <path d="M 0 108 H 390" stroke-width="9"/>
+                <path d="M 0 300 H 390" stroke-width="12"/>
+                <path d="M 0 470 H 390" stroke-width="9"/>
+                <path d="M 130 0 V 844" stroke-width="9"/>
+                <path d="M 268 0 V 620" stroke-width="6"/>
+                <path d="M 0 640 C 90 610, 200 660, 390 610" stroke-width="7"/>
+            </g>
+            <g fill="#9AA5A0" font-size="9" font-family="PingFang SC, sans-serif">
+                <text x="200" y="103">学院路</text>
+                <text x="210" y="295">知春里大街</text>
+                <text x="136" y="480">双榆树东路</text>
+                <text x="34" y="720">朝阳公园</text>
+                <text x="250" y="243">南河</text>
+            </g>
+        </svg>
+
+        <!-- 圆圈涟漪 + 杯标记 + POI -->
+        <div class="overlayCircle connectedOnly locatedOnly" style="width:186px;height:186px;background:rgba(15,142,168,0.04);border:1px solid rgba(15,142,168,0.2);"></div>
+        <div class="overlayCircle connectedOnly locatedOnly" style="width:70px;height:70px;background:rgba(15,142,168,0.12);border:1px solid rgba(15,142,168,0.33);"></div>
+        <div class="poiDot connectedOnly locatedOnly" style="left:110px;top:250px;"><img src="../../images/markers/poi.png" alt=""></div>
+        <div class="callout connectedOnly locatedOnly" style="left:110px;top:250px;">大运村地铁站</div>
+        <div class="poiDot connectedOnly locatedOnly" style="left:295px;top:470px;"><img src="../../images/markers/poi.png" alt=""></div>
+        <div class="callout connectedOnly locatedOnly" style="left:295px;top:470px;">知春里公园</div>
+        <div class="overlayCup connectedOnly locatedOnly"><img src="../../images/markers/cup.png" alt=""></div>
+
+        <!-- 顶部浮层 -->
+        <div class="topBar" style="padding-top:47px;">
+            <div class="backBtn"><div class="backChevron"></div></div>
+            <div class="titlePill"><span class="titlePillText">水杯定位</span></div>
+            <div id="northWrap" style="display:none;">
+                <div class="northBtn">
+                    <div class="northNeedle" style="transform:rotate(38deg);"><div class="needleHead"></div><div class="needleTail"></div></div>
+                    <span class="northTxt">北</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部刻度板 -->
+        <div class="dock">
+            <div class="dockGrab"></div>
+            <div class="dockHead">
+                <div class="dockHeadLeft">
+                    <span class="dockTitle">定位信息</span>
+                    <span class="dockMeta" id="dockMeta">尾号 482913</span>
+                </div>
+                <div class="stateLine stLive" id="stateLine"><span class="stateDot"></span><span id="stateTxt">在线</span></div>
+            </div>
+
+            <div class="connectedOnly">
+                <div class="statusLine">
+                    <span class="statusText" id="statusTxt">已获取位置</span>
+                    <span class="statusFresh locatedOnly">刚刚更新</span>
+                </div>
+                <div class="gauge locatedOnly">
+                    <div class="gaugeTrack"><div class="gaugeFill" style="width:92%;"></div><div class="gaugeTick t1"></div><div class="gaugeTick t2"></div><div class="gaugeTick t3"></div></div>
+                    <div class="gaugeScale"><span class="gaugeScaleTxt">3分钟前</span><span class="gaugeScaleTxt">刚刚</span></div>
+                </div>
+                <div class="dockGrid">
+                    <div class="dockPicker">
+                        <div class="devicePill"><span class="deviceDot"></span><span class="deviceName">客厅的大白杯</span><span class="chevDown"></span></div>
+                    </div>
+                    <div class="seg">
+                        <div class="segItem segOn" id="segGps">GPS</div>
+                        <div class="segItem" id="segPhone">手机</div>
+                    </div>
+                </div>
+                <div class="landmark locatedOnly"><span class="landmarkLabel">附近地标</span><span class="landmarkValue">知春里地铁站 · 学院路</span></div>
+                <div class="primaryBtn locatedOnly"><span class="primaryBtnText">回到水杯位置</span></div>
+            </div>
+
+            <div class="offOnly">
+                <div class="emptyState">
+                    <div class="emptyRipple"><div class="rippleRing r1"></div><div class="rippleRing r2"></div><div class="emptyCore"></div></div>
+                    <div class="emptyCopy">
+                        <span class="emptyTitle">还没找到你的水杯</span>
+                        <span class="emptySub">连接水杯后，这里会实时显示它所在的位置</span>
+                    </div>
+                </div>
+                <div class="primaryBtn"><span class="primaryBtnText">去连接水杯</span></div>
+            </div>
+            <div class="dockSafe"></div>
+        </div>
+    </div>
+    <div class="note">
+        <p><b>地图页反AI打磨预览</b>（镜像 pages/map/map.wxss，×0.52）</p>
+        <p>打磨点：两级圆角（地图浮控件圆形 / 刻度板 16rpx 仪器面板）；徽章→裸点+字（去 chip）；状态色去 Tailwind 默认值；字重分层 700/500/400；主按钮扁平无发光；地标盒→发丝线；量杯补 3 分钟量程标注；板头展示真实尾号；触控 ≥44pt。</p>
+        <p>四种状态：已定位 / 等待GPS（琥珀脉冲点，无水位条与标记）/ 未连接（涟漪空态+去连接）/ 旋转（指北钮出现）。</p>
+    </div>
+</div>
+<script>
+    function setState(s) {
+        document.querySelectorAll('.toolbar button').forEach(function(b){ b.classList.remove('on'); });
+        document.getElementById('b-' + s).classList.add('on');
+        var phone = document.getElementById('phone');
+        phone.classList.remove('state-wait', 'state-off');
+        document.getElementById('northWrap').style.display = 'none';
+        if (s === 'wait') { phone.classList.add('state-wait'); }
+        if (s === 'off') { phone.classList.add('state-off'); }
+        if (s === 'rotated') { document.getElementById('northWrap').style.display = 'block'; }
+        var stateLine = document.getElementById('stateLine'), stateTxt = document.getElementById('stateTxt'), statusTxt = document.getElementById('statusTxt'), dockMeta = document.getElementById('dockMeta');
+        if (s === 'off') {
+            stateLine.className = 'stateLine stOff'; stateTxt.textContent = '离线';
+            dockMeta.style.display = 'none';
+        } else {
+            dockMeta.style.display = '';
+            if (s === 'wait') {
+                stateLine.className = 'stateLine stWait'; stateTxt.textContent = '定位中'; statusTxt.textContent = '等待GPS定位';
+            } else {
+                stateLine.className = 'stateLine stLive'; stateTxt.textContent = '在线'; statusTxt.textContent = '已获取位置';
+            }
+        }
+    }
+</script>
+</body>
+</html>

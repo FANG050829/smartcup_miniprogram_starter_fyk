@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "心情",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#FFFFFF",
+  "backgroundColorTop": "#FFFFFF",
+  "backgroundColorBottom": "#FFFFFF",
+  "disableScroll": true,
+  "usingComponents": {}
+}

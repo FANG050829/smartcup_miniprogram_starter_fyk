@@ -1,0 +1,105 @@
+<view class="page {{pageAnim}}">
+    <scroll-view class="scroll" scrollY="true">
+      <view class="scroll-body">
+        <view class="topbar"></view>
+        <view class="profile-card anim-profile-slide-in fx fx-d1">
+            <view class="profile-avatar">
+                <view class="profile-avatar-icon"></view>
+            </view>
+            <text class="profile-name">智能水杯用户</text>
+            <text class="profile-sub">{{lastDeviceName}}</text>
+            <view class="profile-status">
+                <view class="status-dot {{connected?'on':'off'}}"></view>
+                <text class="status-text">{{connected?'已连接':'未连接'}}</text>
+            </view>
+        </view>
+        <view class="grid fx fx-d2">
+            <view bindtap="goDevice" class="grid-item anim-grid-item" hoverClass="gridItemHover" style="animation-delay:0.08s;">
+                <view class="grid-icon icon-cup-dark"></view>
+                <text class="grid-item-title">设备管理</text>
+                <text class="grid-item-sub">连接</text>
+            </view>
+            <view bindtap="goMap" class="grid-item anim-grid-item" hoverClass="gridItemHover" style="animation-delay:0.14s;">
+                <view class="grid-icon icon-pin-dark"></view>
+                <text class="grid-item-title">位置记录</text>
+                <text class="grid-item-sub">定位</text>
+            </view>
+            <view bindtap="goCheckin" class="grid-item anim-grid-item" hoverClass="gridItemHover" style="animation-delay:0.2s;">
+                <view class="grid-icon icon-check-dark"></view>
+                <text class="grid-item-title">每日打卡</text>
+                <text class="grid-item-sub">打卡</text>
+            </view>
+            <view bindtap="goChat" class="grid-item anim-grid-item" hoverClass="gridItemHover" style="animation-delay:0.26s;">
+                <view class="grid-icon icon-chat-dark"></view>
+                <text class="grid-item-title">AI 对话</text>
+                <text class="grid-item-sub">助手</text>
+            </view>
+        </view>
+        <view class="list-card anim-list-slide-in fx fx-d3" style="animation-delay:0.2s;">
+            <view bindtap="goQualityRange" class="list-row" hoverClass="listRowHover">
+                <view class="list-icon icon-drop-dark"></view>
+                <text class="list-row-title">水质标准</text>
+                <view class="list-row-arrow"></view>
+            </view>
+            <view bindtap="goWaterReminder" class="list-row" hoverClass="listRowHover">
+                <view class="list-icon icon-alarm-dark"></view>
+                <text class="list-row-title">久未喝水提醒</text>
+                <view class="list-row-arrow"></view>
+            </view>
+            <view bindtap="goFamilyCare" class="list-row" hoverClass="listRowHover">
+                <view class="list-icon icon-heart-dark"></view>
+                <text class="list-row-title">家庭关怀</text>
+                <view class="list-row-arrow"></view>
+            </view>
+            <view bindtap="goDiagnostic" class="list-row" hoverClass="listRowHover">
+                <view class="list-icon icon-activity-dark"></view>
+                <text class="list-row-title">设备诊断</text>
+                <view class="list-row-arrow"></view>
+            </view>
+            <view bindtap="goDataReport" class="list-row" hoverClass="listRowHover">
+                <view class="list-icon icon-chat-dark"></view>
+                <text class="list-row-title">AI 周报</text>
+                <view class="list-row-arrow"></view>
+            </view>
+            <view bindtap="goSettings" class="list-row list-row-last" hoverClass="listRowHover">
+                <view class="list-icon icon-settings-dark"></view>
+                <text class="list-row-title">设置</text>
+                <view class="list-row-arrow"></view>
+            </view>
+        </view>
+        <view class="bind-card anim-list-slide-in fx fx-d4" style="animation-delay:0.3s;" wx:if="{{!boundDevices.length}}">
+            <view class="bind-area">
+                <input bindinput="onBindCodeInput" class="bind-input" maxlength="12" placeholder="请输入绑定码" placeholderClass="bind-placeholder" value="{{bindCodeInput}}"></input>
+                <view bindtap="manualBind" class="bind-btn {{bindingBusy?'disabled':''}}" hoverClass="bindBtnHover">
+                    <text class="bind-btn-text">{{bindingBusy?'绑定中':'绑定'}}</text>
+                </view>
+            </view>
+            <view bindtap="scanBind" class="scan-row" hoverClass="scanHover">
+                <view class="bind-scan-icon"></view>
+                <text class="scan-row-title">扫码绑定</text>
+                <view class="list-row-arrow"></view>
+            </view>
+        </view>
+        <view class="device-card anim-list-slide-in fx fx-d4" style="animation-delay:0.3s;" wx:if="{{boundDevices.length}}">
+            <view class="device-card-header">
+                <text class="device-card-title">我的设备</text>
+                <text class="device-card-count">{{boundDevices.length}}</text>
+            </view>
+            <view class="device-row" wx:for="{{boundDevices}}" wx:key="token">
+                <view class="bind-scan-icon"></view>
+                <view class="device-info">
+                    <text class="device-name">{{item.name}}</text>
+                    <text class="device-id">{{item.token}}</text>
+                </view>
+                <view bindtap="removeBoundDevice" class="device-remove" data-token="{{item.token}}" hoverClass="removeHover">
+                    <text class="remove-text">移除</text>
+                </view>
+            </view>
+        </view>
+        <view bindtap="logout" class="logout-btn anim-list-slide-in fx fx-d5" hoverClass="logoutBtnHover" style="animation-delay:0.36s;">
+            <text class="logout-text">退出小程序</text>
+        </view>
+        <view class="bottom-fill"></view>
+      </view>
+    </scroll-view>
+</view>

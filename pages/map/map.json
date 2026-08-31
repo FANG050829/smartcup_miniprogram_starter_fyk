@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "定位水杯",
+  "navigationBarBackgroundColor": "#F7F9FA",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F7F9FA",
+  "backgroundColorTop": "#F7F9FA",
+  "backgroundColorBottom": "#F0F5F8",
+  "navigationStyle": "custom",
+  "disableScroll": true,
+  "usingComponents": {}
+}

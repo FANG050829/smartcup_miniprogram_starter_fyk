@@ -1,0 +1,213 @@
+/* 水质标准 — 平面化重做：无渐变、无投影、细分割线、语义色纯文字 */
+
+.page {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 40rpx 32rpx calc(env(safe-area-inset-bottom) + 40rpx);
+    background: #f7f9fa;
+    font-variant-numeric: tabular-nums;
+}
+
+.head {
+    margin-bottom: 36rpx;
+}
+
+.headTitle {
+    display: block;
+    font-size: 44rpx;
+    line-height: 1.25;
+    font-weight: 800;
+    color: #102a43;
+}
+
+.headSub {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 22rpx;
+    line-height: 1.5;
+    color: #5a6b7b;
+}
+
+.section {
+    margin-bottom: 32rpx;
+}
+
+.secLabel {
+    display: block;
+    margin-bottom: 12rpx;
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 2rpx;
+    color: #5a6b7b;
+}
+
+.secTitleRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-bottom: 12rpx;
+}
+
+.secTitleRow .secLabel {
+    margin-bottom: 0;
+}
+
+.secNote {
+    font-size: 22rpx;
+    color: #7c8a99;
+    text-align: right;
+}
+
+.panel {
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.10);
+    border-radius: 16rpx;
+}
+
+.panel.pad {
+    padding: 24rpx;
+}
+
+/* 当前读数 */
+.tdsValue {
+    font-size: 72rpx;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #102a43;
+    font-variant-numeric: tabular-nums;
+}
+
+.tdsJudge {
+    display: block;
+    margin-top: 12rpx;
+    font-size: 22rpx;
+    line-height: 1.6;
+    color: #5a6b7b;
+}
+
+/* 区间条形图 */
+.chart {
+    display: flex;
+    flex-direction: column;
+    gap: 18rpx;
+    padding-bottom: 24rpx;
+    margin-bottom: 8rpx;
+    border-bottom: 1rpx solid rgba(16, 42, 67, 0.08);
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.barLabel {
+    flex-shrink: 0;
+    width: 160rpx;
+    font-size: 22rpx;
+    font-weight: 600;
+    color: #102a43;
+    font-variant-numeric: tabular-nums;
+}
+
+.barTrack {
+    flex: 1;
+    height: 12rpx;
+    border-radius: 999rpx;
+    background: #e8edf1;
+    overflow: hidden;
+}
+
+.barFill {
+    height: 100%;
+    border-radius: 999rpx;
+}
+
+.barFill.info { background: #0e7490; }
+.barFill.good { background: #15803d; }
+.barFill.warn { background: #b45309; }
+.barFill.bad { background: #b91c1c; }
+
+.barDesc {
+    flex-shrink: 0;
+    width: 150rpx;
+    font-size: 20rpx;
+    color: #7c8a99;
+    text-align: right;
+    line-height: 1.35;
+}
+
+/* 区间明细列表 */
+.rowList {
+    padding-top: 8rpx;
+}
+
+.rowItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 16rpx;
+    padding: 20rpx 0;
+}
+
+.rowItem + .rowItem {
+    border-top: 1rpx solid rgba(16, 42, 67, 0.08);
+}
+
+.rowItem.stack {
+    padding: 22rpx 24rpx;
+}
+
+.rowDot {
+    flex-shrink: 0;
+    width: 12rpx;
+    height: 12rpx;
+    margin-top: 12rpx;
+    border-radius: 50%;
+    background: #b9c4ce;
+}
+
+.rowDot.tone0 { background: #0e7490; }
+.rowDot.tone1 { background: #15803d; }
+.rowDot.tone2 { background: #b45309; }
+.rowDot.tone3 { background: #b91c1c; }
+
+.rowRange {
+    flex-shrink: 0;
+    width: 190rpx;
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #102a43;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+}
+
+.rowContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.rowRangeTitle {
+    display: block;
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #102a43;
+    margin-bottom: 6rpx;
+}
+
+.rowDesc {
+    flex: 1;
+    min-width: 0;
+    font-size: 22rpx;
+    color: #5a6b7b;
+    line-height: 1.6;
+}
+
+/* 页脚 */
+.foot {
+    display: block;
+    font-size: 22rpx;
+    line-height: 1.7;
+    color: #7c8a99;
+    text-align: center;
+}

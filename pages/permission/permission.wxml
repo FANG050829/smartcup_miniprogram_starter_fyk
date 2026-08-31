@@ -1,0 +1,57 @@
+<view class="page {{pageAnim}}">
+    <text class="headNote fx fx-d1">{{summaryText}}</text>
+
+    <view class="section fx fx-d2">
+        <text class="secLabel">设备</text>
+        <view class="panel">
+            <navigator class="row" hoverClass="rowActive" hoverStayTime="60" url="/pages/device/device" aria-role="button" aria-label="设备连接，{{deviceConnected ? '已连接 ' + deviceName : '未连接'}}，查看设备页">
+                <view class="rowIcon iconCup"></view>
+                <view class="rowInfo">
+                    <text class="rowName">设备连接</text>
+                    <text class="rowDesc">{{deviceConnected && deviceName ? deviceName : '尚未连接智能水杯'}}</text>
+                </view>
+                <text class="rowState {{deviceConnected ? 'ok' : 'warn'}}">{{deviceConnected ? '已连接' : '未连接'}}</text>
+                <view class="chev"></view>
+            </navigator>
+        </view>
+    </view>
+
+    <view class="section fx fx-d2">
+        <text class="secLabel">系统权限</text>
+        <view class="panel">
+            <view class="row" hoverClass="rowActive" hoverStayTime="60" bindtap="openSetting" aria-role="button" aria-label="蓝牙，{{permBluetooth ? '已开启' : '未开启'}}，点击前往设置">
+                <view class="rowIcon iconBt"></view>
+                <view class="rowInfo">
+                    <text class="rowName">蓝牙</text>
+                    <text class="rowDesc">{{permBluetooth ? '连接水杯、同步饮水数据' : '系统蓝牙未开启，无法连接水杯'}}</text>
+                </view>
+                <text class="rowState {{permBluetooth ? 'ok' : 'warn'}}">{{permBluetooth ? '已开启' : '未开启'}}</text>
+                <view class="chev"></view>
+            </view>
+            <view class="row" hoverClass="rowActive" hoverStayTime="60" bindtap="openSetting" aria-role="button" aria-label="位置权限，{{permLocation ? '已开启' : '未开启'}}，点击前往设置">
+                <view class="rowIcon iconPin"></view>
+                <view class="rowInfo">
+                    <text class="rowName">位置</text>
+                    <text class="rowDesc">{{permLocation ? '蓝牙搜索设备时系统要求' : '需要位置权限才能搜索设备'}}</text>
+                </view>
+                <text class="rowState {{permLocation ? 'ok' : 'warn'}}">{{permLocation ? '已开启' : '未开启'}}</text>
+                <view class="chev"></view>
+            </view>
+            <view class="row" hoverClass="rowActive" hoverStayTime="60" bindtap="openSetting" aria-role="button" aria-label="通知权限，{{permNotification ? '已开启' : '未开启'}}，点击前往设置">
+                <view class="rowIcon iconBell"></view>
+                <view class="rowInfo">
+                    <text class="rowName">通知</text>
+                    <text class="rowDesc">{{permNotification ? '到点提醒喝水' : '开启后才能收到喝水提醒'}}</text>
+                </view>
+                <text class="rowState {{permNotification ? 'ok' : 'warn'}}">{{permNotification ? '已开启' : '未开启'}}</text>
+                <view class="chev"></view>
+            </view>
+        </view>
+    </view>
+
+    <view class="btn fx fx-d3" hoverClass="btnActive" hoverStayTime="60" bindtap="openSetting" aria-role="button" aria-label="打开系统设置">
+        <text class="btnText">打开系统设置</text>
+    </view>
+
+    <text class="foot fx fx-d3">权限只用于设备连接与饮水提醒，可随时在系统设置中更改。</text>
+</view>

@@ -1,0 +1,56 @@
+<view class="page">
+    <view class="head">
+        <view class="headInfo">
+            <text class="headTitle">硬件检测</text>
+            <text class="headSub">设备硬件健康检查</text>
+        </view>
+        <view bindtap="refreshDiagnostic" class="refreshBtn {{diagLoading?'loading':''}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="{{diagLoading?'正在检测':'重新检测'}}">
+            <view class="refreshDot {{diagLoading?'spin':''}}"></view>
+            <text class="refreshText">{{diagLoading?'检测中…':'重新检测'}}</text>
+        </view>
+    </view>
+
+    <view class="section">
+        <text class="secLabel">概览</text>
+        <view class="panel">
+            <view class="sumRow">
+                <text class="sumLabel">设备状态</text>
+                <text class="sumValue">{{deviceSummary}}</text>
+            </view>
+            <view class="sumRow">
+                <text class="sumLabel">总体结果</text>
+                <text class="sumState {{overallState}}">{{overallStateText}}</text>
+            </view>
+            <view class="sumRow">
+                <text class="sumLabel">最后更新</text>
+                <text class="sumValue">{{lastUpdateText}}</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="section">
+        <text class="secLabel">检测项</text>
+        <view class="panel">
+            <view class="row" wx:for="{{hardwareModules}}" wx:key="key">
+                <view class="dot {{item.state}}"></view>
+                <view class="rowBody">
+                    <view class="rowHead">
+                        <text class="rowName">{{item.name}}</text>
+                        <text class="rowState {{item.state}}">{{item.stateText}}</text>
+                    </view>
+                    <text class="rowDetail {{item.state}}">{{item.detail}}</text>
+                    <view wx:if="{{item.actionVisible}}" class="rowActionWrap">
+                        <view bindtap="startHeatRiseCheck" class="actionBtn {{item.actionDisabled?'disabled':''}}" hoverClass="{{item.actionDisabled?'':'press'}}" hoverStayTime="60" aria-role="button" aria-label="{{item.actionText}}" aria-disabled="{{item.actionDisabled}}">
+                            <text class="actionBtnText">{{item.actionText}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="tip">
+        <text class="tipLabel">提示</text>
+        <text class="tipText">水质检测模块在未接触水时会出现"异常"状态，这与其结构有关，属于正常现象。</text>
+    </view>
+</view>

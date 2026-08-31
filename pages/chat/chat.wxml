@@ -1,0 +1,87 @@
+<view class="page {{pageAnim}}" style="padding-top:{{chatTopPaddingPx}}px;">
+    <view class="header fx fx-d1">
+        <view bindtap="goBack" class="nav-back" hoverClass="btn-hover">
+            <view class="icon-back"></view>
+        </view>
+        <block wx:if="{{petOn}}">
+            <pet-ball class="headerPet fx-d1" size="header" page-key="chat" bind:change="onBallChange"/>
+            <view class="headerTitleWrap">
+                <text class="header-title">水杯助手</text>
+                <text class="headerStatus">{{ballLine}}</text>
+            </view>
+        </block>
+        <text wx:else class="header-title">水杯助手</text>
+        <view bindtap="toggleHistory" class="nav-action" hoverClass="btn-hover">
+            <view class="icon-history"></view>
+        </view>
+    </view>
+    <view bindtap="closeHistory" class="history-mask" wx:if="{{historyOpen}}"></view>
+    <view class="history-panel" wx:if="{{historyOpen}}">
+        <view bindtap="openHistory" class="history-item" data-id="current" hoverClass="item-hover">
+            <view class="history-info">
+                <text class="history-title">今日对话</text>
+                <text class="history-time">{{currentDate}}</text>
+            </view>
+            <text class="history-tag">{{currentLabel}}</text>
+        </view>
+        <view bindtap="openHistory" class="history-item" data-id="{{item.id}}" hoverClass="item-hover" wx:for="{{historyList}}" wx:key="id">
+            <view class="history-info">
+                <text class="history-title">{{item.summary}}</text>
+                <text class="history-time">{{item.date}}</text>
+            </view>
+            <text class="history-tag">{{item.label}}</text>
+        </view>
+        <view class="history-empty" wx:if="{{!historyList.length}}">暂无记录</view>
+    </view>
+    <scroll-view class="chat-list fx fx-d2" scrollTop="{{scrollTop}}" scrollWithAnimation="true" scrollY="true">
+        <view class="message-spacer"></view>
+        <view class="message-row {{item.role}}" wx:for="{{messages}}" wx:key="id">
+            <view bindlongpress="copyMsg" class="message-bubble {{item.role}}" data-index="{{index}}" data-text="{{item.text}}">
+                <text class="message-text" selectable="true">{{item.text}}</text>
+            </view>
+        </view>
+        <view class="message-row ai" wx:if="{{loading}}">
+            <view class="message-bubble ai typing">
+                <block wx:if="{{petOn}}">
+                    <text class="typing-text">{{ballLine}}</text>
+                </block>
+                <block wx:else>
+                    <view class="typing-dot d1"></view>
+                    <view class="typing-dot d2"></view>
+                    <view class="typing-dot d3"></view>
+                </block>
+            </view>
+        </view>
+        <view class="bottom-spacer"></view>
+    </scroll-view>
+    <view class="input-section fx fx-d3">
+        <scroll-view class="quick-actions" scrollX="true" showScrollbar="false">
+            <view class="quick-actions-inner">
+                <view bindtap="analyzeHydration" class="action-chip primary" hoverClass="chip-hover">饮水分析</view>
+                <view bindtap="quickAsk" class="action-chip" data-q="帮我制定今天的喝水提醒计划" hoverClass="chip-hover">提醒计划</view>
+                <view bindtap="quickAsk" class="action-chip" data-q="我喝水少，怎么改善习惯？" hoverClass="chip-hover">改善习惯</view>
+                <view bindtap="quickAsk" class="action-chip" data-q="TDS多少算正常？" hoverClass="chip-hover">水质解读</view>
+                <view bindtap="quickAsk" class="action-chip" data-q="水温多少更适合喝？" hoverClass="chip-hover">适宜水温</view>
+            </view>
+        </scroll-view>
+        <view class="voice-panel" wx:if="{{recording}}">
+            <view class="voice-wave">
+                <view class="voice-dot"></view>
+                <view class="voice-dot d2"></view>
+                <view class="voice-dot d3"></view>
+            </view>
+            <text class="voice-tip">{{interimText || '正在聆听…点击麦克风结束'}}</text>
+        </view>
+        <view class="input-bar">
+            <view bindtap="toggleVoice" class="voice-btn {{recording?'recording':''}}" hoverClass="btn-hover" wx:if="{{voiceAvailable}}">
+                <view class="icon-mic"></view>
+            </view>
+            <view class="input-wrap">
+                <textarea autoHeight="true" bindblur="onBlur" bindconfirm="send" bindfocus="onFocus" bindinput="onInput" class="input-field" confirmType="send" maxlength="600" placeholder="向水杯助手提问…" placeholderClass="input-placeholder" showConfirmBar="false" value="{{input}}"></textarea>
+            </view>
+            <view bindtap="send" class="send-btn {{canSend?'active':''}}" hoverClass="btn-hover">
+                <view class="icon-send"></view>
+            </view>
+        </view>
+    </view>
+</view>

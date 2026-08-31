@@ -1,0 +1,31 @@
+<view class="tabShell" hidden="{{hidden}}" style="padding-bottom:{{safeInsetBottom}}px;">
+    <view class="tabBar">
+        <view bindtap="switchTab" class="tabItem {{selected===index?'active':''}} {{pulseIndex===index?'pulse':''}}" data-index="{{index}}" data-path="{{item.pagePath}}" hoverClass="tabItemHover" hoverStayTime="80" wx:for="{{list}}" wx:key="pagePath">
+            <view class="iconPill {{selected===index?'active':''}}">
+                <view class="icoWrap {{item.icon}}">
+                    <block wx:if="{{item.icon==='home'}}">
+                        <view class="homeRoof iconPart"></view>
+                        <view class="homeBody iconPart"></view>
+                        <view class="homeDoor iconPart"></view>
+                    </block>
+                    <block wx:elif="{{item.icon==='plan'}}">
+                        <view class="clockRing iconPart"></view>
+                        <view class="clockHandHour iconPart"></view>
+                        <view class="clockHandMin iconPart"></view>
+                    </block>
+                    <block wx:elif="{{item.icon==='mood'}}">
+                        <view class="moodFace iconPart"></view>
+                        <view class="moodEye moodEyeL iconPart"></view>
+                        <view class="moodEye moodEyeR iconPart"></view>
+                        <view class="moodSmile iconPart"></view>
+                    </block>
+                    <block wx:else>
+                        <view class="mineHead iconPart"></view>
+                        <view class="mineBody iconPart"></view>
+                    </block>
+                </view>
+            </view>
+            <text class="tabTxt {{selected===index?'active':''}}">{{item.text}}</text>
+        </view>
+    </view>
+</view>

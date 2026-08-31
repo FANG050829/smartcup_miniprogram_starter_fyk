@@ -1,0 +1,878 @@
+.page {
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background: #FFFFFF;
+    color: #17242B;
+}
+
+/* 进场可见性兜底：内容默认即可见，进场动画由纯 CSS 完成（fadeIn 配 both
+ * 从 opacity 0 起播）。不再依赖 onShow 的 setData 挂 is-enter 才显示——
+ * 真机渲染时序异常时最坏只是没有错落动画，不会停在整页透明（白屏） */
+.anim {
+    animation: fadeIn 480ms ease both;
+}
+
+.page.is-enter .anim {
+    opacity: 1;
+}
+
+/* canvas 元素（大球、表情快照）只用位移+淡入，避免 scale 缩放位图导致卡顿 */
+.page.is-enter .head {
+    animation: fadeIn 320ms ease both;
+}
+
+.page.is-enter .stage {
+    animation: fadeIn 480ms ease both;
+}
+
+.page.is-enter .about {
+    animation: slideInUp 420ms cubic-bezier(0.22, 0.9, 0.32, 1) both;
+}
+
+.page.is-enter .groups {
+    animation: popIn 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.page.is-enter .foot {
+    animation: fadeIn 520ms ease both;
+}
+
+.page.is-enter .watermark {
+    animation: fadeIn 640ms ease both;
+    animation-delay: 160ms;
+}
+
+/* 节奏错落 */
+.page.is-enter .d0 { animation-delay: 0ms; }
+.page.is-enter .d1 { animation-delay: 60ms; }
+.page.is-enter .d2 { animation-delay: 130ms; }
+.page.is-enter .d3 { animation-delay: 200ms; }
+.page.is-enter .d4 { animation-delay: 300ms; }
+.page.is-enter .d5 { animation-delay: 380ms; }
+
+/* 表情小球逐个淡入（canvas 快照只改透明度，避免位移卡顿）；
+ * 进场落定后由 is-settled 摘掉，把动画让给换组过渡 */
+.page.is-enter:not(.is-settled) .wall .pick {
+    animation: fadeIn 320ms ease both;
+    animation-delay: calc(300ms + var(--i, 0) * 18ms);
+}
+
+/* 换组过渡：全部 opacity 错落淡入，位于进场规则之后以便接管 */
+.wall.swap .pick {
+    animation: pickSwap 280ms ease both;
+    animation-delay: calc(var(--i, 0) * 14ms);
+}
+
+@keyframes pickSwap {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24rpx); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(48rpx); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8) translateY(12rpx); }
+    60% { opacity: 1; }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(14rpx); }
+    to { opacity: 1; transform: none; }
+}
+
+.press {
+    opacity: 0.7;
+}
+
+/* ---------- 背景级 ID 水印（杂志排版装饰） ---------- */
+.watermark {
+    position: absolute;
+    right: -18rpx;
+    top: 210rpx;
+    font-size: 220rpx;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -6rpx;
+    color: rgba(23, 36, 43, 0.045);
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+    z-index: 0;
+}
+
+/* ---------- 头部 ---------- */
+.head {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16rpx;
+}
+
+.headTitle {
+    font-size: 30rpx;
+    font-weight: 800;
+    letter-spacing: 4rpx;
+}
+
+/* ---------- 角色切换（身体形态） ---------- */
+.charRow {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+}
+
+.charChip {
+    padding: 10rpx 22rpx;
+    border-radius: 999rpx;
+    border: 1px solid rgba(23, 36, 43, 0.14);
+    transition: background-color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1),
+        border-color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+.charChip text {
+    font-size: 23rpx;
+    font-weight: 700;
+    color: rgba(23, 36, 43, 0.55);
+    transition: color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+.charChip.on {
+    background: #17242B;
+    border-color: #17242B;
+}
+
+.charChip.on text {
+    color: #FAF7F1;
+}
+
+.tour {
+    display: flex;
+    align-items: center;
+    gap: 10rpx;
+    padding: 10rpx 22rpx;
+    border-radius: 999rpx;
+    border: 1px solid rgba(23, 36, 43, 0.16);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.tour text {
+    font-size: 21rpx;
+    font-weight: 700;
+    color: rgba(23, 36, 43, 0.66);
+}
+
+.tourDot {
+    width: 11rpx;
+    height: 11rpx;
+    border-radius: 50%;
+    background: rgba(23, 36, 43, 0.3);
+}
+
+.tour.on {
+    background: #17242B;
+    border-color: #17242B;
+}
+
+.tour.on text {
+    color: #FAF7F1;
+}
+
+.tour.on .tourDot {
+    background: #35c4d8;
+    box-shadow: 0 0 12rpx rgba(53, 196, 216, 0.8);
+    animation: blinkDot 1s ease-in-out infinite;
+}
+
+@keyframes blinkDot {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.4);
+    }
+}
+
+/* ---------- 顶部固定区（大球不随页面滚动） ---------- */
+.topZone {
+    position: relative;
+    z-index: 5;
+    flex: 0 0 auto;
+    background: #FFFFFF;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+}
+
+.scrollBody {
+    flex: 1;
+    min-height: 0;
+}
+
+.scrollInner {
+    padding: 0 40rpx calc(env(safe-area-inset-bottom) + 152rpx);
+}
+
+.topZone::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 140rpx;
+    background: linear-gradient(to bottom,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.92) 30%,
+        rgba(255, 255, 255, 0.45) 72%,
+        rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ---------- 舞台：无框大球 ---------- */
+.stage {
+    position: relative;
+    z-index: 2;
+    margin-top: 8rpx;
+}
+
+.stageCanvas {
+    display: block;
+    width: 100%;
+    height: 660rpx;
+}
+
+/* 快照画布：type=2d 同层 canvas 在真机是原生视图，fixed + 视口外大偏移
+ * （-9999rpx）在部分内核会破坏整页合成（白屏/卡死）。改为舞台内 1x1
+ * 常驻小画布：仍满足“不能 display:none”的渲染要求，导出尺寸由 JS 设置
+ * 的 backing（canvas.width/height）决定，与 CSS 尺寸无关 */
+.snapCanvas {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.stageShadow {
+    width: 320rpx;
+    height: 44rpx;
+    margin: -30rpx auto 0;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(23, 36, 43, 0.16), transparent 68%);
+}
+
+/* ---------- 主角信息 ---------- */
+.about {
+    position: relative;
+    z-index: 2;
+    padding: 8rpx 8rpx 0;
+}
+
+.aboutName {
+    display: block;
+    font-size: 76rpx;
+    line-height: 1.05;
+    font-weight: 900;
+    letter-spacing: -1rpx;
+    color: #17242B;
+}
+
+.aboutHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.foldArrow {
+    width: 18rpx;
+    height: 18rpx;
+    border-right: 3rpx solid rgba(23, 36, 43, 0.5);
+    border-bottom: 3rpx solid rgba(23, 36, 43, 0.5);
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+    margin-right: 10rpx;
+    flex-shrink: 0;
+}
+
+.foldArrow.collapsed {
+    transform: rotate(-135deg);
+}
+
+.aboutMeta {
+    display: flex;
+    align-items: center;
+    gap: 14rpx;
+    margin-top: 12rpx;
+}
+
+.aboutId {
+    font-size: 22rpx;
+    font-weight: 800;
+    letter-spacing: 2rpx;
+    color: #0f8ea8;
+}
+
+.metaDot {
+    width: 7rpx;
+    height: 7rpx;
+    border-radius: 50%;
+    background: rgba(23, 36, 43, 0.28);
+}
+
+.aboutGroup {
+    font-size: 22rpx;
+    color: rgba(23, 36, 43, 0.55);
+}
+
+.aboutDesc {
+    display: block;
+    margin-top: 16rpx;
+    font-size: 24rpx;
+    line-height: 1.65;
+    color: rgba(23, 36, 43, 0.62);
+    max-width: 560rpx;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 18rpx;
+    margin-top: 26rpx;
+}
+
+.roundBtn {
+    width: 84rpx;
+    height: 84rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #17242B;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.pressRound {
+    transform: scale(0.92);
+    opacity: 0.85;
+}
+
+.spinGlyph {
+    width: 26rpx;
+    height: 26rpx;
+    border-radius: 50%;
+    border: 5rpx solid #FAF7F1;
+    border-left-color: transparent;
+}
+
+.burstGlyph {
+    font-size: 30rpx;
+    color: #FAF7F1;
+    line-height: 1;
+}
+
+.actionsHint {
+    margin-left: 6rpx;
+    font-size: 19rpx;
+    color: rgba(23, 36, 43, 0.38);
+    letter-spacing: 0.5rpx;
+}
+
+/* 名称区随表情切换快速淡换（点选 / 巡演时更顺滑） */
+.page.is-enter .about.altA {
+    animation: aboutSwap 300ms ease both;
+}
+
+.page.is-enter .about.altB {
+    animation-name: aboutSwapB;
+}
+
+@keyframes aboutSwap {
+    from { opacity: 0.2; transform: translateY(8rpx); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes aboutSwapB {
+    from { opacity: 0.2; transform: translateY(8rpx); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ---------- 页面切换回放（从其他页切回本页）：更快更轻的错落淡入 ---------- */
+.page.is-enter.is-replay .head {
+    animation: fadeIn 240ms ease both;
+}
+
+.page.is-enter.is-replay .stage {
+    animation: fadeIn 340ms ease both;
+}
+
+.page.is-enter.is-replay .watermark {
+    animation-duration: 360ms;
+    animation-delay: 40ms;
+}
+
+.page.is-enter.is-replay .groups {
+    animation: fadeSlide 300ms cubic-bezier(0.22, 0.9, 0.32, 1) both;
+}
+
+.page.is-enter.is-replay .foot {
+    animation: fadeIn 380ms ease both;
+}
+
+.page.is-enter.is-replay .d0 { animation-delay: 0ms; }
+.page.is-enter.is-replay .d1 { animation-delay: 40ms; }
+.page.is-enter.is-replay .d2 { animation-delay: 80ms; }
+.page.is-enter.is-replay .d3 { animation-delay: 120ms; }
+.page.is-enter.is-replay .d4 { animation-delay: 170ms; }
+.page.is-enter.is-replay .d5 { animation-delay: 230ms; }
+
+/* 球阵随切换回放整体错落浮现，落定后仍交还给换组过渡 */
+.page.is-enter.is-replay:not(.is-settled) .wall .pick {
+    animation: fadeIn 260ms ease both;
+    animation-delay: calc(200ms + var(--i, 0) * 10ms);
+}
+
+/* ---------- 分组切换 ---------- */
+.groups {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 10rpx;
+    margin-top: 52rpx;
+    padding-top: 34rpx;
+    border-top: 2rpx solid rgba(23, 36, 43, 0.08);
+}
+
+.gChip {
+    padding: 13rpx 30rpx;
+    border-radius: 999rpx;
+    transition: background-color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+.gChip text {
+    font-size: 24rpx;
+    font-weight: 700;
+    color: rgba(23, 36, 43, 0.55);
+    transition: color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
+}
+
+.gChip.on {
+    background: #17242B;
+}
+
+.gChip.on text {
+    color: #FAF7F1;
+}
+
+/* ---------- 球阵（无卡片，颜色来自内容） ---------- */
+.wall {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 34rpx;
+}
+
+.pick {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10rpx;
+    padding: 14rpx 0 20rpx;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.pick.pressPick {
+    transform: scale(0.92);
+    opacity: 0.78;
+}
+
+.pickSlot {
+    height: 110rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pickImg {
+    width: 100rpx;
+    height: 100rpx;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cell.sel .pickImg {
+    transform: scale(1.18);
+}
+
+.planet {
+    position: relative;
+    width: 82rpx;
+    height: 82rpx;
+    border-radius: 50%;
+    font-size: 10.25rpx;
+    background: #FFFFFF;
+    border: 2rpx solid rgba(23, 36, 43, 0.10);
+    box-shadow:
+        inset -6rpx -10rpx 18rpx rgba(23, 36, 43, 0.10),
+        inset 6rpx 8rpx 16rpx rgba(255, 255, 255, 0.9),
+        0 12rpx 24rpx rgba(23, 36, 43, 0.10);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+}
+
+/* ---------- 静态五官预览（em 相对球体缩放） ---------- */
+.face {
+    position: absolute;
+    inset: 0;
+}
+
+.eye {
+    position: absolute;
+    top: 34%;
+    background: #26333f;
+    border-radius: 50%;
+}
+
+.eyeL { left: 25%; }
+.eyeR { right: 25%; }
+
+.e-dot { width: 0.5em; height: 0.62em; }
+.e-big { width: 0.78em; height: 0.86em; top: 31%; }
+.eyeR.e-big { top: 31%; }
+.e-small { width: 0.36em; height: 0.44em; top: 37%; }
+.eyeL.e-small,
+.eyeR.e-small { top: 37%; }
+
+.e-line {
+    width: 0.66em;
+    height: 0.1em;
+    border-radius: 1em;
+    top: 42%;
+}
+
+.e-half {
+    width: 0.58em;
+    height: 0.34em;
+    top: 39%;
+}
+
+.e-arc {
+    width: 0.72em;
+    height: 0.4em;
+    background: transparent !important;
+    border-top: 0.12em solid #26333f;
+    border-radius: 50% 50% 0 0;
+    top: 38%;
+}
+
+.e-down {
+    width: 0.5em;
+    height: 0.3em;
+    top: 43%;
+}
+
+.e-narrow {
+    width: 0.62em;
+    height: 0.24em;
+    border-radius: 1em;
+    top: 38%;
+}
+
+.e-up {
+    width: 0.48em;
+    height: 0.58em;
+    top: 30%;
+}
+
+.eyeL.e-up { left: 27%; transform: translateX(0.16em); }
+.eyeR.e-up { right: 27%; transform: translateX(0.16em); }
+
+.e-wide { width: 0.72em; height: 0.8em; top: 31%; }
+
+.e-lid {
+    width: 0.56em;
+    height: 0.5em;
+}
+
+.e-lid::before {
+    content: '';
+    position: absolute;
+    left: -15%;
+    top: -42%;
+    width: 130%;
+    height: 68%;
+    background: #FFFFFF;
+    border-radius: 0 0 0.4em 0.4em;
+    box-shadow: 0 0.06em 0 rgba(38, 51, 63, 0.55);
+}
+
+.e-angry {
+    width: 0.52em;
+    height: 0.56em;
+}
+
+.e-angry::before {
+    content: '';
+    position: absolute;
+    top: -0.3em;
+    left: -0.06em;
+    width: 0.72em;
+    height: 0.13em;
+    background: #26333f;
+    border-radius: 1em;
+}
+
+.eyeL.e-angry::before { transform: rotate(22deg); }
+.eyeR.e-angry::before { transform: rotate(-22deg); }
+
+.mouth {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 56%;
+}
+
+.m-smile {
+    width: 1.15em;
+    height: 0.62em;
+    border-bottom: 0.14em solid #26333f;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.m-flat {
+    width: 0.78em;
+    height: 0.11em;
+    background: #26333f;
+    border-radius: 1em;
+    top: 60%;
+}
+
+.m-o {
+    width: 0.42em;
+    height: 0.5em;
+    border: 0.11em solid #26333f;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.65);
+    top: 58%;
+}
+
+.m-frown {
+    width: 1em;
+    height: 0.55em;
+    border-top: 0.13em solid #26333f;
+    border-radius: 1.1em 1.1em 0 0;
+    top: 64%;
+}
+
+.m-wave {
+    width: 0.95em;
+    height: 0.42em;
+    border-bottom: 0.12em solid #26333f;
+    border-radius: 0 0 1em 1em;
+    transform: translateX(-50%) rotate(7deg);
+    top: 61%;
+}
+
+.m-grit {
+    width: 1.05em;
+    height: 0.5em;
+    background: #26333f;
+    border-radius: 0.18em;
+    top: 59%;
+}
+
+.m-grit::before,
+.m-grit::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0.08em;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.m-grit::before { left: 32%; }
+.m-grit::after { right: 32%; }
+
+.m-open {
+    width: 1.15em;
+    height: 0.85em;
+    background: #26333f;
+    border-radius: 0.1em 0.1em 1.2em 1.2em / 0.1em 0.1em 1.6em 1.6em;
+    top: 56%;
+}
+
+.m-open::before {
+    content: '';
+    position: absolute;
+    left: 22%;
+    bottom: 0;
+    width: 56%;
+    height: 38%;
+    background: #e8837a;
+    border-radius: 50% 50% 40% 40%;
+}
+
+/* ---------- 小特效件 ---------- */
+.fx-blush {
+    position: absolute;
+    bottom: 28%;
+    width: 0.85em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: rgba(240, 128, 118, 0.45);
+}
+
+.fx-blushL { left: 11%; }
+.fx-blushR { right: 11%; }
+
+.fx-zzzSm {
+    position: absolute;
+    top: -0.6em;
+    right: 2%;
+    font-size: 1em;
+    font-weight: 800;
+    color: #8fa3b3;
+}
+
+.fx-sweat {
+    position: absolute;
+    top: 4%;
+    right: 8%;
+    width: 0.46em;
+    height: 0.6em;
+    background: #6ec6ea;
+    border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%;
+}
+
+.fx-angerSm {
+    position: absolute;
+    top: -0.5em;
+    right: -0.3em;
+    width: 1em;
+    height: 1em;
+}
+
+.fx-angerSm::before,
+.fx-angerSm::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0.95em;
+    height: 0.17em;
+    border-radius: 0.1em;
+    background: #d9534f;
+}
+
+.fx-angerSm::before { transform: translate(-50%, -50%) rotate(45deg); }
+.fx-angerSm::after { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.planet.sel {
+    transform: scale(1.22);
+    box-shadow:
+        inset -6rpx -10rpx 18rpx rgba(23, 36, 43, 0.10),
+        0 0 0 7rpx rgba(15, 142, 168, 0.22),
+        0 18rpx 40rpx rgba(15, 142, 168, 0.22);
+}
+
+.pickName {
+    font-size: 20rpx;
+    font-weight: 600;
+    color: rgba(23, 36, 43, 0.6);
+    max-width: 140rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+/* 选中反馈：当前表情在球阵里高亮（快照图 / CSS 球都生效） */
+.pick.sel .pickImg {
+    transform: scale(1.16);
+}
+
+.pick.sel .pickName {
+    color: #0f8ea8;
+}
+
+.pickDot {
+    width: 10rpx;
+    height: 10rpx;
+    border-radius: 50%;
+    background: #0f8ea8;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pick.sel .pickDot {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .page.is-enter .head,
+    .page.is-enter .stage,
+    .page.is-enter .about,
+    .page.is-enter .watermark,
+    .page.is-enter .about.altA,
+    .page.is-enter .about.altB,
+    .page.is-enter .groups,
+    .page.is-enter .foot,
+    .page.is-enter:not(.is-settled) .wall .pick,
+    .page.is-enter.is-replay .head,
+    .page.is-enter.is-replay .stage,
+    .page.is-enter.is-replay .watermark,
+    .page.is-enter.is-replay .groups,
+    .page.is-enter.is-replay .foot,
+    .page.is-enter.is-replay:not(.is-settled) .wall .pick,
+    .wall.swap .pick,
+    .tour.on .tourDot {
+        animation: none;
+    }
+
+    .anim {
+        opacity: 1;
+        animation: none;
+    }
+
+    .pickImg,
+    .planet,
+    .pickDot {
+        transition: none;
+    }
+}
+
+.foot {
+    margin-top: 40rpx;
+    text-align: center;
+}
+
+.foot text {
+    font-size: 18rpx;
+    color: rgba(23, 36, 43, 0.3);
+    letter-spacing: 0.5rpx;
+}

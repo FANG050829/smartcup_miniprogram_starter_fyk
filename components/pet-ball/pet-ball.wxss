@@ -1,0 +1,38 @@
+/* 表情球：淡入淡出由引擎像素 alpha 实现（pet-ball.js _startFade），
+ * 页面切换的反向位移抵消样式在 app.wxss（.page.fx-* .ballWrap），
+ * 本文件只负责结构与尺寸 */
+
+.ballWrap {
+    display: inline-block;
+    line-height: 0;
+}
+
+.ballCanvas {
+    display: block;
+    /* 去掉 WebView 默认点按高亮（点球时会出现一块方形色块） */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 拖拽跟手/回归滑行共用层：transform 由 touch 与 rAF 逐帧驱动（见
+ * pet-ball.js 的 onDragMove/_startReturnAnim）。不走 CSS transition——
+ * 「加过渡类 + 改位移」同一拍提交在部分内核不生效（真机观感瞬移），
+ * 逐帧 setData 与跟手同通路、确定平滑 */
+.ballDrag {
+    will-change: transform;
+}
+
+.ballCanvas--header {
+    width: 120rpx;
+    height: 120rpx;
+}
+
+/* 定位页刻度板头部专用：信息面板空间紧凑，比 header 小一号 */
+.ballCanvas--dock {
+    width: 96rpx;
+    height: 96rpx;
+}
+
+.ballCanvas--hero {
+    width: 260rpx;
+    height: 260rpx;
+}

@@ -1,0 +1,134 @@
+<view class="page {{pageAnim}}">
+    <scroll-view class="pageScroll" scrollY="true">
+        <view class="overviewCard anim-fadeInUp fx fx-d1">
+            <view class="overviewBg">
+                <view class="overviewOrb orb1"></view>
+                <view class="overviewOrb orb2"></view>
+            </view>
+            <text class="overviewLabel">今日饮水</text>
+            <view class="overviewMain">
+                <text class="overviewAmount">{{todayProgress.amount}}</text>
+                <text class="overviewUnit">ml</text>
+            </view>
+            <view class="overviewGoal">目标 {{todayProgress.goal}} ml</view>
+            <view class="overviewProgress">
+                <view class="overviewFill" style="width:{{todayProgress.percent}}%;"></view>
+            </view>
+            <view class="overviewFooter">
+                <view class="overviewPercent">{{todayProgress.percent}}%</view>
+                <view class="overviewStatus">{{todayProgress.statusText}}</view>
+            </view>
+        </view>
+        <view class="section anim-fadeInUp fx fx-d2" style="animation-delay:0.1s;">
+            <view class="sectionHeader">
+                <text class="sectionTitle">提醒</text>
+                <view bindtap="startNewReminder" class="sectionAction" hoverClass="sectionActionPress" hoverStayTime="80">+ 新建</view>
+            </view>
+            <view class="reminderList fx fx-d3" wx:if="{{reminders.length}}">
+                <view class="reminderItem {{reminderStatus[item.id]==='done'?'isDone':''}}" style="animation-delay:{{0.15+index*0.05}}s;" wx:for="{{reminders}}" wx:key="id">
+                    <view class="reminderLeft">
+                        <view class="reminderTimeWrapper">
+                            <text class="reminderTime">{{item.time}}</text>
+                            <text class="reminderRepeat">{{item.repeatLabel}}</text>
+                        </view>
+                        <view class="reminderBadge {{reminderStatus[item.id]==='done'?'completed':'upcoming'}}" wx:if="{{reminderStatus[item.id]}}">
+                            <text>{{reminderStatus[item.id]==='done'?'已完成':'待提醒'}}</text>
+                        </view>
+                    </view>
+                    <view class="reminderActions">
+                        <view bindtap="editReminder" class="reminderBtn edit" data-id="{{item.id}}" hoverClass="reminderBtnEditPress" hoverStayTime="80">
+                            <text class="btnIcon">✎</text>
+                        </view>
+                        <view bindtap="deleteReminder" class="reminderBtn delete" data-id="{{item.id}}" hoverClass="reminderBtnDeletePress" hoverStayTime="80">
+                            <text class="btnIcon">✕</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="emptyState" wx:else>
+                <view class="emptyIcon">
+                    <view class="emptyIconRing"></view>
+                    <text class="emptyIconText">+</text>
+                </view>
+                <text class="emptyText">还没有提醒</text>
+                <view bindtap="startNewReminder" class="emptyBtn" hoverClass="emptyBtnPress" hoverStayTime="80">新建提醒</view>
+            </view>
+        </view>
+    </scroll-view>
+    <view bindtap="cancelNewReminder" class="sheetMask" data-scope="new" wx:if="{{newDraftOpen}}"></view>
+    <view class="sheet" wx:if="{{newDraftOpen}}">
+        <view class="sheetGrip"></view>
+        <view class="sheetTitle">新建提醒</view>
+        <template is="reminderEditor" data="{{draft:newDraft,scope:'new'}}"></template>
+    </view>
+    <view bindtap="cancelEditReminder" class="sheetMask" wx:if="{{editDraftOpen}}"></view>
+    <view class="sheet" wx:if="{{editDraftOpen}}">
+        <view class="sheetGrip"></view>
+        <view class="sheetTitle">编辑提醒</view>
+        <template is="reminderEditor" data="{{draft:editDraft,scope:editDraftId}}"></template>
+    </view>
+</view>
+<template name="reminderEditor">
+    <picker bindchange="onNewTimeChange" data-scope="{{scope}}" mode="time" value="{{draft.time}}">
+        <view class="editRow">
+            <text class="editLabel">时间</text>
+            <text class="editValue">{{draft.time}}</text>
+        </view>
+    </picker>
+    <view bindtap="toggleRepeatMenu" class="editRow" data-scope="{{scope}}" hoverClass="editRowPress" hoverStayTime="80">
+        <text class="editLabel">重复</text>
+        <view class="editValueRow">
+            <text class="editValue">
+        {{draft.repeat==='daily'?'每天提醒':draft.repeat==='today'?'仅今天提醒':'自定义提醒日期'}}
+      </text>
+            <text class="editArrow">›</text>
+        </view>
+    </view>
+    <view class="repeatMenu" wx:if="{{draft.repeatMenuOpen}}">
+        <view bindtap="selectRepeat" class="repeatOption {{draft.repeat==='daily'?'on':''}}" data-scope="{{scope}}" data-value="daily" hoverClass="repeatOptionPress" hoverStayTime="80">每天提醒</view>
+        <view bindtap="selectRepeat" class="repeatOption {{draft.repeat==='today'?'on':''}}" data-scope="{{scope}}" data-value="today" hoverClass="repeatOptionPress" hoverStayTime="80">仅今天提醒</view>
+        <view bindtap="selectRepeat" class="repeatOption {{draft.repeat==='custom'?'on':''}}" data-scope="{{scope}}" data-value="custom" hoverClass="repeatOptionPress" hoverStayTime="80">自定义提醒日期</view>
+    </view>
+    <view class="dateRow" wx:if="{{draft.repeat==='custom'}}">
+        <text class="editLabel">日期</text>
+        <text class="dateSummary">{{draft.dates.length?'已选 '+draft.dates.length+'天':'未选择日期'}}</text>
+        <view bindtap="toggleDateView" class="dateBtn" data-scope="{{scope}}" hoverClass="dateBtnPress" hoverStayTime="80">选择日期</view>
+    </view>
+    <view class="dateDropdown" wx:if="{{draft.repeat==='custom'&&draft.dateViewOpen&&scope==='new'&&!draft.dateEditMode}}">
+        <view class="dateChips">
+            <view class="dateChip" wx:for="{{draft.dates}}" wx:key="*this">{{item}}</view>
+            <view class="dateEmpty" wx:if="{{!draft.dates.length}}">尚未选择日期</view>
+        </view>
+        <view class="dateEditRow">
+            <view bindtap="startDateEdit" class="dateEditBtn" data-scope="{{scope}}" hoverClass="dateEditBtnPress" hoverStayTime="80">修改</view>
+            <view bindtap="confirmDateEdit" class="dateEditBtn primary" data-scope="{{scope}}" hoverClass="dateEditBtnPress" hoverStayTime="80" wx:if="{{draft.dateEditMode}}">确定</view>
+        </view>
+    </view>
+    <view class="calendarPanel" wx:if="{{draft.repeat==='custom'&&(draft.dateEditMode||scope!=='new'&&draft.dateViewOpen)}}">
+        <view class="calHeader">
+            <view bindtap="prevMonth" class="calNav" data-scope="{{scope}}" hoverClass="calNavPress" hoverStayTime="80">&lt;</view>
+            <text class="calTitle">{{draft.calendarYear}}年{{draft.calendarMonth}}月</text>
+            <view bindtap="nextMonth" class="calNav" data-scope="{{scope}}" hoverClass="calNavPress" hoverStayTime="80">&gt;</view>
+        </view>
+        <view class="calWeek">
+            <text>日</text>
+            <text>一</text>
+            <text>二</text>
+            <text>三</text>
+            <text>四</text>
+            <text>五</text>
+            <text>六</text>
+        </view>
+        <view class="calGrid">
+            <view bindtap="toggleDate" class="calCell {{item.isCurrentMonth?'':'muted'}} {{item.selected?'on':''}}" data-date="{{item.date}}" data-scope="{{scope}}" hoverClass="calCellPress" hoverStayTime="80" wx:for="{{draft.calendarDays}}" wx:key="key">{{item.day}}</view>
+        </view>
+        <view class="calActions">
+            <view bindtap="startDateEdit" class="calEdit" data-scope="{{scope}}" hoverClass="calEditPress" hoverStayTime="80">修改</view>
+            <view bindtap="confirmDateEdit" class="calConfirm" data-scope="{{scope}}" hoverClass="calConfirmPress" hoverStayTime="80" wx:if="{{draft.dateEditMode}}">确定</view>
+        </view>
+    </view>
+    <view class="editorActions">
+        <view bindtap="cancelNewReminder" class="editorBtn ghost" data-scope="{{scope}}" hoverClass="editorBtnGhostPress" hoverStayTime="80">取消</view>
+        <view bindtap="saveReminder" class="editorBtn primary" data-scope="{{scope}}" hoverClass="editorBtnPrimaryPress" hoverStayTime="80">保存</view>
+    </view>
+</template>

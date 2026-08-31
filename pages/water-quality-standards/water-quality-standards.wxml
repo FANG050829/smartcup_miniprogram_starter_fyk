@@ -1,0 +1,76 @@
+<view class="page">
+    <view class="head">
+        <text class="headTitle">水质标准</text>
+        <text class="headSub">{{standardSource}}</text>
+    </view>
+
+    <view class="section">
+        <text class="secLabel">当前读数</text>
+        <view class="panel pad">
+            <view class="tdsRow">
+                <text class="tdsValue">{{currentTdsValue}}</text>
+            </view>
+            <text class="tdsJudge">{{currentTdsJudge}}</text>
+        </view>
+    </view>
+
+    <view class="section">
+        <view class="secTitleRow">
+            <text class="secLabel">PPM（TDS）范围</text>
+            <text class="secNote">国标上限：≤ {{tdsStandardMax}} mg/L（近似 ppm）</text>
+        </view>
+        <view class="panel pad">
+            <view class="chart">
+                <view class="bar" wx:if="{{tdsRows.length>=5}}">
+                    <text class="barLabel">{{tdsRows[0].range}}</text>
+                    <view class="barTrack">
+                        <view class="barFill info" style="width:12%"></view>
+                    </view>
+                    <text class="barDesc">{{tdsRows[0].desc}}</text>
+                </view>
+                <view class="bar" wx:if="{{tdsRows.length>=3}}">
+                    <text class="barLabel">{{tdsRows[2].range}}</text>
+                    <view class="barTrack">
+                        <view class="barFill good" style="width:48%"></view>
+                    </view>
+                    <text class="barDesc">{{tdsRows[2].desc}}</text>
+                </view>
+                <view class="bar" wx:if="{{tdsRows.length>=4}}">
+                    <text class="barLabel">{{tdsRows[3].range}}</text>
+                    <view class="barTrack">
+                        <view class="barFill warn" style="width:74%"></view>
+                    </view>
+                    <text class="barDesc">{{tdsRows[3].desc}}</text>
+                </view>
+                <view class="bar" wx:if="{{tdsRows.length>=8}}">
+                    <text class="barLabel">{{tdsRows[7].range}}</text>
+                    <view class="barTrack">
+                        <view class="barFill bad" style="width:100%"></view>
+                    </view>
+                    <text class="barDesc">{{tdsRows[7].desc}}</text>
+                </view>
+            </view>
+            <view class="rowList">
+                <view class="rowItem" wx:for="{{tdsRows}}" wx:key="range">
+                    <view class="rowDot tone{{index}}"></view>
+                    <text class="rowRange">{{item.range}}</text>
+                    <text class="rowDesc">{{item.desc}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="section">
+        <text class="secLabel">本程序 ppm 测试说明</text>
+        <view class="panel">
+            <view class="rowItem stack" wx:for="{{ppmExplainRows}}" wx:key="title">
+                <view class="rowContent">
+                    <text class="rowRangeTitle">{{item.title}}</text>
+                    <text class="rowDesc">{{item.desc}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <text class="foot">ppm 仅代表 TDS 估算值，用于水质趋势参考，不等同于完整水质安全检测。</text>
+</view>

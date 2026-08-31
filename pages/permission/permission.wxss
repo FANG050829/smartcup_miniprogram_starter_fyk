@@ -1,0 +1,168 @@
+/* ============================================================
+ * 权限与连接 — 安静的设置子页
+ * 令牌与 map/settings 同源：墨青 #102A43 / 灰青 #5A6B7B，
+ * 语义色取 map 页同一色相的加深版（#1A7A52 / #9A5C12，小字号可读）；
+ * 白底发丝线面板、纯文字状态、无徽章无仪表无胶囊装饰。
+ * ============================================================ */
+
+.page {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 24rpx 32rpx calc(env(safe-area-inset-bottom) + 32rpx);
+    background: #f7f9fa;
+}
+
+.headNote {
+    display: block;
+    margin-bottom: 28rpx;
+    font-size: 24rpx;
+    line-height: 1.5;
+    color: #5a6b7b;
+}
+
+.section {
+    margin-bottom: 32rpx;
+}
+
+.secLabel {
+    display: block;
+    margin-bottom: 12rpx;
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 2rpx;
+    color: #5a6b7b;
+}
+
+.panel {
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.10);
+    border-radius: 16rpx;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+    min-height: 112rpx;
+    padding: 20rpx 24rpx;
+    transition: background-color 0.2s ease;
+}
+
+.row + .row {
+    border-top: 1rpx solid rgba(16, 42, 67, 0.08);
+}
+
+.rowActive {
+    background-color: rgba(16, 42, 67, 0.05);
+}
+
+.rowIcon {
+    flex-shrink: 0;
+    width: 40rpx;
+    height: 40rpx;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.iconCup {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgc3Ryb2tlPSclMjMxMDJBNDMnIHN0cm9rZS13aWR0aD0nMS44JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9Ik0xNyA4aDFhNCA0IDAgMSAxIDAgOGgtMSIvPjxwYXRoIGQ9Ik0zIDhoMTR2OWE0IDQgMCAwIDEtNCA0SDdhNCA0IDAgMCAxLTQtNFoiLz48bGluZSB4MT0iNiIgeDI9IjYiIHkxPSIyIiB5Mj0iNCIvPjxsaW5lIHgxPSIxMCIgeDI9IjEwIiB5MT0iMiIgeTI9IjQiLz48bGluZSB4MT0iMTQiIHgyPSIxNCIgeTE9IjIiIHkyPSI0Ii8+PC9zdmc+");
+}
+
+.iconBt {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgc3Ryb2tlPSclMjMxMDJBNDMnIHN0cm9rZS13aWR0aD0nMS44JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9Im03IDcgMTAgMTAtNSA1VjJsNSA1TDcgMTciLz48L3N2Zz4=");
+}
+
+.iconPin {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgc3Ryb2tlPSclMjMxMDJBNDMnIHN0cm9rZS13aWR0aD0nMS44JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9Ik0yMCAxMGMwIDQuOTkzLTUuNTM5IDEwLjE5My03LjM5OSAxMS43OTlhMSAxIDAgMCAxLTEuMjAyIDBDOS41MzkgMjAuMTkzIDQgMTQuOTkzIDQgMTBhOCA4IDAgMCAxIDE2IDAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSIzIi8+PC9zdmc+");
+}
+
+.iconBell {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgc3Ryb2tlPSclMjMxMDJBNDMnIHN0cm9rZS13aWR0aD0nMS44JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9Ik0xMC4yNjggMjFhMiAyIDAgMCAwIDMuNDY0IDAiLz48cGF0aCBkPSJNMy4yNjIgMTUuMzI2QTEgMSAwIDAgMCA0IDE3aDE2YTEgMSAwIDAgMCAuNzQtMS42NzNDMTkuNDEgMTMuOTU2IDE4IDEyLjQ5OSAxOCA4QTYgNiAwIDAgMCA2IDhjMCA0LjQ5OS0xLjQxMSA1Ljk1Ni0yLjczOCA3LjMyNiIvPjwvc3ZnPg==");
+}
+
+.rowInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.rowName {
+    display: block;
+    font-size: 28rpx;
+    line-height: 1.3;
+    font-weight: 600;
+    color: #102a43;
+}
+
+.rowDesc {
+    display: block;
+    margin-top: 4rpx;
+    font-size: 22rpx;
+    line-height: 1.4;
+    color: #5a6b7b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 状态读数：纯文字，绿色=就绪、琥珀=缺项 */
+
+.rowState {
+    flex-shrink: 0;
+    font-size: 24rpx;
+    font-weight: 600;
+}
+
+.rowState.ok {
+    color: #1a7a52;
+}
+
+.rowState.warn {
+    color: #9a5c12;
+}
+
+.chev {
+    flex-shrink: 0;
+    width: 28rpx;
+    height: 28rpx;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgc3Ryb2tlPSclMjM5QUE3QjQnIHN0cm9rZS13aWR0aD0nMS44JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9Im05IDE4IDYtNi02LTYiLz48L3N2Zz4=");
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 92rpx;
+    margin-top: 40rpx;
+    border-radius: 14rpx;
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.16);
+    transition: opacity 0.2s ease;
+}
+
+.btnActive {
+    opacity: 0.88;
+}
+
+.btnText {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #102a43;
+}
+
+.foot {
+    display: block;
+    margin-top: 24rpx;
+    font-size: 22rpx;
+    line-height: 1.6;
+    color: #5a6b7b;
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .row {
+        transition: none;
+    }
+}

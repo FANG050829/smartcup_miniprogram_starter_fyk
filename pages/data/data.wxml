@@ -1,0 +1,117 @@
+<scroll-view class="page skin-{{skin}}" scrollY="true">
+    <view class="sheet">
+
+        <view class="skinSwitch">
+            <view class="skinOpt {{skin === 'classic' ? 'on' : ''}}" data-skin="classic" bindtap="switchSkin" hover-class="press" hover-stay-time="80">主题版</view>
+            <view class="skinOpt {{skin === 'print' ? 'on' : ''}}" data-skin="print" bindtap="switchSkin" hover-class="press" hover-stay-time="80">印刷版</view>
+        </view>
+
+        <view class="masthead">
+            <view class="mastTop">
+                <text class="kicker">饮水记录 · 近 7 日</text>
+                <text class="mastMeta">{{sourceLabel}}</text>
+            </view>
+            <text class="mastTitle">AI 周报</text>
+        </view>
+
+        <view class="statsBlock">
+            <view class="figures">
+            <view class="figMain">
+                <view class="figNumWrap">
+                    <text class="figNum">{{summary.avg}}</text>
+                    <text class="figUnit">ml / 日</text>
+                </view>
+                <text class="figNote">日均饮水量 · 目标 {{dailyGoalMl}}ml</text>
+            </view>
+            <view class="gauge">
+                <view class="gaugeFill" style="width:{{summary.completionRate}}%;"></view>
+            </view>
+            <text class="figNote">7 日总达成 {{summary.completionRate}}%</text>
+        </view>
+
+        <view class="strip">
+            <view class="stripCell">
+                <text class="stripV">{{summary.achieveDays}} 天</text>
+                <text class="stripL">达标</text>
+            </view>
+            <view class="stripCell">
+                <text class="stripV">{{summary.recordCount}} 次</text>
+                <text class="stripL">记录</text>
+            </view>
+            <view class="stripCell">
+                <text class="stripV">{{summary.latestText}}</text>
+                <text class="stripL">最近饮水</text>
+            </view>
+        </view>
+        </view>
+
+        <view class="sec">
+            <view class="secHead">
+                <text class="secTitle">本周趋势</text>
+                <text class="secMeta">合计 {{summary.total}}ml · {{updatedText}}</text>
+            </view>
+            <view class="chart">
+                <view class="col" wx:for="{{days}}" wx:key="dateKey">
+                    <view class="colBox">
+                        <text class="colVal">{{item.total}}</text>
+                        <view class="colBar {{item.tone}}" style="height:{{item.barHeight}}rpx;"></view>
+                    </view>
+                    <text class="colLabel {{item.isToday ? 'today' : ''}}">{{item.dayLabel}}</text>
+                </view>
+            </view>
+            <view class="legend">
+                <view class="lgItem"><view class="lgSwatch good"></view><text class="lgText">达标</text></view>
+                <view class="lgItem"><view class="lgSwatch steady"></view><text class="lgText">接近</text></view>
+                <view class="lgItem"><view class="lgSwatch low"></view><text class="lgText">偏低</text></view>
+            </view>
+        </view>
+
+        <view class="sec">
+            <view class="secHead">
+                <text class="secTitle">逐日明细</text>
+                <text class="secMeta">单位 ml</text>
+            </view>
+            <view class="table">
+                <view class="tRow tHead">
+                    <text class="tCell date">日期</text>
+                    <text class="tCell num">饮水</text>
+                    <text class="tCell num">次数</text>
+                    <text class="tCell num">最近</text>
+                </view>
+                <view class="tRow {{item.isToday ? 'today' : ''}}" wx:for="{{days}}" wx:key="dateKey">
+                    <text class="tCell date">{{item.dayLabel}}</text>
+                    <text class="tCell num">{{item.total}}</text>
+                    <text class="tCell num">{{item.count}}</text>
+                    <text class="tCell num dim">{{item.lastTime}}</text>
+                </view>
+            </view>
+        </view>
+
+        <view class="sec">
+            <view class="secHead withStamp">
+                <view class="stamp">AI</view>
+                <view class="secTitleWrap">
+                    <text class="secTitle">本周建议</text>
+                    <text class="secMeta">{{aiMetaText}}</text>
+                </view>
+            </view>
+            <view class="skeleton" wx:if="{{aiLoading}}">
+                <view class="skLine w90"></view>
+                <view class="skLine w70"></view>
+                <view class="skLine w80"></view>
+            </view>
+            <view class="noteList" wx:else>
+                <view class="noteItem" wx:for="{{adviceLines}}" wx:key="*this">
+                    <text class="noteIdx">{{index + 1}}</text>
+                    <text class="noteText">{{item}}</text>
+                </view>
+            </view>
+            <view class="actions">
+                <view class="btn primary" bindtap="refreshReport" hover-class="press" hover-stay-time="80">重新生成</view>
+                <view class="btn" bindtap="goPlan" hover-class="press" hover-stay-time="80">写入计划</view>
+                <view class="btn" bindtap="goCheckin" hover-class="press" hover-stay-time="80">去记录</view>
+            </view>
+        </view>
+
+    </view>
+</scroll-view>

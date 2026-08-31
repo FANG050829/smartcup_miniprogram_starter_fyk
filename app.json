@@ -1,0 +1,70 @@
+{
+  "entryPagePath": "pages/launch/launch",
+  "pages": [
+    "pages/launch/launch",
+    "pages/index/index",
+    "pages/plan/plan",
+    "pages/mood/mood",
+    "pages/data/data",
+    "pages/profile/profile",
+    "pages/checkin/checkin",
+    "pages/daily-checkin/daily-checkin",
+    "pages/diagnostic/diagnostic",
+    "pages/device/device",
+    "pages/map/map",
+    "pages/chat/chat",
+    "pages/permission/permission",
+    "pages/settings/settings",
+    "pages/water-quality-standards/water-quality-standards",
+    "pages/water-reminder/water-reminder",
+    "pages/family-care/family-care"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于地图定位与蓝牙设备附近显示"
+    }
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#7b97a8",
+    "selectedColor": "#0f8ea8",
+    "backgroundColor": "#F7F9FA",
+    "borderStyle": "white",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index"
+      },
+      {
+        "text": "计划",
+        "pagePath": "pages/plan/plan"
+      },
+      {
+        "text": "心情",
+        "pagePath": "pages/mood/mood"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/profile/profile"
+      }
+    ]
+  },
+  "style": "v2",
+  "renderer": "webview",
+  "lazyCodeLoading": "requiredComponents",
+  "requiredPrivateInfos": [
+    "getLocation"
+  ],
+  "componentFramework": "exparser",
+  "window": {
+    "navigationBarTitleText": "SmartCup",
+    "navigationBarBackgroundColor": "#F7F9FA",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F7F9FA"
+  },
+  "plugins": {},
+  "usingComponents": {
+    "pet-ball": "/components/pet-ball/pet-ball"
+  },
+  "cloudfunctionRoot": "cloudfunctions/"
+}

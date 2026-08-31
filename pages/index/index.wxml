@@ -1,0 +1,166 @@
+<view class="page {{pageAnim}}" style="padding-bottom:{{homePageBottomPaddingPx}}px;">
+    <view class="pageContent">
+        <view class="bgBlob b1"></view>
+        <view class="bgBlob b2"></view>
+        <view class="bgBlob b3"></view>
+        <view class="tempCard {{heaterOn?'heating':''}} {{heatCooling?'cooling':''}} anim-home-scale-in fx fx-d1" id="tempCard">
+            <view class="tempCardBackdrop">
+                <view class="tempCardGlow tempCardGlowA"></view>
+                <view class="tempCardGlow tempCardGlowB"></view>
+                <view class="tempCardGlow tempCardGlowC"></view>
+            </view>
+            <view class="tempContent">
+                <view class="tempCardSpacer"></view>
+                <view class="tempValueRow tempSummaryRow">
+                    <view bindtap="goQualityRange" class="tempMetricValue tempMetricLeft tempMetricTap" hoverClass="tempMetricTapPress" hoverStayTime="80" hoverStopPropagation="true">
+                        <text>{{tds}}</text>
+                        <text wx:if="{{tds!=='--'}}">ppm</text>
+                    </view>
+                    <text class="tempDivider">|</text>
+                    <view class="tempMetricValue tempMetricRight">
+                        <text>{{temperature}}℃</text>
+                    </view>
+                </view>
+                <text class="tempLabel">水质检测与温度</text>
+                <view class="tempCardSpacer"></view>
+                <view class="shimmer" wx:if="{{dataLoading}}"></view>
+            </view>
+        </view>
+        <view class="controlPad {{heaterOn?'heating':''}} {{heatCooling?'cooling':''}} {{petFly?'petFlyRoot':''}} {{petBallFloat?'padPetFloat':''}} anim-home-fade-in fx fx-d2" style="animation-delay:0.1s;">
+            <view bindtap="goDevice" class="padItem padTL {{padGlance==='tl'?'padGlance':''}}" hoverClass="press" hoverStayTime="80">
+                <view class="padInk">
+                    <image class="padIcon" mode="aspectFit" src="/assets/icons/home_device.png"></image>
+                    <text class="padWord">设备</text>
+                    <text class="padSub">连接设备</text>
+                </view>
+                <view class="padNotch"></view>
+            </view>
+            <view bindtap="goMap" class="padItem padTR {{padGlance==='tr'?'padGlance':''}}" hoverClass="press" hoverStayTime="80">
+                <view class="padInk">
+                    <image class="padIcon" mode="aspectFit" src="/assets/icons/home_location.png"></image>
+                    <text class="padWord">定位</text>
+                    <text class="padSub">定位水杯</text>
+                </view>
+                <view class="padNotch"></view>
+            </view>
+            <view bindtap="goChat" class="padItem padBL {{padGlance==='bl'?'padGlance':''}}" hoverClass="press" hoverStayTime="80">
+                <view class="padInk">
+                    <image class="padIcon" mode="aspectFit" src="/assets/icons/home_chat.png"></image>
+                    <text class="padWord">智聊</text>
+                    <text class="padSub">AI 对话</text>
+                </view>
+                <view class="padNotch"></view>
+            </view>
+            <view bindtap="toggleHeat" class="padItem padBR {{padGlance==='br'?'padGlance':''}}" hoverClass="press" hoverStayTime="80">
+                <view class="padInk">
+                    <image class="padIcon" mode="aspectFit" src="/assets/icons/home_heat.png"></image>
+                    <text class="padWord">加热</text>
+                    <text class="padSub">{{heatResponsePending?'下发中…':heaterOn?'加热中…':'快速热水'}}</text>
+                </view>
+                <view class="padNotch"></view>
+            </view>
+            <view class="padPet {{petFly?'petFlyMode':''}}" id="padPetAnchor" wx:if="{{petOn}}" style="transform:{{petFlyStyle}}">
+                <pet-ball class="padPetBall fx-d2" id="padPetBall" size="hero" page-key="index" draggable="{{true}}" bind:change="onPetChange" bind:pettap="onPetTap" bind:dragstate="onPetDragState"/>
+                <view class="petBubble" wx:if="{{petBubble}}">
+                    <view class="petBubbleTail"></view>
+                    <view class="petBubbleTailFill"></view>
+                    <text class="petBubbleText">{{petBubble}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="homeHeroCard anim-home-fade-in fx fx-d3" style="animation-delay:0.2s;">
+            <view class="homeHeroHead">
+                <view class="homeHeroTitleWrap">
+                    <text class="homeHeroTitle">自动饮水记录</text>
+                    <text class="homeHeroSub">{{todayLabel}}</text>
+                </view>
+                <view class="homeHeroActions">
+                    <view bindtap="openGoalEditor" class="homeGoalChip" hoverClass="press" hoverStayTime="80">目标 {{dailyGoalMl}}ml</view>
+                    <view bindtap="goCheckinRecords" class="homeRecordBtn" hoverClass="press" hoverStayTime="80">饮水记录></view>
+                </view>
+            </view>
+            <view class="homeHeroBody">
+                <view class="homeHeroMain">
+                    <view class="homeHeroAmountBlock">
+                        <text class="homeHeroAmountLabel">今日已饮水：</text>
+                        <view class="homeHeroAmount">
+                            <text class="homeHeroValue">{{homeTodayTotalMl}}</text>
+                            <text class="homeHeroUnit">ml</text>
+                        </view>
+                    </view>
+                    <view class="homeCupWaterBlock">
+                        <text class="homeCupWaterLabel">当前水杯水量</text>
+                        <view class="homeHeroAmount homeCupWaterAmount">
+                            <text class="homeHeroValue">{{cupWaterMlValue}}</text>
+                            <text class="homeHeroUnit">ml</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="homeHeroMetaRow">
+                    <text class="homeHeroHint">{{latestCheckinText}}</text>
+                    <text class="homeProgressText">完成 {{progressPercent}}%</text>
+                </view>
+                <view class="homeProgressBlock">
+                    <view class="homeProgressTrack">
+                        <view class="homeProgressFill" style="{{progressBarStyle}}"></view>
+                    </view>
+                </view>
+            </view>
+            <view class="homeStatsRow">
+                <view class="homeStatItem">
+                    <text class="homeStatLabel">剩余</text>
+                    <text class="homeStatValue">{{remainingMl}}ml</text>
+                </view>
+                <view class="homeStatItem homeStatItemAccent">
+                    <text class="homeStatLabel">连续达标</text>
+                    <text class="homeStatValue">{{streakDays}}天</text>
+                </view>
+                <view class="homeStatItem homeStatItemAccent">
+                    <text class="homeStatLabel">今日次数</text>
+                    <text class="homeStatValue">{{recordCountToday}}次</text>
+                </view>
+            </view>
+        </view>
+        <view bindtap="closeGoalEditor" class="homeGoalMask" wx:if="{{showGoalEditor}}"></view>
+        <view class="homeGoalPanel" wx:if="{{showGoalEditor}}">
+            <text class="homeGoalTitle">设置每日饮水目标</text>
+            <input bindconfirm="saveGoal" bindinput="onGoalInput" class="homeGoalInput" confirmType="done" placeholder="请输入目标 ml" type="number" value="{{goalInput}}"></input>
+            <text class="homeGoalHint">建议范围 800 - 6000 ml</text>
+            <view class="homeGoalActions">
+                <view bindtap="closeGoalEditor" class="homeGoalBtn ghost" hoverClass="press" hoverStayTime="80">取消</view>
+                <view bindtap="saveGoal" class="homeGoalBtn primary" hoverClass="press" hoverStayTime="80">保存</view>
+            </view>
+        </view>
+        <view bindtap="closeHeatPanel" class="heatPanelMask" wx:if="{{showHeatPanel}}"></view>
+        <view class="heatPanelWrap" wx:if="{{showHeatPanel}}">
+            <view class="heatPanel">
+                <view class="heatPanelHead">
+                    <view class="heatPetSocket"></view>
+                    <text class="heatPanelTitle">加热模式</text>
+                    <text class="heatPanelHint">点卡片立即开始加热 · 点温度可自定义</text>
+                </view>
+                <view class="heatSceneGrid">
+                    <view bindtap="pickHeatPreset" class="heatSceneBtn {{item.tone}}" data-group="scene" data-key="{{item.key}}" hoverClass="press" hoverStayTime="80" wx:for="{{heatSceneOptions}}" wx:key="key">
+                        <view class="heatSceneMainRow">
+                            <view class="heatSceneHeadRow">
+                                <view class="heatSceneIconWrap">
+                                    <text class="heatSceneIcon">{{item.icon}}</text>
+                                </view>
+                                <text class="heatSceneTitle">{{item.title}}</text>
+                            </view>
+                            <text catchtap="editHeatPresetTemp" class="heatSceneTemp heatTempEditable" data-group="scene" data-key="{{item.key}}">{{item.temp}}°C</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="heatSectionTitle">快捷温度</view>
+                <view class="heatPresetList">
+                    <view bindtap="pickHeatPreset" class="heatPresetItem" data-group="base" data-key="{{item.key}}" hoverClass="press" hoverStayTime="80" wx:for="{{heatOptions}}" wx:key="key">
+                        <text class="heatPresetName">{{item.title}}</text>
+                        <text catchtap="editHeatPresetTemp" class="heatPresetTemp heatTempEditable" data-group="base" data-key="{{item.key}}">{{item.temp}}°C</text>
+                    </view>
+                </view>
+                <view bindtap="closeHeatPanel" class="heatPanelCancel" hoverClass="press" hoverStayTime="80">取消</view>
+            </view>
+        </view>
+    </view>
+</view>

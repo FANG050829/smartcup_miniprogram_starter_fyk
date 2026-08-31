@@ -1,0 +1,647 @@
+page {
+    height: 100%;
+    background: #dce9f2;
+}
+
+/* 反AI打磨约定（本次 pass）：
+   1) 两级圆角体系——浮在地图上的控件保持圆形（地图App平台惯例）；
+      刻度板内一律 16rpx 仪器面板圆角，杜绝"全员胶囊"chip 味。
+   2) 状态徽章降为裸「点+字」读数，不发胶囊盒子；语义色调成与 teal 水世界同族。
+   3) 字重分层：标题 700、正文 500、说明 400——不再满屏 800。
+   4) 主按钮扁平化：无彩色发光投影（廉价红线）。
+   5) 淡色小盒子一律换成发丝线分隔（附近地标）。
+   6) 触控目标 ≥ 84rpx（≈44pt），间距对齐 8 的倍数节奏。 */
+
+.page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    --accent: #0f8ea8;
+    --accent-deep: #0b6e86;
+    --ink: #102a43;
+    --muted: #5a7084;
+    --faint: #5f7589;
+    --hairline: rgba(16, 42, 67, 0.08);
+    --ok: #1f9e6b;
+    --ok-ink: #0e7a5f;
+    --warn: #d99a3d;
+    --warn-ink: #8a6420;
+}
+
+.press {
+    transform: translateY(2rpx) scale(0.99);
+    opacity: 0.94;
+}
+
+.map {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+/* ---- 顶部浮层（圆形地图控件） ---- */
+
+.topBar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    padding: 10rpx 24rpx 0;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.topBar > view {
+    pointer-events: auto;
+}
+
+.backBtn {
+    width: 84rpx;
+    height: 84rpx;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999rpx;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(31, 57, 89, 0.1);
+}
+
+.backChevron {
+    width: 18rpx;
+    height: 18rpx;
+    margin-left: 6rpx;
+    border-left: 4rpx solid #27466d;
+    border-bottom: 4rpx solid #27466d;
+    transform: rotate(45deg);
+}
+
+.titlePill {
+    display: flex;
+    align-items: center;
+    height: 84rpx;
+    padding: 0 28rpx;
+    border-radius: 999rpx;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(31, 57, 89, 0.1);
+}
+
+.titlePillText {
+    font-size: 26rpx;
+    font-weight: 700;
+    letter-spacing: 1rpx;
+    color: var(--ink);
+}
+
+.northWrap {
+    margin-left: auto;
+}
+
+.northBtn {
+    width: 84rpx;
+    height: 84rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4rpx;
+    border-radius: 999rpx;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(31, 57, 89, 0.1);
+}
+
+.northNeedle {
+    position: relative;
+    width: 28rpx;
+    height: 28rpx;
+}
+
+.needleHead {
+    position: absolute;
+    left: 10rpx;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 4rpx solid transparent;
+    border-right: 4rpx solid transparent;
+    border-bottom: 14rpx solid #c9554b;
+}
+
+.needleTail {
+    position: absolute;
+    left: 10rpx;
+    top: 14rpx;
+    width: 0;
+    height: 0;
+    border-left: 4rpx solid transparent;
+    border-right: 4rpx solid transparent;
+    border-top: 14rpx solid rgba(16, 42, 67, 0.4);
+}
+
+.northTxt {
+    font-size: 16rpx;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--muted);
+}
+
+/* ---- 底部液态刻度板（仪器面板） ---- */
+
+.dock {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    padding: 14rpx 32rpx 0;
+    border-radius: 24rpx 24rpx 0 0;
+    background: #fbfdfe;
+    border-top: 2rpx solid rgba(15, 142, 168, 0.45);
+    box-shadow: 0 -10rpx 30rpx rgba(13, 70, 92, 0.1);
+    box-sizing: border-box;
+    animation: dockIn 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes dockIn {
+    0% {
+        opacity: 0;
+        transform: translateY(48rpx);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dockGrab {
+    width: 72rpx;
+    height: 8rpx;
+    margin: 0 auto;
+    border-radius: 999rpx;
+    background: rgba(16, 42, 67, 0.14);
+}
+
+.dockHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-top: 20rpx;
+}
+
+.dockHeadLeft {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    min-width: 0;
+}
+
+/* 伙伴球：贴着「定位信息」标题，与右侧状态徽章同排；
+ * 总开关关闭（petOn=false）时元素不渲染，板头还原为纯文字行 */
+.dockPet {
+    flex-shrink: 0;
+    display: flex;
+}
+
+/* 标题+元信息保持原来的基线对齐小行，包一层以便与球垂直居中共处 */
+.dockTitleBlock {
+    display: flex;
+    align-items: baseline;
+    gap: 14rpx;
+    min-width: 0;
+}
+
+.dockTitle {
+    flex-shrink: 0;
+    font-size: 26rpx;
+    font-weight: 700;
+    letter-spacing: 1rpx;
+    color: var(--ink);
+}
+
+.dockMeta {
+    font-size: 20rpx;
+    font-weight: 500;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 状态读数：裸点+字，不发胶囊 */
+
+.stateLine {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10rpx;
+    font-size: 22rpx;
+    font-weight: 700;
+}
+
+.stateDot {
+    width: 12rpx;
+    height: 12rpx;
+    border-radius: 50%;
+}
+
+.stLive {
+    color: var(--ok-ink);
+}
+
+.stLive .stateDot {
+    background: var(--ok);
+}
+
+.stWait {
+    color: var(--warn-ink);
+}
+
+.stWait .stateDot {
+    background: var(--warn);
+    animation: pulseDot 1.4s ease-in-out infinite;
+}
+
+.stOff {
+    color: var(--muted);
+}
+
+.stOff .stateDot {
+    background: #97a8b6;
+}
+
+/* ---- 状态行与水位新鲜度（量杯量程：3分钟） ---- */
+
+.statusLine {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-top: 16rpx;
+}
+
+.statusText {
+    font-size: 22rpx;
+    font-weight: 500;
+    color: #4a6272;
+}
+
+.statusFresh {
+    flex-shrink: 0;
+    font-size: 20rpx;
+    font-weight: 600;
+    color: var(--accent-deep);
+    font-variant-numeric: tabular-nums;
+}
+
+.gauge {
+    margin-top: 14rpx;
+}
+
+.gaugeTrack {
+    position: relative;
+    height: 12rpx;
+    border-radius: 999rpx;
+    background-color: rgba(15, 142, 168, 0.1);
+    /* 发丝小刻度：每 12.5% 一道，与主刻度 25/50/75 对齐 */
+    background-image: repeating-linear-gradient(
+        to right,
+        transparent 0,
+        transparent calc(12.5% - 1px),
+        rgba(251, 253, 254, 0.65) calc(12.5% - 1px),
+        rgba(251, 253, 254, 0.65) 12.5%
+    );
+    overflow: hidden;
+}
+
+.gaugeFill {
+    position: relative;
+    height: 100%;
+    border-radius: 999rpx;
+    background: var(--accent);
+    transition: width 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* 液面高光端线 */
+
+.gaugeFill::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2rpx;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.gaugeTick {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: rgba(251, 253, 254, 0.9);
+}
+
+.gaugeTick.t1 {
+    left: 25%;
+}
+
+.gaugeTick.t2 {
+    left: 50%;
+}
+
+.gaugeTick.t3 {
+    left: 75%;
+}
+
+.gaugeScale {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8rpx;
+}
+
+.gaugeScaleTxt {
+    font-size: 20rpx;
+    font-weight: 500;
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- 设备与模式行 ---- */
+
+.dockGrid {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    margin-top: 22rpx;
+}
+
+.dockPicker {
+    flex: 1;
+    min-width: 0;
+}
+
+.devicePill {
+    display: flex;
+    align-items: center;
+    gap: 14rpx;
+    height: 84rpx;
+    padding: 0 22rpx;
+    border-radius: 16rpx;
+    background: #ffffff;
+    border: 1px solid rgba(16, 42, 67, 0.1);
+    box-sizing: border-box;
+}
+
+.devicePillOff {
+    opacity: 0.6;
+}
+
+.deviceDot {
+    flex-shrink: 0;
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.deviceName {
+    flex: 1;
+    min-width: 0;
+    font-size: 24rpx;
+    font-weight: 600;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chevDown {
+    flex-shrink: 0;
+    width: 12rpx;
+    height: 12rpx;
+    margin-right: 4rpx;
+    border-right: 3rpx solid rgba(15, 142, 168, 0.8);
+    border-bottom: 3rpx solid rgba(15, 142, 168, 0.8);
+    transform: rotate(45deg) translateY(-2rpx);
+}
+
+.seg {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 6rpx;
+    border-radius: 16rpx;
+    background: rgba(15, 142, 168, 0.08);
+}
+
+.segItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 72rpx;
+    padding: 0 26rpx;
+    border-radius: 12rpx;
+    font-size: 22rpx;
+    font-weight: 600;
+    color: var(--faint);
+}
+
+.segItem.segOn {
+    background: #ffffff;
+    color: var(--accent-deep);
+    border: 1px solid rgba(15, 142, 168, 0.28);
+}
+
+.modeHint {
+    flex-shrink: 0;
+    padding: 0 18rpx;
+    font-size: 20rpx;
+    font-weight: 500;
+    color: var(--faint);
+}
+
+/* ---- 附近地标（发丝线行，不做盒子） ---- */
+
+.landmark {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-top: 24rpx;
+    padding: 20rpx 4rpx 0;
+    border-top: 1px solid var(--hairline);
+}
+
+.landmarkLabel {
+    flex-shrink: 0;
+    font-size: 20rpx;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.landmarkValue {
+    flex: 1;
+    min-width: 0;
+    font-size: 22rpx;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.landmarkLoading {
+    color: var(--accent-deep);
+    animation: blinkText 1.1s ease-in-out infinite;
+}
+
+@keyframes blinkText {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.45;
+    }
+}
+
+/* ---- 主操作（扁平，无发光） ---- */
+
+.primaryBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 88rpx;
+    margin-top: 24rpx;
+    border-radius: 16rpx;
+    background: var(--accent);
+}
+
+.primaryBtnText {
+    font-size: 26rpx;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* ---- 未连接空态 ---- */
+
+.emptyState {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    margin-top: 24rpx;
+    padding: 4rpx 4rpx 0;
+}
+
+.emptyRipple {
+    position: relative;
+    flex-shrink: 0;
+    width: 120rpx;
+    height: 120rpx;
+}
+
+.rippleRing {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60rpx;
+    height: 60rpx;
+    margin: -30rpx 0 0 -30rpx;
+    border-radius: 50%;
+    border: 2rpx solid rgba(15, 142, 168, 0.5);
+    animation: rippleOut 2.6s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+.rippleRing.r2 {
+    animation-delay: 1.3s;
+}
+
+@keyframes rippleOut {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1.9);
+        opacity: 0;
+    }
+}
+
+.emptyCore {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 40rpx;
+    height: 40rpx;
+    margin: -20rpx 0 0 -20rpx;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 5rpx solid #ffffff;
+    box-shadow: 0 4rpx 10rpx rgba(13, 70, 92, 0.14);
+    box-sizing: border-box;
+}
+
+.emptyCopy {
+    display: flex;
+    flex-direction: column;
+    gap: 8rpx;
+    min-width: 0;
+}
+
+.emptyTitle {
+    font-size: 28rpx;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.emptySub {
+    font-size: 22rpx;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.dockSafe {
+    height: calc(env(safe-area-inset-bottom) + 16rpx);
+}
+
+@keyframes pulseDot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dock,
+    .rippleRing,
+    .stWait .stateDot,
+    .landmarkLoading {
+        animation: none;
+    }
+
+    .gaugeFill {
+        transition: none;
+    }
+}

@@ -1,0 +1,90 @@
+<view class="page {{pageAnim}}">
+    <view class="header fx fx-d1">
+        <block wx:if="{{petOn}}">
+            <pet-ball class="headerPet fx-d1" size="header" page-key="device"/>
+            <view class="headerTitleWrap">
+                <text class="header-title">设备</text>
+                <text class="headerHint">{{scanHint}}</text>
+            </view>
+        </block>
+        <text wx:else class="header-title">设备</text>
+        <view class="status-badge {{connected?'connected':scanning?'scanning':'offline'}}">
+            <view class="status-dot"></view>
+            <text>{{connected?connectedName:connecting?'连接中':scanning?'扫描中':'未连接'}}</text>
+        </view>
+    </view>
+    <view class="empty-state fx fx-d2" wx:if="{{!connected}}">
+        <view class="hero-icon-box {{scanning||connecting?'is-scanning':''}}">
+            <view class="hero-icon {{scanning||connecting?'icon-bluetooth':'icon-cup'}}"></view>
+        </view>
+        <text class="hero-title">{{connecting?'正在连接设备':scanning?'正在寻找水杯':'连接你的智能水杯'}}</text>
+        <text class="hero-desc">{{connecting?'请保持手机与设备靠近':scanning?devices.length?'已发现 '+devices.length+' 个设备':'请确保设备已开启并靠近手机':'开启蓝牙，体验智能饮水生活'}}</text>
+        <view class="action-area" wx:if="{{!connecting}}">
+            <view bindtap="{{scanning?'stopScan':'startScan'}}" class="btn-primary" hoverClass="btn-hover">{{scanning?'停止扫描':'开始扫描'}}</view>
+        </view>
+    </view>
+    <view class="dashboard fx fx-d2" wx:if="{{connected}}">
+        <view class="card temp-card">
+            <text class="card-subtitle">当前水温</text>
+            <view class="temp-display">
+                <text class="temp-value">{{temperature}}</text>
+                <text class="temp-unit">°C</text>
+            </view>
+        </view>
+        <view class="metrics-grid">
+            <view class="card metric-card">
+                <text class="card-subtitle">水质 TDS</text>
+                <view class="metric-value-box">
+                    <text class="metric-value">{{tds}}</text>
+                    <text class="metric-unit" wx:if="{{tds!=='--'}}">ppm</text>
+                </view>
+            </view>
+            <view class="card metric-card">
+                <text class="card-subtitle">加热状态</text>
+                <view class="metric-value-box">
+                    <text class="metric-value">{{heaterOn?'55':'关闭'}}</text>
+                    <text class="metric-unit" wx:if="{{heaterOn}}">°C</text>
+                </view>
+            </view>
+        </view>
+        <view class="info-section">
+            <view class="info-row" wx:if="{{firmwareVersion}}">
+                <text class="info-label">固件版本</text>
+                <text class="info-value">{{firmwareVersion}}</text>
+            </view>
+            <view class="info-row" wx:if="{{alarm}}">
+                <text class="info-label">信号状态</text>
+                <text class="info-value warn">偏弱，请靠近</text>
+            </view>
+            <view bindtap="disconnect" class="btn-secondary mt-32" hoverClass="btn-hover">断开连接</view>
+        </view>
+    </view>
+    <view class="device-list-section fx fx-d3" wx:if="{{!connected&&(pairedDevices.length||devices.length)}}">
+        <block wx:if="{{pairedDevices.length}}">
+            <text class="section-title">我的设备</text>
+            <view class="device-list">
+                <view bindtap="connectPaired" class="device-card" data-id="{{item.id}}" data-name="{{item.name}}" hoverClass="card-hover" wx:for="{{pairedDevices}}" wx:key="id">
+                    <view class="device-card-icon icon-cup"></view>
+                    <view class="device-card-info">
+                        <text class="device-name">{{item.name||'SmartCup'}}</text>
+                        <text class="device-meta">已保存 · {{item.lastSeenLabel}}</text>
+                    </view>
+                    <view class="chevron"></view>
+                </view>
+            </view>
+        </block>
+        <block wx:if="{{devices.length}}">
+            <text class="section-title mt-32">发现的设备</text>
+            <view class="device-list">
+                <view bindtap="connect" class="device-card" data-id="{{item.deviceId}}" data-name="{{item.name||item.localName}}" hoverClass="card-hover" wx:for="{{devices}}" wx:key="deviceId">
+                    <view class="device-card-icon icon-bluetooth new"></view>
+                    <view class="device-card-info">
+                        <text class="device-name">{{item.name||item.localName||'未知设备'}}</text>
+                        <text class="device-meta">信号 {{item.RSSI}} dBm</text>
+                    </view>
+                    <view class="chevron"></view>
+                </view>
+            </view>
+        </block>
+    </view>
+</view>

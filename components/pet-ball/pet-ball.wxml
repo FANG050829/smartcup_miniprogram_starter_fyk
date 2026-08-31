@@ -1,0 +1,6 @@
+<view wx:if="{{enabled}}" class="ballWrap">
+    <view class="ballDrag" style="transform: translate({{dragX}}px, {{dragY}}px) scale({{dragScale}});"
+        bindtouchstart="onDragStart" bindtouchmove="onDragMove" bindtouchend="onDragEnd" bindtouchcancel="onDragEnd">
+        <canvas type="2d" id="petBallCanvas" class="ballCanvas ballCanvas--{{size}}" bindtap="onTap" aria-label="伙伴表情：{{emotionName}}"></canvas>
+    </view>
+</view>

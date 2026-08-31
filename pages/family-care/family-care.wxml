@@ -1,0 +1,170 @@
+<view class="page">
+    <scroll-view class="pageScroll" scrollY="true">
+        <view class="head enter enter-d1">
+            <text class="headTitle">家庭关怀</text>
+            <text class="headSub">{{nickName?nickName+' 的饮水主页':'设置昵称后即可开启家庭关怀'}}</text>
+        </view>
+
+        <view class="section enter enter-d2">
+            <text class="secLabel">昵称</text>
+            <view class="panel pad">
+                <view class="inputRow">
+                    <input bindinput="onNickNameInput" class="input" maxlength="24" placeholder="输入你的昵称" value="{{nickName}}"></input>
+                    <view bindtap="saveNickName" class="btnSm {{busy?'disabled':''}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="保存昵称">
+                        <text class="btnSmText">{{busy?'处理中…':'保存'}}</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="section enter enter-d3" wx:if="{{bindCode}}">
+            <view class="secTitleRow">
+                <text class="secLabel">我的绑定码</text>
+                <text class="secNote">{{deviceName || '我的水杯'}}</text>
+            </view>
+            <view class="panel pad">
+                <view class="codeRow">
+                    <text class="codeValue">{{bindCode}}</text>
+                    <view bindtap="refreshBindCode" class="textBtn" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="刷新绑定码">
+                        <text class="textBtnText">刷新</text>
+                    </view>
+                </view>
+                <view class="btnRow">
+                    <view bindtap="copyBindCode" class="btn ghost" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="复制绑定码">
+                        <text class="btnGhostText">复制码</text>
+                    </view>
+                    <view bindtap="shareBindCode" class="btn ghost" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="复制分享文案">
+                        <text class="btnGhostText">复制分享文案</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="section enter enter-d3" wx:elif="{{!loading && !hasCup}}">
+            <text class="secLabel">开始使用</text>
+            <view class="panel pad">
+                <text class="panelText">还没有绑定水杯</text>
+                <text class="panelSub">家庭关怀以杯子为单位：先添加你的水杯，家人才能看到它的饮水数据</text>
+                <view bindtap="goDevice" class="btn ghost" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="去添加水杯">
+                    <text class="btnGhostText">去添加水杯</text>
+                </view>
+            </view>
+        </view>
+
+        <view class="section enter enter-d3" wx:elif="{{!loading}}">
+            <text class="secLabel">我的绑定码</text>
+            <view class="panel pad">
+                <text class="panelText">保存昵称后将自动生成绑定码</text>
+            </view>
+        </view>
+
+        <view class="section enter enter-d4">
+            <view class="secTitleRow">
+                <text class="secLabel">我的饮水状态</text>
+                <text class="secNote">同步给关怀你的家人</text>
+            </view>
+            <view class="panel pad">
+                <view class="ownHead">
+                    <text class="ownName">{{nickName||'我'}}</text>
+                    <text class="ownState ownState--{{ownSnapshotView.statusTone}}">{{ownSnapshotView.statusText}}</text>
+                </view>
+                <block wx:if="{{ownSnapshotView.hasData}}">
+                    <view class="amountRow">
+                        <text class="amountValue">{{ownSnapshotView.amount}}</text>
+                        <text class="amountUnit">ml</text>
+                        <text class="amountGoal">/ {{ownSnapshotView.goal}}ml</text>
+                    </view>
+                    <view class="progress">
+                        <view class="progressFill" style="width:{{ownSnapshotView.percent}}%;"></view>
+                    </view>
+                    <text class="percent">{{ownSnapshotView.percent}}%</text>
+                </block>
+                <text class="panelSub" wx:else>尚未同步今日数据</text>
+                <view bindtap="submitSnapshot" class="btn {{submitting?'disabled':''}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="同步今日数据">
+                    <text class="btnText">{{submitting?'同步中…':'同步今日数据'}}</text>
+                </view>
+                <text class="hint">数据仅在你点击上方按钮时更新，平时家人看到的是上次同步的结果</text>
+            </view>
+        </view>
+
+        <view class="section enter enter-d5">
+            <view class="secTitleRow">
+                <text class="secLabel">绑定家人</text>
+                <text class="secNote">输入家人的绑定码</text>
+            </view>
+            <view class="panel pad">
+                <input bindinput="onBindCodeInput" class="input block" maxlength="16" placeholder="家人绑定码" value="{{bindCodeInput}}"></input>
+                <input bindinput="onRelationInput" class="input block" maxlength="12" placeholder="给TA的备注（如：爸爸，仅自己可见）" value="{{relationInput}}"></input>
+                <view bindtap="bindFamily" class="btn {{busy?'disabled':''}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="绑定家人">
+                    <text class="btnText">{{busy?'处理中…':'绑定家人'}}</text>
+                </view>
+            </view>
+        </view>
+
+        <view class="section enter enter-d6">
+            <view class="secTitleRow">
+                <text class="secLabel">我关怀的家人</text>
+                <text class="secNote" wx:if="{{careTargets.length}}">共 {{careTargets.length}} 人</text>
+            </view>
+            <view class="panel pad center" wx:if="{{!careTargets.length&&!loading}}">
+                <text class="panelText">尚未绑定任何家人</text>
+                <text class="panelSub">输入家人的绑定码即可互相关注</text>
+            </view>
+            <view class="panel" wx:if="{{careTargets.length}}">
+                <view class="member" wx:for="{{careTargets}}" wx:key="id">
+                    <view class="rowIcon person"></view>
+                    <view class="memberBody">
+                        <view class="memberHead">
+                            <text class="memberName">{{item.owner&&item.owner.nickName||'家人'}}</text>
+                            <text class="memberState memberState--{{item.snapshotView.statusTone}}">{{item.snapshotView.statusText}}</text>
+                        </view>
+                        <text class="memberMeta">{{item.relation}} · 更新于 {{item.updatedAtText}}</text>
+                        <block wx:if="{{item.snapshotView.hasData}}">
+                            <view class="amountRow sm">
+                                <text class="amountValue sm">{{item.snapshotView.amount}}</text>
+                                <text class="amountUnit">ml</text>
+                                <text class="amountGoal">/ {{item.snapshotView.goal}}ml · {{item.snapshotView.percent}}%</text>
+                            </view>
+                            <view class="progress">
+                                <view class="progressFill" style="width:{{item.snapshotView.percent}}%;"></view>
+                            </view>
+                            <view class="memberFoot">
+                                <text class="memberMeta">最近饮水 {{item.snapshotView.lastWaterText}} · {{item.snapshotView.deviceName}}</text>
+                                <view bindtap="unbindMember" class="textBtn danger" data-id="{{item.id}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="解除绑定 {{item.owner&&item.owner.nickName||'家人'}}">
+                                    <text class="textBtnText danger">解除</text>
+                                </view>
+                            </view>
+                        </block>
+                        <view class="memberFoot" wx:else>
+                            <text class="memberMeta">家人尚未同步数据</text>
+                            <view bindtap="unbindMember" class="textBtn danger" data-id="{{item.id}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="解除绑定 {{item.owner&&item.owner.nickName||'家人'}}">
+                                <text class="textBtnText danger">解除</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="section enter enter-d7" wx:if="{{careViewers.length}}">
+            <view class="secTitleRow">
+                <text class="secLabel">关怀我的家人</text>
+                <text class="secNote">可随时停止分享</text>
+            </view>
+            <view class="panel">
+                <view class="viewer" wx:for="{{careViewers}}" wx:key="id">
+                    <view class="rowIcon person"></view>
+                    <view class="viewerInfo">
+                        <text class="memberName">{{item.viewerName}}</text>
+                        <text class="memberMeta">{{item.relation}} · 更新于 {{item.updatedAtText}}</text>
+                    </view>
+                    <view bindtap="unbindMember" class="textBtn danger" data-role="viewer" data-id="{{item.id}}" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="停止分享给 {{item.viewerName}}">
+                        <text class="textBtnText danger">停止分享</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <text class="foot enter enter-d7">家庭关怀数据通过云函数加密存储，仅互相关注的家人可见。</text>
+    </scroll-view>
+</view>

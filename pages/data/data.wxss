@@ -1,0 +1,823 @@
+/* AI 周报 —— 双皮肤页面（仅本页）
+   skin-print  ：编辑印刷风（纸面 + 油墨，零渐变零阴影）
+   skin-classic：小程序主题风（深青蓝 + 白卡片胶囊，与首页/计划页一致）
+   结构类名两套皮肤共用，颜色/圆角/投影由皮肤层接管 */
+
+/* ================= 共享结构 ================= */
+
+.page {
+    height: 100vh;
+}
+
+.sheet {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20rpx 32rpx calc(env(safe-area-inset-bottom) + 56rpx);
+    font-variant-numeric: tabular-nums;
+}
+
+/* 皮肤切换（仅本页） */
+
+.skinSwitch {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8rpx;
+    margin-bottom: 8rpx;
+}
+
+.skinOpt {
+    height: 88rpx;
+    padding: 0 26rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24rpx;
+    box-sizing: border-box;
+}
+
+/* 刊头 */
+
+.masthead {
+    box-sizing: border-box;
+}
+
+.mastTop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.kicker {
+    font-size: 22rpx;
+    font-weight: 600;
+}
+
+.mastMeta {
+    font-size: 22rpx;
+}
+
+.mastTitle {
+    display: block;
+    margin-top: 12rpx;
+    font-size: 60rpx;
+    line-height: 1.1;
+    font-weight: 900;
+    letter-spacing: 2rpx;
+}
+
+/* 头版数字 */
+
+.figures {
+    box-sizing: border-box;
+}
+
+.figNumWrap {
+    display: flex;
+    align-items: baseline;
+    gap: 10rpx;
+}
+
+.figNum {
+    font-size: 92rpx;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.figUnit {
+    font-size: 26rpx;
+    font-weight: 600;
+}
+
+.figNote {
+    display: block;
+    margin-top: 12rpx;
+    font-size: 22rpx;
+}
+
+.gauge {
+    height: 10rpx;
+    margin-top: 22rpx;
+    overflow: hidden;
+}
+
+.gaugeFill {
+    height: 100%;
+}
+
+/* 数据条 */
+
+.strip {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.stripCell {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stripCell + .stripCell {
+    border-left: 1rpx solid;
+}
+
+.stripV {
+    font-size: 30rpx;
+    line-height: 1.2;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.stripL {
+    margin-top: 6rpx;
+    font-size: 20rpx;
+}
+
+/* 章节 */
+
+.sec {
+    margin-top: 30rpx;
+    box-sizing: border-box;
+}
+
+.secHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 12rpx;
+}
+
+.secTitle {
+    font-size: 30rpx;
+    font-weight: 800;
+}
+
+.secMeta {
+    font-size: 20rpx;
+}
+
+/* 柱状图 */
+
+.chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12rpx;
+    height: 280rpx;
+    margin-top: 28rpx;
+    padding-bottom: 16rpx;
+}
+
+.col {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.colBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.colVal {
+    margin-bottom: 8rpx;
+    font-size: 20rpx;
+    white-space: nowrap;
+}
+
+.colBar {
+    width: 36rpx;
+}
+
+.colLabel {
+    margin-top: 12rpx;
+    font-size: 20rpx;
+}
+
+.colLabel.today {
+    font-weight: 800;
+}
+
+.legend {
+    display: flex;
+    gap: 28rpx;
+    margin-top: 16rpx;
+}
+
+.lgItem {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+}
+
+.lgSwatch {
+    width: 16rpx;
+    height: 16rpx;
+}
+
+.lgText {
+    font-size: 20rpx;
+}
+
+/* 逐日明细表 */
+
+.table {
+    margin-top: 6rpx;
+}
+
+.tRow {
+    display: flex;
+    align-items: center;
+    padding: 18rpx 4rpx;
+}
+
+.tRow.tHead {
+    padding: 14rpx 4rpx 12rpx;
+}
+
+.tCell {
+    flex: 1;
+    font-size: 24rpx;
+}
+
+.tCell.date {
+    flex: 1.2;
+    font-weight: 600;
+}
+
+.tCell.num {
+    text-align: right;
+}
+
+.tRow.today .tCell.date {
+    font-weight: 800;
+}
+
+.tHead .tCell {
+    font-size: 20rpx;
+    font-weight: 600;
+}
+
+/* AI 建议 */
+
+.secHead.withStamp {
+    align-items: center;
+}
+
+.stamp {
+    align-self: center;
+    width: 52rpx;
+    height: 52rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20rpx;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.secTitleWrap {
+    flex: 1;
+    min-width: 0;
+    margin-left: 16rpx;
+}
+
+.secTitleWrap .secTitle,
+.secTitleWrap .secMeta {
+    display: block;
+}
+
+.secTitleWrap .secMeta {
+    margin-top: 4rpx;
+}
+
+.skeleton {
+    margin-top: 24rpx;
+}
+
+.skLine {
+    height: 24rpx;
+    margin-bottom: 18rpx;
+}
+
+.skLine.w90 {
+    width: 90%;
+}
+
+.skLine.w80 {
+    width: 80%;
+}
+
+.skLine.w70 {
+    width: 70%;
+}
+
+.noteList {
+    margin-top: 10rpx;
+}
+
+.noteItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 18rpx;
+    padding: 20rpx 0;
+}
+
+.noteIdx {
+    font-size: 24rpx;
+    line-height: 1.7;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.noteText {
+    flex: 1;
+    min-width: 0;
+    font-size: 26rpx;
+    line-height: 1.7;
+}
+
+/* 操作 */
+
+.actions {
+    display: flex;
+    gap: 16rpx;
+    margin-top: 30rpx;
+}
+
+.btn {
+    flex: 1;
+    height: 88rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26rpx;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+
+.btn.primary {
+    flex: 1.4;
+}
+
+.press {
+    opacity: 0.75;
+}
+
+/* ================= 皮肤：印刷版 ================= */
+
+.skin-print.page {
+    background: #f7f5ef;
+}
+
+.skin-print .sheet {
+    color: #1f1d18;
+}
+
+.skin-print .skinOpt {
+    color: #6b675c;
+}
+
+.skin-print .skinOpt.on {
+    color: #1f1d18;
+    font-weight: 700;
+    border-bottom: 4rpx solid #1f1d18;
+}
+
+.skin-print .masthead {
+    padding-bottom: 22rpx;
+    border-bottom: 10rpx double #1f1d18;
+}
+
+.skin-print .kicker {
+    letter-spacing: 4rpx;
+    color: #5f5b52;
+}
+
+.skin-print .mastMeta {
+    color: #5f5b52;
+}
+
+.skin-print .mastTitle {
+    color: #1f1d18;
+}
+
+.skin-print .figures {
+    padding: 30rpx 0 26rpx;
+    border-bottom: 1rpx solid #dad5c8;
+}
+
+.skin-print .figNum {
+    color: #1f1d18;
+}
+
+.skin-print .figUnit,
+.skin-print .figNote {
+    color: #5f5b52;
+}
+
+.skin-print .gauge {
+    background: #e7e2d6;
+}
+
+.skin-print .gaugeFill {
+    background: #0f6b78;
+}
+
+.skin-print .strip {
+    padding: 22rpx 0;
+    border-bottom: 1rpx solid #dad5c8;
+}
+
+.skin-print .stripCell + .stripCell {
+    border-color: #dad5c8;
+}
+
+.skin-print .stripV {
+    color: #1f1d18;
+}
+
+.skin-print .stripL {
+    color: #6b675c;
+}
+
+.skin-print .secHead {
+    border-bottom: 3rpx solid #1f1d18;
+}
+
+.skin-print .secTitle {
+    color: #1f1d18;
+}
+
+.skin-print .secMeta {
+    color: #5f5b52;
+}
+
+.skin-print .chart {
+    border-bottom: 2rpx solid #1f1d18;
+}
+
+.skin-print .colVal {
+    color: #5f5b52;
+}
+
+.skin-print .colBar {
+    background: #0f6b78;
+}
+
+.skin-print .colBar.good {
+    background: #2e6b52;
+}
+
+.skin-print .colBar.steady {
+    background: #0f6b78;
+}
+
+.skin-print .colBar.low {
+    background: #b4552d;
+}
+
+.skin-print .colLabel {
+    color: #6b675c;
+}
+
+.skin-print .colLabel.today {
+    color: #1f1d18;
+}
+
+.skin-print .lgSwatch.good {
+    background: #2e6b52;
+}
+
+.skin-print .lgSwatch.steady {
+    background: #0f6b78;
+}
+
+.skin-print .lgSwatch.low {
+    background: #b4552d;
+}
+
+.skin-print .lgText {
+    color: #5f5b52;
+}
+
+.skin-print .tRow {
+    border-bottom: 1rpx solid #dad5c8;
+}
+
+.skin-print .tRow.tHead {
+    border-bottom: 2rpx solid #1f1d18;
+}
+
+.skin-print .tRow.today {
+    background: rgba(15, 107, 120, 0.06);
+}
+
+.skin-print .tCell {
+    color: #1f1d18;
+}
+
+.skin-print .tRow.today .tCell.date {
+    color: #0f6b78;
+}
+
+.skin-print .tCell.dim,
+.skin-print .tHead .tCell {
+    color: #5f5b52;
+}
+
+.skin-print .stamp {
+    border: 3rpx solid #1f1d18;
+    color: #1f1d18;
+}
+
+.skin-print .skLine {
+    background: #e7e2d6;
+}
+
+.skin-print .noteItem {
+    border-bottom: 1rpx solid #dad5c8;
+}
+
+.skin-print .noteItem:last-child {
+    border-bottom: none;
+}
+
+.skin-print .noteIdx {
+    color: #0f6b78;
+}
+
+.skin-print .noteText {
+    color: #1f1d18;
+}
+
+.skin-print .btn {
+    border: 2rpx solid #1f1d18;
+    color: #1f1d18;
+    background: #f7f5ef;
+}
+
+.skin-print .btn.primary {
+    background: #1f1d18;
+    color: #f7f5ef;
+}
+
+/* ================= 皮肤：主题版（平面品牌风）
+   只用品牌色块与细边框区分层级：零渐变、零阴影、零半透明、无胶囊堆砌 */
+
+.skin-classic.page {
+    background: #eef5f9;
+}
+
+.skin-classic .sheet {
+    color: #1c2b33;
+}
+
+.skin-classic .skinSwitch {
+    background: #e3edf2;
+    border-radius: 14rpx;
+    padding: 6rpx;
+    margin-bottom: 20rpx;
+}
+
+.skin-classic .skinOpt {
+    border-radius: 10rpx;
+    color: #5a7286;
+}
+
+.skin-classic .skinOpt.on {
+    background: #ffffff;
+    border: 1rpx solid #c9dce6;
+    color: #1f6e8c;
+    font-weight: 800;
+}
+
+.skin-classic .masthead {
+    padding: 32rpx 30rpx 30rpx;
+    border-radius: 24rpx;
+    background: #1f6e8c;
+}
+
+.skin-classic .kicker {
+    letter-spacing: 3rpx;
+    color: #d7eaf2;
+}
+
+.skin-classic .mastMeta {
+    color: #d7eaf2;
+}
+
+.skin-classic .mastTitle {
+    color: #ffffff;
+}
+
+.skin-classic .statsBlock {
+    margin-top: 20rpx;
+    padding: 6rpx 30rpx;
+    border-radius: 24rpx;
+    background: #ffffff;
+    border: 1rpx solid #d8e5ec;
+}
+
+.skin-classic .figures {
+    padding-top: 26rpx;
+    padding-bottom: 26rpx;
+    border-bottom: 1rpx solid #e8f0f4;
+}
+
+.skin-classic .figNum {
+    color: #1f6e8c;
+}
+
+.skin-classic .figUnit,
+.skin-classic .figNote {
+    color: #5a7286;
+}
+
+.skin-classic .gauge {
+    border-radius: 999rpx;
+    background: #e4eef3;
+}
+
+.skin-classic .gaugeFill {
+    border-radius: 999rpx;
+    background: #1f6e8c;
+}
+
+.skin-classic .strip {
+    padding-top: 22rpx;
+    padding-bottom: 22rpx;
+}
+
+.skin-classic .stripCell + .stripCell {
+    border-color: #e8f0f4;
+}
+
+.skin-classic .stripV {
+    color: #1c2b33;
+}
+
+.skin-classic .stripL {
+    color: #5a7286;
+}
+
+.skin-classic .sec {
+    padding: 28rpx 30rpx 30rpx;
+    border-radius: 24rpx;
+    background: #ffffff;
+    border: 1rpx solid #d8e5ec;
+}
+
+.skin-classic .secHead {
+    border-bottom: 1rpx solid #e8f0f4;
+    padding-bottom: 14rpx;
+}
+
+.skin-classic .secTitle {
+    color: #1c2b33;
+}
+
+.skin-classic .secMeta {
+    color: #5a7286;
+}
+
+.skin-classic .chart {
+    border-bottom: 2rpx solid #d8e5ec;
+}
+
+.skin-classic .colVal {
+    color: #5a7286;
+}
+
+.skin-classic .colBar {
+    border-radius: 6rpx 6rpx 0 0;
+    background: #1f6e8c;
+}
+
+.skin-classic .colBar.good {
+    background: #3a8f6d;
+}
+
+.skin-classic .colBar.steady {
+    background: #1f6e8c;
+}
+
+.skin-classic .colBar.low {
+    background: #c06b32;
+}
+
+.skin-classic .colLabel {
+    color: #5a7286;
+}
+
+.skin-classic .colLabel.today {
+    color: #1f6e8c;
+}
+
+.skin-classic .lgSwatch {
+    border-radius: 2rpx;
+}
+
+.skin-classic .lgSwatch.good {
+    background: #3a8f6d;
+}
+
+.skin-classic .lgSwatch.steady {
+    background: #1f6e8c;
+}
+
+.skin-classic .lgSwatch.low {
+    background: #c06b32;
+}
+
+.skin-classic .lgText {
+    color: #5a7286;
+}
+
+.skin-classic .tRow {
+    border-bottom: 1rpx solid #e8f0f4;
+}
+
+.skin-classic .tRow:last-child {
+    border-bottom: none;
+}
+
+.skin-classic .tRow.tHead {
+    border-bottom: 2rpx solid #d8e5ec;
+}
+
+.skin-classic .tRow.today {
+    background: #eaf3f7;
+    border-radius: 10rpx;
+}
+
+.skin-classic .tCell {
+    color: #1c2b33;
+}
+
+.skin-classic .tRow.today .tCell.date {
+    color: #1f6e8c;
+}
+
+.skin-classic .tCell.dim,
+.skin-classic .tHead .tCell {
+    color: #5a7286;
+}
+
+.skin-classic .stamp {
+    border: none;
+    border-radius: 8rpx;
+    color: #ffffff;
+    background: #1f6e8c;
+}
+
+.skin-classic .skLine {
+    border-radius: 4rpx;
+    background: #e8f0f4;
+}
+
+.skin-classic .noteItem {
+    border-bottom: 1rpx solid #e8f0f4;
+}
+
+.skin-classic .noteItem:last-child {
+    border-bottom: none;
+}
+
+.skin-classic .noteIdx {
+    color: #1f6e8c;
+}
+
+.skin-classic .noteText {
+    color: #1c2b33;
+}
+
+.skin-classic .actions {
+    margin-top: 26rpx;
+}
+
+.skin-classic .btn {
+    border: 1rpx solid #c9dce6;
+    border-radius: 16rpx;
+    color: #1f6e8c;
+    background: #ffffff;
+}
+
+.skin-classic .btn.primary {
+    border: 1rpx solid #1f6e8c;
+    color: #ffffff;
+    background: #1f6e8c;
+}
+
+.skin-classic .press {
+    opacity: 0.85;
+    transform: scale(0.98);
+}

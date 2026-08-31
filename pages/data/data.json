@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "AI周报",
+  "navigationBarBackgroundColor": "#EEF5F9",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#EEF5F9",
+  "enablePullDownRefresh": true,
+  "usingComponents": {}
+}

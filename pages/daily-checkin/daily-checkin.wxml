@@ -1,0 +1,170 @@
+<view class="page">
+    <!-- 云端数据失败：保留原重试逻辑 -->
+    <view class="loadBanner" wx:if="{{loadError}}">
+        <text class="loadBannerText">云端饮水数据没取到，打卡先歇一会儿</text>
+        <view class="loadBannerBtn" hoverClass="press" hoverStayTime="80" bindtap="onRetryLoad" aria-role="button" aria-label="重试加载">
+            <text class="loadBannerBtnText">重试</text>
+        </view>
+    </view>
+
+    <!-- 日期 + 目标入口 -->
+    <view class="topRow">
+        <text class="dateText">{{todayLabel}}</text>
+        <view class="goalChip" hoverClass="press" hoverStayTime="80" bindtap="onToggleGoalEdit" aria-role="button" aria-label="调整每日目标">
+            <text class="goalChipText">目标 {{dailyGoalMl}}ml</text>
+            <view class="goalChipChevron {{goalEditing ? 'up' : ''}}"></view>
+        </view>
+    </view>
+
+    <view class="goalEditor" wx:if="{{goalEditing}}">
+        <view class="goalStepBtn {{goalDraft <= GOAL_MIN ? 'off' : ''}}" hoverClass="press" hoverStayTime="80" bindtap="onGoalStepDown" aria-role="button" aria-label="目标减100毫升">
+            <text class="goalStepSign">−</text>
+            <text class="goalStepUnit">100ml</text>
+        </view>
+        <view class="goalDraftBox">
+            <text class="goalDraftNum">{{goalDraft}}</text>
+            <text class="goalDraftUnit">ml</text>
+        </view>
+        <view class="goalStepBtn {{goalDraft >= GOAL_MAX ? 'off' : ''}}" hoverClass="press" hoverStayTime="80" bindtap="onGoalStepUp" aria-role="button" aria-label="目标加100毫升">
+            <text class="goalStepSign">＋</text>
+            <text class="goalStepUnit">100ml</text>
+        </view>
+        <view class="goalSaveBtn {{goalSaving ? 'off' : ''}}" hoverClass="press" hoverStayTime="80" bindtap="onGoalSave" aria-role="button" aria-label="保存目标">
+            <text class="goalSaveText">{{goalSaving ? '存着…' : '存'}}</text>
+        </view>
+    </view>
+    <text class="goalHint" wx:if="{{goalEditing}}">范围 {{GOAL_MIN}}–{{GOAL_MAX}}ml，步进 100ml</text>
+
+    <!-- 主账目 -->
+    <view class="ledger">
+        <view class="ledgerNumRow">
+            <text class="ledgerNum">{{todayTotalLabel}}</text>
+            <text class="ledgerUnit">ml</text>
+            <view class="stamp" wx:if="{{reachedGoal}}" aria-role="text" aria-label="今日已达标">
+                <text class="stampText">达 标</text>
+                <text class="stampDate">{{stampDateText}}</text>
+            </view>
+        </view>
+        <text class="ledgerSub">{{ledgerSub}}</text>
+    </view>
+
+    <!-- 水位尺：进度 + 每次打卡的落点 -->
+    <view class="rulerSec">
+        <view class="rulerTrack">
+            <view class="rulerFill" style="width:{{fillPercent}}%;"></view>
+            <view class="rulerMajor" style="left:{{item.pct}}%;" wx:for="{{rulerMajors}}" wx:key="pct"></view>
+            <view class="rulerNotch {{item.key === freshNotchKey ? 'fresh' : ''}}"
+                  wx:for="{{notches}}" wx:key="key"
+                  style="left:{{item.left}}%;"
+                  data-index="{{index}}" bindtap="onNotchTap" aria-role="button" aria-label="{{item.timeLabel}}{{item.amount}}毫升"></view>
+            <view class="gainTag" wx:if="{{gainTag}}" style="left:{{gainTag.left}}%;">
+                <text class="gainTagText">+{{gainTag.amount}}</text>
+            </view>
+        </view>
+        <view class="rulerScale">
+            <text class="rulerScaleNum" style="left:{{item.pct}}%;" wx:for="{{rulerMajors}}" wx:key="pct">{{item.ml}}</text>
+        </view>
+    </view>
+
+    <!-- 时段节奏带 06:00–24:00 -->
+    <view class="rhythmSec">
+        <view class="rhythmHead">
+            <text class="rhythmTitle">今天的节奏</text>
+            <text class="rhythmMeta">{{rhythmMeta}}</text>
+        </view>
+        <view class="rhythmBand">
+            <view class="rhythmGrid" style="left:{{item.left}}%;" wx:for="{{rhythmGrid}}" wx:key="left"></view>
+            <view class="rhythmTick t{{item.size}}" wx:for="{{rhythmTicks}}" wx:key="key" style="left:{{item.left}}%;"></view>
+            <view class="rhythmNow" wx:if="{{nowLeft !== null}}" style="left:{{nowLeft}}%;"></view>
+        </view>
+        <view class="rhythmScale">
+            <text class="rhythmScaleNum" style="left:{{item.left}}%;" wx:for="{{rhythmGrid}}" wx:key="left">{{item.label}}</text>
+        </view>
+        <view class="rhythmEmpty" wx:if="{{!rhythmTicks.length}}">
+            <text class="rhythmEmptyText">白天还没落下刻度</text>
+        </view>
+    </view>
+
+    <!-- 上一杯 -->
+    <view class="lastDrinkRow">
+        <view class="lastDrinkIcon"></view>
+        <text class="lastDrinkText" wx:if="{{lastDrink.text}}">{{lastDrink.text}}</text>
+        <text class="lastDrinkText idle" wx:else>账本还是新的，等着第一笔</text>
+        <view class="topUpBtn {{checkinBusy ? 'off' : ''}}" wx:if="{{showTopUp}}" hoverClass="press" hoverStayTime="80" bindtap="onTopUp" aria-role="button" aria-label="补一杯200毫升">
+            <text class="topUpText">补一杯 200ml</text>
+        </view>
+    </view>
+
+    <!-- 打卡操作 -->
+    <view class="checkinSec">
+        <view class="primaryBtn {{checkinBusy ? 'off' : ''}}" hoverClass="primaryPress" hoverStayTime="80" bindtap="onSuggestedCheckin" aria-role="button" aria-label="打卡{{suggestedAmount}}毫升">
+            <text class="primaryBtnText">{{checkinBusy ? '咕咚…' : '咕咚一下'}}</text>
+            <view class="primaryBtnDivider"></view>
+            <text class="primaryBtnAmount">{{suggestedAmount}}ml</text>
+        </view>
+        <view class="quickChips">
+            <view class="quickChip {{checkinBusy ? 'off' : ''}}" wx:for="{{quickAmounts}}" wx:key="*this"
+                  hoverClass="chipPress" hoverStayTime="80" data-amount="{{item}}" bindtap="onQuickCheckin"
+                  aria-role="button" aria-label="打卡{{item}}毫升">
+                <text class="quickChipNum">{{item}}</text>
+                <text class="quickChipUnit">ml</text>
+            </view>
+        </view>
+        <view class="customRow">
+            <input class="customInput" type="number" placeholder="另有记法，直接写毫升数" placeholderClass="customPlaceholder"
+                   value="{{customAmount}}" bindinput="onCustomAmountInput" confirmType="done" bindconfirm="onCustomCheckin"
+                   disabled="{{checkinBusy}}"/>
+            <view class="customBtn {{checkinBusy ? 'off' : ''}}" hoverClass="press" hoverStayTime="80" bindtap="onCustomCheckin" aria-role="button" aria-label="记录自定义饮水量">
+                <text class="customBtnText">记一笔</text>
+            </view>
+        </view>
+    </view>
+
+    <!-- 连续达标 + 最近七天 -->
+    <view class="streakRow">
+        <view class="streakLeft">
+            <text class="streakNum">{{streakDays}}</text>
+            <view class="streakWords">
+                <text class="streakLabel">连续达标</text>
+                <text class="streakTail">{{streakTail}}</text>
+            </view>
+        </view>
+        <view class="weekDots">
+            <view class="weekDot" wx:for="{{weekDots}}" wx:key="key">
+                <view class="weekDotDisc {{item.state}} {{item.today ? 'today' : ''}}"></view>
+                <text class="weekDotLabel {{item.today ? 'today' : ''}}">{{item.label}}</text>
+            </view>
+        </view>
+    </view>
+
+    <!-- AI 水顾问（懒加载扩展位） -->
+    <view class="advisor">
+        <view class="advisorHead" hoverClass="press" hoverStayTime="80" bindtap="onToggleAdvice" aria-role="button" aria-label="展开或收起AI水顾问">
+            <view class="advisorSpark"></view>
+            <text class="advisorTitle">水顾问</text>
+            <text class="advisorMeta">{{adviceMeta}}</text>
+            <view class="advisorChevron {{adviceOpen ? 'up' : ''}}"></view>
+        </view>
+        <view class="advisorBody" wx:if="{{adviceOpen}}">
+            <block wx:if="{{adviceState === 'loading'}}">
+                <text class="advisorLine">正在翻你最近七天的水账…</text>
+            </block>
+            <block wx:elif="{{adviceState === 'error'}}">
+                <text class="advisorLine">这会儿连不上 AI。不影响记账，稍后再试。</text>
+                <view class="advisorRetry" hoverClass="press" hoverStayTime="80" bindtap="onLoadAdvice" aria-role="button" aria-label="重试AI建议">
+                    <text class="advisorRetryText">再来一次</text>
+                </view>
+            </block>
+            <block wx:elif="{{adviceState === 'ready'}}">
+                <text class="advisorLine" wx:for="{{adviceLines}}" wx:key="*this">{{item}}</text>
+                <navigator class="advisorMore" url="/pages/chat/chat" hoverClass="press" hoverStayTime="80">
+                    <text class="advisorMoreText">觉得不够细，去对话页接着问 ›</text>
+                </navigator>
+            </block>
+        </view>
+    </view>
+
+    <navigator class="footLink" url="/pages/checkin/checkin" hoverClass="press" hoverStayTime="80">
+        <text class="footLinkText">全部记录与打卡日历 ›</text>
+    </navigator>
+</view>

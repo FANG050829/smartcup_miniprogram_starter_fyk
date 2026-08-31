@@ -1,0 +1,443 @@
+/* 家庭关怀 — 平面化重做：无渐变、无投影、细分割线、单一强调色 */
+
+.page {
+    min-height: 100vh;
+    background: #f7f9fa;
+}
+
+.pageScroll {
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 40rpx 32rpx calc(env(safe-area-inset-bottom) + 40rpx);
+}
+
+.head {
+    margin-bottom: 36rpx;
+}
+
+.headTitle {
+    display: block;
+    font-size: 44rpx;
+    line-height: 1.25;
+    font-weight: 800;
+    color: #102a43;
+}
+
+.headSub {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 22rpx;
+    line-height: 1.5;
+    color: #5a6b7b;
+}
+
+.section {
+    margin-bottom: 32rpx;
+}
+
+.secLabel {
+    display: block;
+    margin-bottom: 12rpx;
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 2rpx;
+    color: #5a6b7b;
+}
+
+.secTitleRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-bottom: 12rpx;
+}
+
+.secTitleRow .secLabel {
+    margin-bottom: 0;
+}
+
+.secNote {
+    font-size: 22rpx;
+    color: #7c8a99;
+}
+
+.panel {
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.10);
+    border-radius: 16rpx;
+}
+
+.panel.pad {
+    padding: 24rpx;
+}
+
+.panel.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40rpx 24rpx;
+}
+
+.panelText {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #102a43;
+    text-align: center;
+}
+
+.panelSub {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 22rpx;
+    line-height: 1.6;
+    color: #5a6b7b;
+    text-align: center;
+}
+
+/* 输入 */
+.inputRow {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.input {
+    flex: 1;
+    min-width: 0;
+    height: 88rpx;
+    padding: 0 24rpx;
+    border: 1rpx solid rgba(16, 42, 67, 0.14);
+    border-radius: 12rpx;
+    background: #fbfcfd;
+    font-size: 26rpx;
+    color: #102a43;
+}
+
+.input.block {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16rpx;
+}
+
+/* 按钮 */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 88rpx;
+    margin-top: 16rpx;
+    border-radius: 14rpx;
+    background: #102a43;
+    transition: opacity 0.2s ease;
+}
+
+.btn.ghost {
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.16);
+    margin-top: 0;
+}
+
+.btnRow {
+    display: flex;
+    gap: 16rpx;
+    margin-top: 20rpx;
+}
+
+.btnRow .btn {
+    flex: 1;
+}
+
+.btn.disabled {
+    opacity: 0.55;
+}
+
+.btnText {
+    font-size: 26rpx;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.btnGhostText {
+    font-size: 26rpx;
+    font-weight: 700;
+    color: #102a43;
+}
+
+.btnSm {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 88rpx;
+    padding: 0 32rpx;
+    border-radius: 14rpx;
+    background: #102a43;
+    transition: opacity 0.2s ease;
+}
+
+.btnSm.disabled {
+    opacity: 0.55;
+}
+
+.btnSmText {
+    font-size: 26rpx;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.textBtn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 88rpx;
+    padding: 0 12rpx;
+}
+
+.textBtnText {
+    font-size: 24rpx;
+    font-weight: 700;
+    color: #102a43;
+}
+
+.textBtnText.danger {
+    color: #b91c1c;
+}
+
+/* 绑定码 */
+.codeRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+}
+
+.codeValue {
+    font-size: 44rpx;
+    font-weight: 800;
+    letter-spacing: 8rpx;
+    color: #102a43;
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+/* 饮水状态 */
+.ownHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+}
+
+.ownName {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #102a43;
+}
+
+.ownState {
+    font-size: 24rpx;
+    font-weight: 700;
+}
+
+.ownState--success { color: #15803d; }
+.ownState--warning { color: #b45309; }
+.ownState--info { color: #0e7490; }
+.ownState--muted { color: #5a6b7b; }
+
+.amountRow {
+    display: flex;
+    align-items: baseline;
+    gap: 8rpx;
+    margin-top: 20rpx;
+}
+
+.amountRow.sm {
+    margin-top: 16rpx;
+}
+
+.amountValue {
+    font-size: 56rpx;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #102a43;
+    font-variant-numeric: tabular-nums;
+}
+
+.amountValue.sm {
+    font-size: 36rpx;
+}
+
+.amountUnit {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #5a6b7b;
+}
+
+.amountGoal {
+    font-size: 24rpx;
+    color: #5a6b7b;
+}
+
+.progress {
+    height: 10rpx;
+    margin-top: 16rpx;
+    border-radius: 999rpx;
+    background: #e8edf1;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 999rpx;
+    background: #102a43;
+    transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.percent {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 22rpx;
+    font-weight: 700;
+    color: #5a6b7b;
+    text-align: right;
+}
+
+.hint {
+    display: block;
+    margin-top: 16rpx;
+    font-size: 22rpx;
+    line-height: 1.6;
+    color: #7c8a99;
+}
+
+/* 家人列表 */
+.member,
+.viewer {
+    display: flex;
+    align-items: flex-start;
+    gap: 20rpx;
+    padding: 24rpx;
+}
+
+.member + .member,
+.viewer + .viewer {
+    border-top: 1rpx solid rgba(16, 42, 67, 0.08);
+}
+
+.rowIcon {
+    flex-shrink: 0;
+    width: 40rpx;
+    height: 40rpx;
+    margin-top: 6rpx;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.person {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCcgZmlsbD0nbm9uZScgc3Ryb2tlPSclMjMxMDJBNDMnIHN0cm9rZS13aWR0aD0nMS44JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9J00xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyJy8+PGNpcmNsZSBjeD0nMTInIGN5PSc3JyByPSc0Jy8+PC9zdmc+");
+}
+
+.memberBody,
+.viewerInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.viewer {
+    align-items: center;
+}
+
+.viewerInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.memberHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+}
+
+.memberName {
+    font-size: 28rpx;
+    line-height: 1.3;
+    font-weight: 600;
+    color: #102a43;
+}
+
+.memberState {
+    flex-shrink: 0;
+    font-size: 24rpx;
+    font-weight: 700;
+}
+
+.memberState--success { color: #15803d; }
+.memberState--warning { color: #b45309; }
+.memberState--info { color: #0e7490; }
+.memberState--muted { color: #5a6b7b; }
+
+.memberMeta {
+    display: block;
+    margin-top: 4rpx;
+    font-size: 22rpx;
+    line-height: 1.5;
+    color: #5a6b7b;
+}
+
+.memberFoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-top: 12rpx;
+}
+
+/* 页脚说明 */
+.foot {
+    display: block;
+    font-size: 22rpx;
+    line-height: 1.6;
+    color: #7c8a99;
+    text-align: center;
+}
+
+.press {
+    opacity: 0.7;
+}
+
+/* 入场错峰动画 */
+.enter {
+    animation: fcEnter 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.enter-d1 { animation-delay: 0ms; }
+.enter-d2 { animation-delay: 60ms; }
+.enter-d3 { animation-delay: 120ms; }
+.enter-d4 { animation-delay: 180ms; }
+.enter-d5 { animation-delay: 240ms; }
+.enter-d6 { animation-delay: 300ms; }
+.enter-d7 { animation-delay: 360ms; }
+
+@keyframes fcEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(18rpx);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .enter {
+        animation: none;
+    }
+
+    .progressFill {
+        transition: none;
+    }
+}

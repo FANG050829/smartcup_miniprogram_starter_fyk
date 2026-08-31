@@ -1,0 +1,93 @@
+<!--
+  方向契约 · pages/water-reminder（久未喝水提醒）
+  THESIS: 本页主角是「喝水间隔水钟」——监测多久没喝水，超过设定时长才提醒；hero 卡用流逝时间读数 + 流向「N 小时提醒线」的水位条表达 watchdog 本质，与按点响铃的定时提醒划清界限（防混淆是本次重做的第一目标）。
+  区分策略: 原生导航标题 = 久未喝水提醒（与 profile 入口、提醒弹窗统一命名）；卡内状态行区分 监测中/已超时/未启用/未开始；关闭开关时明说「仅记录饮水间隔」，不假装还会提醒。
+  ANTI-AI: 无渐变、无光斑、无发光、无字距把戏；发丝线 + 平涂白卡；字重 700/500/400；动效仅水位条 width 过渡与超时状态点脉冲；返回交给原生导航栏。
+-->
+<view class="page">
+    <view class="timerCard tone--{{statusTone}}">
+        <view class="timerHead">
+            <text class="timerKicker">距上次喝水</text>
+            <view class="stateLine st--{{stateTone}}">
+                <view class="stateDot"></view>
+                <text>{{stateWord}}</text>
+            </view>
+        </view>
+        <text class="timerReadout">{{timeSinceLastWater}}</text>
+        <view class="timerBar">
+            <view class="timerFill" style="width:{{elapsedPercent}}%;"></view>
+            <view class="timerTick t1"></view>
+            <view class="timerTick t2"></view>
+            <view class="timerTick t3"></view>
+        </view>
+        <view class="timerScale">
+            <text class="timerScaleTxt">上次喝水</text>
+            <text class="timerScaleTxt">{{interval}} 小时提醒线</text>
+        </view>
+        <text class="timerNote note--{{stateTone}}">{{statusBadgeText}}</text>
+        <view bindtap="onMarkAsDrunk" class="primaryBtn" hoverClass="press" hoverStayTime="80">
+            <text class="primaryBtnText">我喝过了 · 记 200ml</text>
+        </view>
+    </view>
+
+    <view class="sectionKicker">提醒设置</view>
+    <view class="panel">
+        <view class="row">
+            <view class="rowInfo">
+                <text class="rowLabel">超时提醒</text>
+                <text class="rowDesc">开启后按喝水间隔监测</text>
+            </view>
+            <switch bindchange="onToggleEnabled" checked="{{enabled}}" color="#0f8ea8"></switch>
+        </view>
+        <view class="hairline"></view>
+        <picker bindchange="onIntervalChange" mode="selector" range="{{[3,4,5,6,7,8,9,10,11,12]}}" value="{{[3,4,5,6,7,8,9,10,11,12].indexOf(interval)}}">
+            <view class="rowTapWrap" hoverClass="rowHover" hoverStayTime="80">
+                <view class="row">
+                    <view class="rowInfo">
+                        <text class="rowLabel">提醒间隔</text>
+                        <text class="rowDesc">{{interval}} 小时没喝水就提醒</text>
+                    </view>
+                    <view class="stepper">
+                        <text class="stepperValue">{{interval}}h</text>
+                        <view class="chevRight"></view>
+                    </view>
+                </view>
+            </view>
+        </picker>
+        <view class="hairline"></view>
+        <view class="methodBlock">
+            <text class="rowLabel">提醒方式</text>
+            <radio-group bindchange="onMethodChange" class="radioGroup">
+                <label class="radioRow">
+                    <radio checked="{{reminderMethod==='notification'}}" color="#0f8ea8" value="notification"></radio>
+                    <view class="radioContent">
+                        <text class="radioLabel">通知</text>
+                        <text class="radioDesc">小程序内弹出提醒窗口</text>
+                    </view>
+                </label>
+                <view class="hairline hairlineInset"></view>
+                <label class="radioRow">
+                    <radio checked="{{reminderMethod==='sound'}}" color="#0f8ea8" value="sound"></radio>
+                    <view class="radioContent">
+                        <text class="radioLabel">声音</text>
+                        <text class="radioDesc">播放提示音</text>
+                    </view>
+                </label>
+                <view class="hairline hairlineInset"></view>
+                <label class="radioRow">
+                    <radio checked="{{reminderMethod==='vibration'}}" color="#0f8ea8" value="vibration"></radio>
+                    <view class="radioContent">
+                        <text class="radioLabel">震动</text>
+                        <text class="radioDesc">手机震动</text>
+                    </view>
+                </label>
+            </radio-group>
+        </view>
+    </view>
+
+    <view class="notes">
+        <text class="noteLine">· 只在你超过设定时长没有饮水记录时提醒，不会按固定时刻响铃</text>
+        <text class="noteLine">· 点击「我喝过了」或在首页记录饮水，都会重新开始计时</text>
+        <text class="noteLine">· 修改间隔或方式立即生效，无需重新开启</text>
+    </view>
+</view>

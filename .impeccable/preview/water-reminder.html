@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>water-reminder preview · 久未喝水提醒 · 间隔水钟</title>
+<style>
+    /* 镜像 pages/water-reminder/water-reminder.wxss，rpx→px 按 750 设计稿 → 390px 视口（×0.52）
+       顶部为原生导航栏替身（页面 json navigationBarTitleText=久未喝水提醒） */
+    html, body { margin: 0; padding: 0; background: #E3E9EE; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .toolbar { padding: 14px 16px 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .toolbar button { border: 1px solid #C6D4DD; background: #fff; color: #27466d; border-radius: 8px; padding: 7px 14px; font-size: 13px; cursor: pointer; }
+    .toolbar button.on { background: #0F8EA8; border-color: #0F8EA8; color: #fff; }
+    .stage { display: flex; gap: 20px; padding: 0 16px 24px; flex-wrap: wrap; }
+    .phone { position: relative; width: 390px; height: 844px; border-radius: 28px; overflow: hidden; box-shadow: 0 18px 44px rgba(16,42,67,0.18); background: #F7F9FA; flex-shrink: 0; }
+    .note { max-width: 300px; font-size: 12px; line-height: 1.7; color: #56748a; }
+
+    /* 原生导航替身 */
+    .nav { height: 68px; background: #F7F9FA; display: flex; align-items: flex-end; }
+    .navInner { height: 44px; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+    .navTitle { font-size: 16px; font-weight: 600; color: #102a43; }
+    .navBack { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+    .navBackChev { width: 10px; height: 10px; border-left: 2px solid #102a43; border-bottom: 2px solid #102a43; transform: rotate(45deg); margin-left: 3px; }
+
+    /* ===== 镜像 wxss 开始 ===== */
+    :root {
+        --accent: #0f8ea8; --accent-deep: #0b6e86; --ink: #102a43; --muted: #5a7084;
+        --faint: #5f7589; --hairline: rgba(16,42,67,0.08);
+        --ok: #1f9e6b; --ok-ink: #0e7a5f; --alert: #c14f43; --alert-ink: #a63e33;
+    }
+    .page { min-height: calc(100% - 68px); box-sizing: border-box; padding: 12.5px 12.5px 36px; }
+    .press { transform: translateY(1px) scale(0.99); opacity: 0.94; }
+
+    .timerCard { background: #fff; border: 1px solid rgba(16,42,67,0.06); border-radius: 10.4px; padding: 15.6px 14.6px 16.6px; }
+    .timerCard.tone--alert { border-color: rgba(193,79,67,0.22); background: #fffcfb; }
+    .timerHead { display: flex; align-items: center; justify-content: space-between; gap: 8.3px; }
+    .timerKicker { font-size: 11.4px; font-weight: 600; color: var(--muted); }
+    .stateLine { display: flex; align-items: center; gap: 5.2px; font-size: 11.4px; font-weight: 700; }
+    .stateDot { width: 6.2px; height: 6.2px; border-radius: 50%; }
+    .st--ok { color: var(--ok-ink); }
+    .st--ok .stateDot { background: var(--ok); }
+    .st--alert { color: var(--alert-ink); }
+    .st--alert .stateDot { background: var(--alert); animation: pulseDot 1.4s ease-in-out infinite; }
+    .st--off, .st--empty { color: var(--muted); }
+    .st--off .stateDot, .st--empty .stateDot { background: #97a8b6; }
+    .timerReadout { display: block; margin-top: 5.2px; font-size: 29px; line-height: 1.15; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .timerBar { position: relative; margin-top: 13.5px; height: 8.3px; border-radius: 999px; background-color: rgba(15,142,168,0.1); background-image: repeating-linear-gradient(to right, transparent 0, transparent calc(12.5% - 1px), rgba(255,255,255,0.75) calc(12.5% - 1px), rgba(255,255,255,0.75) 12.5%); overflow: hidden; }
+    .timerFill { position: relative; height: 100%; border-radius: 999px; background: var(--accent); transition: width 600ms cubic-bezier(0.22,0.61,0.36,1); }
+    .tone--alert .timerFill { background: var(--alert); }
+    .timerFill::after { content: ''; position: absolute; right: 0; top: 0; width: 1px; height: 100%; background: rgba(255,255,255,0.7); }
+    .timerTick { position: absolute; top: 0; width: 1px; height: 100%; background: rgba(255,255,255,0.9); }
+    .timerTick.t1 { left: 25%; } .timerTick.t2 { left: 50%; } .timerTick.t3 { left: 75%; }
+    .timerScale { display: flex; align-items: center; justify-content: space-between; margin-top: 4.2px; }
+    .timerScaleTxt { font-size: 10.4px; font-weight: 500; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .timerNote { display: block; margin-top: 11.4px; font-size: 11.4px; font-weight: 500; color: var(--muted); }
+    .note--ok { color: var(--ok-ink); }
+    .note--alert { color: var(--alert-ink); font-weight: 600; }
+    .primaryBtn { display: flex; align-items: center; justify-content: center; height: 45.8px; margin-top: 13.5px; border-radius: 8.3px; background: var(--accent); }
+    .primaryBtnText { font-size: 13.5px; font-weight: 700; color: #fff; }
+
+    .sectionKicker { margin: 16.6px 3.1px 7.3px; font-size: 10.4px; font-weight: 600; letter-spacing: 0.5px; color: var(--muted); }
+    .panel { background: #fff; border: 1px solid rgba(16,42,67,0.06); border-radius: 10.4px; padding: 4.2px 12.5px; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 8.3px; padding: 12.5px 0; }
+    .rowTapWrap { margin: 0 -8.3px; border-radius: 6.2px; }
+    .rowTapWrap .row { padding-left: 8.3px; padding-right: 8.3px; }
+    .rowHover { background: rgba(15,142,168,0.05); }
+    .rowInfo { flex: 1; min-width: 0; }
+    .rowLabel { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+    .rowDesc { display: block; margin-top: 2.1px; font-size: 10.4px; font-weight: 400; line-height: 1.4; color: var(--muted); }
+    .hairline { height: 1px; background: var(--hairline); }
+    .hairlineInset { margin: 0 8.3px; }
+
+    /* switch 替身 */
+    .switch { flex-shrink: 0; width: 26px; height: 15.6px; border-radius: 999px; background: #d5dee4; position: relative; transition: background 0.2s; }
+    .switch::after { content: ''; position: absolute; left: 1.6px; top: 1.6px; width: 12.5px; height: 12.5px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); transition: transform 0.2s; }
+    .switch.on { background: var(--accent); }
+    .switch.on::after { transform: translateX(10.4px); }
+
+    .stepper { flex-shrink: 0; display: flex; align-items: center; gap: 4.2px; padding: 5.2px 9.4px; border: 1px solid rgba(16,42,67,0.1); border-radius: 6.2px; background: #fff; }
+    .stepperValue { font-size: 12.5px; font-weight: 600; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
+    .chevRight { width: 6.2px; height: 6.2px; border-right: 1.6px solid rgba(15,142,168,0.8); border-top: 1.6px solid rgba(15,142,168,0.8); transform: rotate(45deg); margin-left: 1px; }
+    .methodBlock { padding: 12.5px 0 6.2px; }
+    .radioGroup { margin-top: 4.2px; }
+    .radioRow { display: flex; align-items: center; gap: 8.3px; padding: 10.4px 8.3px; margin: 0 -8.3px; border-radius: 6.2px; }
+    .radioContent { flex: 1; min-width: 0; }
+    .radioLabel { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+    .radioDesc { display: block; margin-top: 2.1px; font-size: 10.4px; font-weight: 400; color: var(--muted); }
+    input[type="radio"] { accent-color: #0f8ea8; width: 15.6px; height: 15.6px; margin: 0; flex-shrink: 0; }
+
+    .notes { margin: 14.6px 3.1px 0; padding-top: 10.4px; border-top: 1px solid var(--hairline); display: flex; flex-direction: column; gap: 4.2px; }
+    .noteLine { font-size: 10.4px; font-weight: 400; line-height: 1.6; color: var(--faint); }
+
+    @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    /* ===== 镜像结束 ===== */
+</style>
+</head>
+<body>
+<div class="toolbar">
+    <button id="b-empty" class="on" onclick="setState('empty')">未开始（无记录）</button>
+    <button id="b-ok" onclick="setState('ok')">监测中 · 2小时40分</button>
+    <button id="b-alert" onclick="setState('alert')">已超时</button>
+    <button id="b-off" onclick="setState('off')">有记录 · 开关关闭</button>
+    <span style="font-size:12px;color:#56748a;">顶部为原生导航替身，仅用于构图验收</span>
+</div>
+<div class="stage">
+    <div class="phone" id="phone">
+        <div class="nav">
+            <div class="navInner">
+                <div class="navBack"><div class="navBackChev"></div></div>
+                <span class="navTitle">久未喝水提醒</span>
+            </div>
+        </div>
+        <div class="page">
+            <div class="timerCard tone--ok" id="timerCard">
+                <div class="timerHead">
+                    <span class="timerKicker">距上次喝水</span>
+                    <div class="stateLine" id="stateLine"><span class="stateDot"></span><span id="stateTxt">监测中</span></div>
+                </div>
+                <span class="timerReadout" id="readout">2小时40分钟前</span>
+                <div class="timerBar"><div class="timerFill" id="fill" style="width:89%;"></div><div class="timerTick t1"></div><div class="timerTick t2"></div><div class="timerTick t3"></div></div>
+                <div class="timerScale"><span class="timerScaleTxt">上次喝水</span><span class="timerScaleTxt">3 小时提醒线</span></div>
+                <span class="timerNote" id="note">距下次提醒约 20 分钟</span>
+                <div class="primaryBtn"><span class="primaryBtnText">我喝过了 · 记 200ml</span></div>
+            </div>
+
+            <div class="sectionKicker">提醒设置</div>
+            <div class="panel">
+                <div class="row">
+                    <div class="rowInfo">
+                        <span class="rowLabel">超时提醒</span>
+                        <span class="rowDesc">开启后按喝水间隔监测</span>
+                    </div>
+                    <div class="switch on" id="sw"></div>
+                </div>
+                <div class="hairline"></div>
+                <div class="rowTapWrap">
+                    <div class="row">
+                        <div class="rowInfo">
+                            <span class="rowLabel">提醒间隔</span>
+                            <span class="rowDesc" id="intervalDesc">3 小时没喝水就提醒</span>
+                        </div>
+                        <div class="stepper"><span class="stepperValue">3h</span><span class="chevRight"></span></div>
+                    </div>
+                </div>
+                <div class="hairline"></div>
+                <div class="methodBlock">
+                    <span class="rowLabel">提醒方式</span>
+                    <div class="radioGroup">
+                        <div class="radioRow"><input type="radio" name="m" checked><div class="radioContent"><span class="radioLabel">通知</span><span class="radioDesc">小程序内弹出提醒窗口</span></div></div>
+                        <div class="hairline hairlineInset"></div>
+                        <div class="radioRow"><input type="radio" name="m"><div class="radioContent"><span class="radioLabel">声音</span><span class="radioDesc">播放提示音</span></div></div>
+                        <div class="hairline hairlineInset"></div>
+                        <div class="radioRow"><input type="radio" name="m"><div class="radioContent"><span class="radioLabel">震动</span><span class="radioDesc">手机震动</span></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notes">
+                <span class="noteLine">· 只在你超过设定时长没有饮水记录时提醒，不会按固定时刻响铃</span>
+                <span class="noteLine">· 点击「我喝过了」或在首页记录饮水，都会重新开始计时</span>
+                <span class="noteLine">· 修改间隔或方式立即生效，无需重新开启</span>
+            </div>
+        </div>
+    </div>
+    <div class="note">
+        <p><b>久未喝水提醒 · 重做预览</b>（镜像 pages/water-reminder/water-reminder.wxss，×0.52）</p>
+        <p>区分策略：原生导航标题=久未喝水提醒（与 profile 入口、提醒弹窗统一）；hero=间隔水钟（流逝读数 + 流向「N 小时提醒线」的水位条）；关闭开关时明说「仅记录饮水间隔」。</p>
+        <p>反AI：无渐变/光斑/发光/大胶囊；发丝线 + 平涂白卡；字重 700/500/400；动效仅水位条过渡 + 超时点脉冲。</p>
+    </div>
+</div>
+<script>
+    function setState(s) {
+        document.querySelectorAll('.toolbar button').forEach(function(b){ b.classList.remove('on'); });
+        document.getElementById('b-' + s).classList.add('on');
+        var card = document.getElementById('timerCard');
+        card.classList.remove('tone--ok', 'tone--alert', 'tone--empty');
+        var stateLine = document.getElementById('stateLine'), stateTxt = document.getElementById('stateTxt');
+        var readout = document.getElementById('readout'), fill = document.getElementById('fill');
+        var note = document.getElementById('note'), sw = document.getElementById('sw');
+        sw.classList.toggle('on', s !== 'off');
+        if (s === 'empty') {
+            card.classList.add('tone--empty');
+            stateLine.className = 'stateLine st--empty';
+            stateTxt.textContent = '未开始'; readout.textContent = '暂无饮水记录';
+            fill.style.width = '0%'; note.className = 'timerNote'; note.textContent = '喝一杯，开始计时';
+        } else if (s === 'ok') {
+            card.classList.add('tone--ok');
+            stateLine.className = 'stateLine st--ok';
+            stateTxt.textContent = '监测中'; readout.textContent = '2小时40分钟前';
+            fill.style.width = '89%'; note.className = 'timerNote note--ok'; note.textContent = '距下次提醒约 20 分钟';
+        } else if (s === 'alert') {
+            card.classList.add('tone--alert');
+            stateLine.className = 'stateLine st--alert';
+            stateTxt.textContent = '已超时'; readout.textContent = '3小时26分钟前';
+            fill.style.width = '100%'; note.className = 'timerNote note--alert'; note.textContent = '已超过 3 小时未喝水，记得补水';
+        } else if (s === 'off') {
+            card.classList.add('tone--ok');
+            stateLine.className = 'stateLine st--off';
+            stateTxt.textContent = '未启用'; readout.textContent = '2小时40分钟前';
+            fill.style.width = '89%'; note.className = 'timerNote'; note.textContent = '提醒未开启，当前仅记录饮水间隔';
+        }
+    }
+</script>
+</body>
+</html>

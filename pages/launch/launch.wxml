@@ -1,0 +1,48 @@
+<!--
+  THESIS: 晨光里的水面只剩一线青——把加载页做成一段被认真对待的等待，而不是一条进度条的等待。
+  OWN-WORLD: 主题白与浅蓝的连续渐变水场（#F7F9FA 天 → #E4F0F6 线处 → #BCDDEA 深水，无接缝），一条中央最亮、两端消隐的 teal 发丝水线（#0D8AA4）带水下倒影与缓行光斑，珠下轻摇的倒影光柱，线心 teal 水珠（#0F8EA8）；水面上方居中大字标「智能水杯 / SMART CUP」，水面之下倒映着模糊消隐的镜像字标；文字取墨青 #1C2B33 系；无卡片、无图标、无发光装饰。
+  STORY: 一滴水从天而降穿过字标、击中线心，荡开三道羽化波前，字的倒影随之轻晃，杯正在醒来；文案在页脚轻声轮换，随后交棒首页。
+  FIRST VIEWPORT: 全屏连续渐变水场，水线在垂直 46% 贯穿左右；线上方 96rpx 处 56rpx 大字标居中，其正下方水面倒映镜像字标并随深度消隐；页脚安全区上方一行轮换文案；落水→波前→倒影轻晃是唯一的一次性叙事，天光/暗涌/光斑/水线各按慢周期持续活着，无百分比、无进度条。
+  FORM: 一线水光 · 落水变奏（晨光浅水执行，用户指定主题白+浅蓝，并两度要求加强精致感与大胆程度），候选序列第 1 位，seed 4dff850d。
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+-->
+<view class="launch {{settled ? 'settled' : ''}} {{leaving ? 'leaving' : ''}}">
+    <view class="drift driftA"></view>
+    <view class="drift driftB"></view>
+    <view class="swell"></view>
+    <view class="swell swell2"></view>
+    <view class="caustic a"></view>
+    <view class="caustic b"></view>
+    <view class="sheen"></view>
+
+    <view class="horizon">
+        <view class="lineWrap">
+            <view class="line"></view>
+            <view class="lineShadow"></view>
+            <view class="reflection"></view>
+            <view class="glint"></view>
+            <view class="ring r1"></view>
+            <view class="ring r2"></view>
+            <view class="ring r3"></view>
+            <view class="drop"></view>
+            <view class="node"></view>
+        </view>
+    </view>
+
+    <view class="brandZone">
+        <view class="brand">
+            <text class="brandCn">智能水杯</text>
+            <text class="brandEn">SMART CUP</text>
+        </view>
+        <view class="brandMirror">
+            <view class="mInner">
+                <text class="mEn">SMART CUP</text>
+                <text class="mCn">智能水杯</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="foot">
+        <text class="tip {{tipAlt ? 'alt' : ''}}">{{tip}}</text>
+    </view>
+</view>

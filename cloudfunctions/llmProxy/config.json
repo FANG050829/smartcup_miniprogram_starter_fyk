@@ -1,0 +1,10 @@
+{
+  "timeout": 60,
+  "permissions": {
+    "openapi": [
+      "https://api.openai.com/v1",
+      "https://api.deepseek.com",
+      "https://api.deepseek.com/v1"
+    ]
+  }
+}

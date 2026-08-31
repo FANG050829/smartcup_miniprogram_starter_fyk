@@ -1,0 +1,279 @@
+/* 硬件检测 — 平面化重做：无渐变、无投影、细分割线、语义色文字 */
+
+.page {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 40rpx 32rpx calc(env(safe-area-inset-bottom) + 40rpx);
+    background: #f7f9fa;
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20rpx;
+    margin-bottom: 36rpx;
+}
+
+.headInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.headTitle {
+    display: block;
+    font-size: 44rpx;
+    line-height: 1.25;
+    font-weight: 800;
+    color: #102a43;
+}
+
+.headSub {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 22rpx;
+    line-height: 1.5;
+    color: #5a6b7b;
+}
+
+.refreshBtn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12rpx;
+    height: 88rpx;
+    padding: 0 28rpx;
+    border-radius: 14rpx;
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.16);
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.refreshBtn.loading {
+    opacity: 0.7;
+}
+
+.refreshText {
+    font-size: 26rpx;
+    font-weight: 700;
+    color: #102a43;
+    white-space: nowrap;
+}
+
+.refreshDot {
+    width: 12rpx;
+    height: 12rpx;
+    border-radius: 50%;
+    background: #102a43;
+}
+
+.refreshDot.spin {
+    animation: blink 0.9s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.section {
+    margin-bottom: 32rpx;
+}
+
+.secLabel {
+    display: block;
+    margin-bottom: 12rpx;
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 2rpx;
+    color: #5a6b7b;
+}
+
+.panel {
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.10);
+    border-radius: 16rpx;
+    overflow: hidden;
+}
+
+/* 概览 */
+.sumRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+    min-height: 92rpx;
+    padding: 16rpx 24rpx;
+}
+
+.sumRow + .sumRow {
+    border-top: 1rpx solid rgba(16, 42, 67, 0.08);
+}
+
+.sumLabel {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #5a6b7b;
+}
+
+.sumValue {
+    font-size: 24rpx;
+    font-weight: 700;
+    color: #102a43;
+    text-align: right;
+}
+
+.sumState {
+    font-size: 24rpx;
+    font-weight: 700;
+}
+
+.sumState.ok { color: #15803d; }
+.sumState.fail { color: #b91c1c; }
+.sumState.checking { color: #0e7490; }
+.sumState.pending { color: #b45309; }
+.sumState.idle { color: #5a6b7b; }
+
+/* 检测项列表 */
+.row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20rpx;
+    padding: 24rpx;
+}
+
+.row + .row {
+    border-top: 1rpx solid rgba(16, 42, 67, 0.08);
+}
+
+.dot {
+    flex-shrink: 0;
+    width: 14rpx;
+    height: 14rpx;
+    margin-top: 12rpx;
+    border-radius: 50%;
+    background: #b9c4ce;
+}
+
+.dot.ok { background: #16a34a; }
+.dot.fail { background: #dc2626; }
+.dot.checking { background: #0891b2; animation: blink 0.9s ease-in-out infinite; }
+.dot.pending { background: #d97706; }
+.dot.idle { background: #b9c4ce; }
+
+.rowBody {
+    flex: 1;
+    min-width: 0;
+}
+
+.rowHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16rpx;
+}
+
+.rowName {
+    font-size: 28rpx;
+    line-height: 1.3;
+    font-weight: 600;
+    color: #102a43;
+}
+
+.rowState {
+    flex-shrink: 0;
+    font-size: 24rpx;
+    font-weight: 700;
+}
+
+.rowState.ok { color: #15803d; }
+.rowState.fail { color: #b91c1c; }
+.rowState.checking { color: #0e7490; }
+.rowState.pending { color: #b45309; }
+.rowState.idle { color: #5a6b7b; }
+
+.rowDetail {
+    display: block;
+    margin-top: 6rpx;
+    font-size: 22rpx;
+    line-height: 1.55;
+    color: #5a6b7b;
+}
+
+.rowDetail.ok { color: #15803d; }
+.rowDetail.fail { color: #b91c1c; }
+.rowDetail.checking { color: #0e7490; }
+.rowDetail.pending { color: #b45309; }
+
+.rowActionWrap {
+    margin-top: 16rpx;
+}
+
+.actionBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 88rpx;
+    padding: 0 28rpx;
+    border-radius: 12rpx;
+    background: #ffffff;
+    border: 1rpx solid rgba(180, 83, 9, 0.45);
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.actionBtn.disabled {
+    border-color: rgba(16, 42, 67, 0.14);
+    opacity: 0.55;
+}
+
+.actionBtnText {
+    font-size: 24rpx;
+    font-weight: 700;
+    color: #b45309;
+    white-space: nowrap;
+}
+
+.actionBtn.disabled .actionBtnText {
+    color: #5a6b7b;
+}
+
+/* 提示 */
+.tip {
+    padding: 22rpx 24rpx;
+    background: #ffffff;
+    border: 1rpx solid rgba(16, 42, 67, 0.10);
+    border-left: 6rpx solid #b45309;
+    border-radius: 16rpx;
+}
+
+.tipLabel {
+    display: block;
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 2rpx;
+    color: #b45309;
+    margin-bottom: 8rpx;
+}
+
+.tipText {
+    font-size: 22rpx;
+    line-height: 1.6;
+    color: #5a6b7b;
+}
+
+.press {
+    opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .refreshDot.spin,
+    .dot.checking {
+        animation: none;
+    }
+
+    .refreshBtn,
+    .actionBtn {
+        transition: none;
+    }
+}

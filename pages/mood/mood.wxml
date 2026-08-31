@@ -1,0 +1,84 @@
+<view class="page {{enter ? 'is-enter' : ''}} {{settled ? 'is-settled' : ''}} {{replay ? 'is-replay' : ''}}">
+
+    <view class="watermark anim" wx:if="{{stage}}">#{{stage.id}}</view>
+
+    <view class="topZone" id="topZone">
+        <view class="head anim d0">
+            <view class="charRow">
+                <view wx:for="{{chars}}" wx:key="key" bindtap="onCharTap" data-key="{{item.key}}" class="charChip {{charKey===item.key?'on':''}}" hoverClass="press" hoverStayTime="80">
+                    <text>{{item.name}}</text>
+                </view>
+            </view>
+            <view bindtap="toggleTour" class="tour {{touring?'on':''}}" hoverClass="press" hoverStayTime="80">
+                <view class="tourDot"></view>
+                <text>巡演</text>
+            </view>
+        </view>
+
+        <view class="stage anim d1">
+            <canvas type="2d" id="moodStage" class="stageCanvas" bindtap="onStageTap"></canvas>
+            <canvas type="2d" id="snapStage" class="snapCanvas"></canvas>
+            <view class="stageShadow"></view>
+        </view>
+    </view>
+
+    <scroll-view class="scrollBody" scroll-y>
+      <view class="scrollInner">
+    <view class="about anim d2 {{stageAlt}}" wx:if="{{stage}}">
+        <view class="aboutHead" bindtap="toggleAbout">
+            <text class="aboutName">{{stage.name}}</text>
+            <view class="foldArrow {{aboutCollapsed?'collapsed':''}}"></view>
+        </view>
+        <block wx:if="{{!aboutCollapsed}}">
+            <view class="aboutMeta">
+                <text class="aboutId">#{{stage.id}}</text>
+                <view class="metaDot"></view>
+                <text class="aboutGroup">{{stage.groupLabel}}</text>
+            </view>
+            <text class="aboutDesc">{{stage.desc}}</text>
+        </block>
+        <view class="actions">
+            <view bindtap="onSpinTap" class="roundBtn" hoverClass="pressRound" hoverStayTime="80">
+                <view class="spinGlyph"></view>
+            </view>
+            <view bindtap="onBurstTap" class="roundBtn" hoverClass="pressRound" hoverStayTime="80">
+                <text class="burstGlyph">✦</text>
+            </view>
+            <text class="actionsHint">{{actionsHint}}</text>
+        </view>
+    </view>
+
+    <view class="groups anim d3">
+        <view bindtap="onGroupTap" data-key="{{item.key}}" class="gChip {{activeGroup===item.key?'on':''}}" hoverClass="press" hoverStayTime="80" wx:for="{{groups}}" wx:key="key">
+            <text>{{item.name}}</text>
+        </view>
+    </view>
+
+    <view class="wall anim d4 {{wallSwap ? 'swap' : ''}}">
+        <view class="pick {{stage.id===item.id?'sel':''}}" style="--i:{{index}}" bindtap="pickMood" data-id="{{item.id}}" hoverClass="pressPick" hoverStayTime="80" wx:for="{{filtered}}" wx:key="id">
+        <view class="pickSlot">
+            <image wx:if="{{item.snap}}" class="pickImg" src="{{item.snap}}" mode="aspectFit"></image>
+            <view wx:else class="planet {{stage.id===item.id?'sel':''}}" style="--c:{{item.color}};">
+                <view class="face">
+                    <view class="eye eyeL {{item.eye}}"></view>
+                    <view class="eye eyeR {{item.eyeR || item.eye}}"></view>
+                    <view class="mouth {{item.mouth}}"></view>
+                </view>
+                <view class="fx-blush fx-blushL" wx:if="{{item.blush}}"></view>
+                <view class="fx-blush fx-blushR" wx:if="{{item.blush}}"></view>
+                <text class="fx-zzzSm" wx:if="{{item.zzz}}">z</text>
+                <view class="fx-sweat" wx:if="{{item.sweat}}"></view>
+                <view class="fx-anger fx-angerSm" wx:if="{{item.anger}}"></view>
+            </view>
+        </view>
+            <text class="pickName">{{item.name}}</text>
+            <view class="pickDot"></view>
+        </view>
+    </view>
+
+    <view class="foot anim d5">
+        <text>表情引擎：emotion-ball · mood-mates（开源，个人学习使用）· Canvas 实时渲染</text>
+    </view>
+      </view>
+    </scroll-view>
+</view>
