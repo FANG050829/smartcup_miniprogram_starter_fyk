@@ -18,7 +18,9 @@
         <view class="stage anim d1">
             <canvas type="2d" id="moodStage" class="stageCanvas" bindtap="onStageTap"></canvas>
             <canvas type="2d" id="snapStage" class="snapCanvas"></canvas>
-            <view class="stageShadow"></view>
+            <!-- mates 角色（云宝/亮亮）由引擎在画布内自绘地面软投影，
+                 这里再叠 CSS 椭圆会出现双阴影 —— CSS 阴影只给球球保留 -->
+            <view class="stageShadow {{charKey==='ball' ? '' : 'off'}}"></view>
         </view>
     </view>
 

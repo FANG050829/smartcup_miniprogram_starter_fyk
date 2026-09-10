@@ -281,6 +281,12 @@
     margin: -30rpx auto 0;
     border-radius: 50%;
     background: radial-gradient(ellipse at center, rgba(23, 36, 43, 0.16), transparent 68%);
+    transition: opacity 0.28s ease;
+}
+
+/* 云宝/亮亮：隐藏 CSS 阴影，只留引擎画布内自绘的那一个 */
+.stageShadow.off {
+    opacity: 0;
 }
 
 /* ---------- 主角信息 ---------- */

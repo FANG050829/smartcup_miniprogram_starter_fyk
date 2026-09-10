@@ -897,8 +897,20 @@
         ctx.fill();
         ctx.restore();
 
-        /* 高光点贴同一变换；有效高度过低（眯/困/扫读）隐藏 */
+        /* 高光点贴同一变换；有效高度过低（真正闭眼/笑成弧线）隐藏。
+         * 未配置 highlight 的豆眼角色：按默认眼环 bbox 推导
+         * 「主光 + 副光」两粒，保证所有豆眼都带亮光（可爱风统一） */
         var hls = ch.eyeStyle.highlight;
+        if (!hls) {
+          var dB0 = eyeState.defBBox || eyeState.bbox;
+          if (dB0 && dB0.w > 0.5 && dB0.h > 0.5) {
+            var mR = Math.max(1.6, Math.min(dB0.w, dB0.h) * 0.14);
+            hls = [
+              { dx: dB0.w * 0.16, dy: -dB0.h * 0.18, r: mR },
+              { dx: -dB0.w * 0.2, dy: dB0.h * 0.14, r: mR * 0.45, opacity: 0.6 }
+            ];
+          }
+        }
         if (hls) {
           var hlList = Object.prototype.toString.call(hls) === '[object Array]' ? hls : [hls];
           var boxH = eyeState.bbox ? eyeState.bbox.h : EYE_HALF * 2;
@@ -937,7 +949,7 @@
       /* ---- iris 瞳孔眼：lens 环作为眼睑开口裁剪，内部眼白→虹膜→瞳孔→高光 ----
        * 实际闭合判定：轮廓厚度 × 开合度。
        * 睫线模式（effOpen < 0.26）：深色睫线，藏起虹膜/瞳孔/高光；
-       * 小眼模式（0.26~0.45）：保留虹膜与「按比例缩小的瞳孔」，只藏白色高光 */
+       * 小眼模式（0.26~0.45）：保留虹膜与「按比例缩小的瞳孔与高光」 */
       var thick = eyeState.thick != null ? eyeState.thick : EYE_HALF * 2 * 0.7;
       var effOpen = open * thick / (EYE_HALF * 2);
       var lash = effOpen < IRIS_LASH;
@@ -1005,8 +1017,11 @@
         ctx.fill();
         ctx.restore();
 
-        /* 定光源高光：位置相对眼心固定（镜像），不跟随眼球滑动 */
-        if (!small) {
+        /* 定光源高光：位置相对眼心固定（镜像），不跟随眼球滑动。
+         * 小眼模式不再整体隐藏高光，改为按开合比例缩小常驻
+         * （可爱风：亮光尽量常驻，闭成睫线时仍由 lash 分支隐藏） */
+        var hlK = small ? clamp(effOpen / IRIS_SMALL, 0.5, 1) : 1;
+        {
           var hlList2 = pupilCfg.highlights || [
             { dx: -irisR * 0.34, dy: -irisR * 0.4, r: irisR * 0.3 },
             { dx: irisR * 0.36, dy: irisR * 0.22, r: irisR * 0.13, opacity: 0.6 }
@@ -1016,7 +1031,7 @@
             var hOp = hn.opacity != null ? hn.opacity : 0.95;
             ctx.save();
             ctx.beginPath();
-            ctx.arc(base[0] + (hn.dx || 0) * (k3 === 0 ? 1 : -1), base[1] + (hn.dy || 0), hn.r, 0, TAU);
+            ctx.arc(base[0] + (hn.dx || 0) * (k3 === 0 ? 1 : -1), base[1] + (hn.dy || 0), hn.r * hlK, 0, TAU);
             ctx.fillStyle = hn.color || '#FFFFFF';
             ctx.globalAlpha *= hOp;
             ctx.fill();

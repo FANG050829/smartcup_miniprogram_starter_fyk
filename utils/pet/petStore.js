@@ -160,6 +160,26 @@ function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+/* 摸头反应（点击小球触发）加权概率：
+ * 70% 触发 33 任务完成（自旋甩彩带 + 撒花庆祝），
+ * 害羞压到最低档，其余由开心 / 惊讶分摊 */
+var PET_TAP_WEIGHTS = [
+  [EMO.done, 0.7],
+  [EMO.happy, 0.15],
+  [EMO.surprised, 0.1],
+  [EMO.shy, 0.05]
+];
+
+function pickWeighted(pairs) {
+  var r = Math.random();
+  var acc = 0;
+  for (var i = 0; i < pairs.length; i++) {
+    acc += pairs[i][1];
+    if (r < acc) return pairs[i][0];
+  }
+  return pairs[pairs.length - 1][0];
+}
+
 function exitActive() {
   return state.exitAt > 0 && now() - state.exitAt < 300;
 }
@@ -368,10 +388,10 @@ module.exports = {
     notify();
   },
 
-  /* 摸头/互动：随机亲昵反应 */
+  /* 摸头/互动：加权随机亲昵反应（60% 彩带自旋庆祝，害羞低概率） */
   pet: function() {
     if (!state.enabled) return;
-    setHold(pick([EMO.happy, EMO.shy, EMO.surprised]), HOLD_TAP_MS);
+    setHold(pickWeighted(PET_TAP_WEIGHTS), HOLD_TAP_MS);
     notify();
   },
 

@@ -37,7 +37,11 @@ var NIMBO = {
   eyeStyle: {
     dx: 29, cy: 104, w: 26, h: 30,
     taper: 0.55, tilt: -2, bend: 0.1,
-    highlight: { dx: 3.5, dy: -6, r: 3.2 }
+    /* 主光 + 副光两粒：固定光源感更稳定，豆眼更水润可爱 */
+    highlight: [
+      { dx: 3.5, dy: -6, r: 3.4 },
+      { dx: -3.4, dy: 4.6, r: 1.5, opacity: 0.6 }
+    ]
   },
 
   features: {

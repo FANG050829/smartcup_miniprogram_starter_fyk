@@ -251,6 +251,10 @@ Page({
         eng = emotionEngine.create({ canvas: canvas, ctx: ctx }, {
           emotion: "10",
           idle: true,
+          /* 球球舞台略缩小：默认 margin 1 时球体占比 0.72，
+           * 明显大于云宝/亮亮（margin 1.42，占比 ≈0.61）；
+           * margin 1.18 使三者舞台视觉占比相近 */
+          margin: 1.18,
           /* 帧时钟绑自己的 canvas：跨页共享时钟会在注册页隐藏后停摆 */
           raf: function(cb) { canvas.requestAnimationFrame(cb); }
         });

@@ -155,24 +155,26 @@
     /* 闭合 / 困倦 */
     closed:  function (s) { return { w: s.w * 0.95, h: s.h * 0.12, bend: -0.25, taper: 0.9, tilt: s.tilt }; },
     closed2: function (s) { return { w: s.w * 0.9, h: s.h * 0.1, bend: 0.2, taper: 0.9, tilt: s.tilt }; },
-    sleepy:  function (s) { return { w: s.w, h: s.h * 0.34, bend: -0.3, taper: 0.7, shift: 0.35, tilt: s.tilt }; },
-    /* 斜眼 / 无奈 */
-    squint:  function (s) { return { w: s.w * 1.02, h: s.h * 0.5, bend: 0.05, slope: 0.35, taper: 0.7, tilt: s.tilt }; },
-    squint2: function (s) { return { w: s.w * 0.96, h: s.h * 0.44, bend: -0.1, slope: 0.3, taper: 0.8, tilt: s.tilt + 3 }; },
-    /* 怒目：内低外高 + 上缘压平 */
-    angry:   function (s) { return { w: s.w * 1.02, h: s.h * 0.72, bend: 0.1, slope: -0.5, taper: 0.6, shift: 0.3, tilt: s.tilt }; },
-    angry2:  function (s) { return { w: s.w * 0.98, h: s.h * 0.62, bend: 0.05, slope: -0.62, taper: 0.65, shift: 0.35, tilt: s.tilt }; },
-    /* 扫读：宽扁横条 */
-    scan:    function (s) { return { w: s.w * 1.3, h: s.h * 0.46, bend: 0, taper: 0.45, tilt: 0 }; },
-    scan2:   function (s) { return { w: s.w * 1.18, h: s.h * 0.56, bend: 0.08, taper: 0.5, tilt: 0 }; },
-    scan3:   function (s) { return { w: s.w * 1.36, h: s.h * 0.38, bend: -0.06, taper: 0.42, tilt: 0 }; },
+    /* 闭 / 困倦：保留近闭合线语义，仅略抬眼高、圆化端部 */
+    sleepy:  function (s) { return { w: s.w, h: s.h * 0.4, bend: -0.2, taper: 0.55, shift: 0.3, tilt: s.tilt }; },
+    /* 轻眯眼 / 困惑 / 无奈：全族椭圆化 —— 极弱 slope + 低 taper（圆润端部），
+     * 语义只保留「两眼大小不一」与极轻的方向性，整体读作斜斜的椭圆 */
+    squint:  function (s) { return { w: s.w, h: s.h * 0.64, bend: 0.07, slope: 0.05, taper: 0.45, tilt: s.tilt }; },
+    squint2: function (s) { return { w: s.w * 0.88, h: s.h * 0.56, bend: 0.04, slope: 0.04, taper: 0.45, tilt: s.tilt + 2 }; },
+    /* 怒目：内低外高降为轻斜，靠 shift 下坠感保留怒意，形状更接近椭圆 */
+    angry:   function (s) { return { w: s.w * 1.02, h: s.h * 0.76, bend: 0.08, slope: -0.3, taper: 0.5, shift: 0.28, tilt: s.tilt }; },
+    angry2:  function (s) { return { w: s.w * 0.98, h: s.h * 0.68, bend: 0.04, slope: -0.38, taper: 0.55, shift: 0.32, tilt: s.tilt }; },
+    /* 扫读：仍比圆眼宽（阅读语义），但由横条收成扁椭圆 */
+    scan:    function (s) { return { w: s.w * 1.16, h: s.h * 0.56, bend: 0, taper: 0.42, tilt: 0 }; },
+    scan2:   function (s) { return { w: s.w * 1.08, h: s.h * 0.62, bend: 0.05, taper: 0.45, tilt: 0 }; },
+    scan3:   function (s) { return { w: s.w * 1.22, h: s.h * 0.48, bend: -0.04, taper: 0.4, tilt: 0 }; },
     /* 聆听：窄高竖圆 */
     listen:  function (s) { return { w: s.w * 0.78, h: s.h * 1.18, bend: 0, taper: Math.max(s.taper * 0.85, 0.35), tilt: 0 }; },
     listen2: function (s) { return { w: s.w * 0.72, h: s.h * 1.08, bend: 0.08, taper: Math.max(s.taper * 0.85, 0.35), tilt: s.tilt }; },
-    /* 羞怯：下垂微闭，外角向下 */
-    shy:     function (s) { return { w: s.w * 0.92, h: s.h * 0.6, bend: -0.18, slope: 0.22, taper: 0.85, tilt: s.tilt + 4 }; },
-    /* 哀伤：外低内高 */
-    sad:     function (s) { return { w: s.w * 0.95, h: s.h * 0.62, bend: -0.1, slope: 0.45, taper: 0.75, tilt: s.tilt }; }
+    /* 羞怯：下垂微闭弱化为轻垂椭圆 */
+    shy:     function (s) { return { w: s.w * 0.92, h: s.h * 0.66, bend: -0.08, slope: 0.1, taper: 0.6, tilt: s.tilt + 3 }; },
+    /* 哀伤：外低内高保留方向语义，斜率减半成轻垂椭圆 */
+    sad:     function (s) { return { w: s.w * 0.95, h: s.h * 0.68, bend: -0.05, slope: 0.24, taper: 0.6, tilt: s.tilt }; }
   };
 
   /** 生成一对眼环（含左右镜像）
