@@ -324,14 +324,14 @@ var HEAT_LINES = [
 
 Page({
   data: {
-    // Real-time telemetry shown on the home dashboard.
+    // 首页仪表盘实时数据（水温 / TDS）
     temperature: 0,
     tds: 0,
     // 表情伙伴（petStore 全局驱动）
     petOn: true,
     padGlance: "",
     petBubble: "",
-    // Heating button and status UI.
+    // 烧水按钮与状态
     heaterOn: false,
     heatCooling: false,
     heatResponsePending: false,

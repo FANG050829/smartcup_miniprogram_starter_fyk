@@ -787,7 +787,7 @@ function _pickCharacteristic(chars, targetUuid) {
     if (match(item)) return item;
   }
 
-  // Fallback: UUID only
+  // 兜底：仅按 UUID 匹配
   for (var _i = 0; _i < list.length; _i++) {
     var _item = list[_i];
     if (!_item || !_item.uuid) continue;
@@ -1415,7 +1415,7 @@ function _writeValue2() {
                   }
                   throw _context15.t0;
                 case 15:
-                  // Re-discover once in case cached characteristic id is stale/wrong.
+                  // 重新发现一次服务，防止缓存的特征值 id 失效或错误
                   entry = _linkByDevice[id];
                   if (entry) {
                     entry.serviceId = "";

@@ -1,13 +1,14 @@
 <!--
-  方向契约 · pages/map（surface roll 6d186189, assigned index 6）
-  THESIS: 地图即页面——水杯位置是唯一主角，界面收缩为顶部浮胶囊与底部液态刻度板；拒绝旧的「卡片包地图」仪表盘纵列。
-  OWN-WORLD: 晨光浅水（继承 app 既有世界）：全幅真实地图为底，浮层主题白 #F7F9FA + 浅蓝 #CEECF5 系 + teal #0F8EA8 水线；刻度板如量杯内壁——发丝刻度、teal 水位条、墨青 #102A43 文字。
-  STORY: 打开即见杯在哪；未连接→知道去哪连；已连接→知道谁在定位（GPS/手机）、数据多新；一键回到水杯。
-  FIRST VIEWPORT: 全幅地图（出血到状态栏与四缘）；顶部左「返回+水杯定位」胶囊、右指北复位钮；底部液态刻度板：状态行（徽章+摘要+更新时间）、设备切换、定位模式分段、水位新鲜度条、附近地标、「回到水杯位置」主按钮；未连接时板内为涟漪空态 + 「去连接水杯」。
-  FORM: assigned index 6（量杯刻度板结构），donations——#4 涟漪：地图 circles 同心波纹与空态脉冲；#7 寻物器：「x分钟前更新」新鲜度读数。
-  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
-  POLISH (2026-08-29, 反AI pass): 两级圆角体系（地图浮控件圆形 / 刻度板内 16rpx 仪器面板）；徽章降为裸点+字；语义色去 Tailwind 默认值（#22c55e/#f59e0b→#1f9e6b/#d99a3d 系）；字重分层 700/500/400；主按钮去彩色发光；地标盒→发丝线；量杯补 3 分钟量程标注；触控目标≥84rpx；真实数据「尾号」入板头。
-  POLISH (2026-08-29, 伙伴球): 刻度板头部接入 pet-ball（size dock，总开关关闭时 wx:if 让位、板头还原标题+元信息）；表情三态由 petEvents 驱动——搜索中 36 联网加载 / 拿到定位 13→10 两连庆祝 / 水杯离线 00 打盹（场景文案）。
+  地图页 · 水杯定位
+  设计意图：地图即页面——水杯位置是唯一主角，界面收缩为顶部浮胶囊与底部液态刻度板。
+  视觉：全幅真实地图为底，浮层用主题白 #F7F9FA + 浅蓝 #CEECF5 系 + teal #0F8EA8 水线；
+        刻度板如量杯内壁——发丝刻度、teal 水位条、墨青 #102A43 文字。
+  页面结构：全幅地图（出血到状态栏与四缘）；顶部左「返回+水杯定位」胶囊、右指北复位钮；
+        底部液态刻度板：状态行（徽章+摘要+更新时间）、设备切换、定位模式分段、
+        水位新鲜度条、附近地标、「回到水杯位置」主按钮；未连接时为涟漪空态 + 「去连接水杯」。
+  交互要点：打开即见杯在哪；未连接→知道去哪连；已连接→知道谁在定位（GPS/手机）、数据多新；
+        一键回到水杯。
+  动效：地图 circles 同心波纹与空态脉冲；「x分钟前更新」新鲜度读数。
 -->
 <view class="page {{pageAnim}}">
     <map bindregionchange="onRegionChange" circles="{{circles}}" class="map" enable3D="{{false}}" enableBuilding="{{false}}" enableOverlooking="{{false}}" enablePoi="{{false}}" enableRotate="{{true}}" enableSatellite="{{false}}" enableScroll="{{true}}" enableZoom="{{true}}" id="cupMap" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" maxScale="20" minScale="4" polyline="{{polylines}}" rotate="{{mapRotate}}" scale="{{scale}}" showLocation="{{false}}" showScale="{{false}}" skew="{{mapSkew}}"></map>

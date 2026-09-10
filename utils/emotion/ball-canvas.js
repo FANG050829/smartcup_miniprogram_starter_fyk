@@ -295,9 +295,9 @@
       trails.push({
         o: cfg.o, life: 0, ret: 0, hist: [],
         orbitMode: !!cfg.orbit,
-        /* r：彩带基准宽度。反编译源此处丢失赋值导致 rb.r 恒为 undefined，
-         * 宽度 NaN 会让彩带多边形坐标全为 NaN——浏览器内核静默忽略，
-         * 部分真机原生 canvas 直接抛错，rAF 链死、球消失 */
+        /* r：彩带基准宽度。缺失或非法时回退 6——宽度 NaN 会让彩带多边形
+         * 坐标全为 NaN，浏览器内核静默忽略，部分真机原生 canvas 直接抛错，
+         * rAF 链死、球消失 */
         r: isFinite(cfg.r) ? cfg.r : 6,
         hue: cfg.hue,
         hueSpan: rand(45, 95) * (Math.random() < 0.5 ? 1 : -1),
