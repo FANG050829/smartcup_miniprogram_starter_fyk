@@ -31,16 +31,7 @@ Component({
   },
   lifetimes: {
     attached: function attached() {
-      try {
-        var sys = wxCompat.getLayoutMetrics();
-        var safeArea = sys && sys.safeArea;
-        var screenHeight = Number(sys && sys.screenHeight) || 0;
-        var bottom = safeArea && Number(safeArea.bottom);
-        var inset = screenHeight > 0 && Number.isFinite(bottom) ? Math.max(0, screenHeight - bottom) : 0;
-        this.setData({
-          safeInsetBottom: inset
-        });
-      } catch (e) {}
+      this._syncSafeInset();
       /* 每个 tab 页都有独立的 tabBar 实例且被缓存复用，selected 可能带着
        * 上次离开时的旧值。先按真实路由纠正一次，避免“点了 A、反馈落在 B” */
       this._syncFromRoute();
@@ -49,7 +40,27 @@ Component({
       bootLog.breadcrumb("tabbar attached, page stack=" + (typeof getCurrentPages === "function" ? getCurrentPages().length : 0));
     }
   },
+  pageLifetimes: {
+    /* 平板横竖屏旋转时安全区高度会变（如 Home 指示条换边），重算底部内边距 */
+    resize: function resize() {
+      this._syncSafeInset();
+    }
+  },
   methods: {
+    _syncSafeInset: function _syncSafeInset() {
+      try {
+        var sys = wxCompat.getLayoutMetrics();
+        var safeArea = sys && sys.safeArea;
+        var screenHeight = Number(sys && sys.screenHeight) || 0;
+        var bottom = safeArea && Number(safeArea.bottom);
+        var inset = screenHeight > 0 && Number.isFinite(bottom) ? Math.max(0, screenHeight - bottom) : 0;
+        if (inset !== this.data.safeInsetBottom) {
+          this.setData({
+            safeInsetBottom: inset
+          });
+        }
+      } catch (e) {}
+    },
     _currentRouteIndex: function _currentRouteIndex() {
       var pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
       var cur = pages[pages.length - 1];

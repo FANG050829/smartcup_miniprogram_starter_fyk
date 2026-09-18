@@ -60,7 +60,9 @@
     "navigationBarTitleText": "SmartCup",
     "navigationBarBackgroundColor": "#F7F9FA",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#F7F9FA"
+    "backgroundColor": "#F7F9FA",
+    "pageOrientation": "auto",
+    "resizable": true
   },
   "plugins": {},
   "usingComponents": {

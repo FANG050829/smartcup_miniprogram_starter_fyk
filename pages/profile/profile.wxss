@@ -600,3 +600,36 @@ page {
     font-weight: 600;
     letter-spacing: 2rpx;
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    /* 内容列收窄居中（顶/底外边距保持原值，仅横向居中） */
+    .profile-card,
+    .grid,
+    .list-card,
+    .logout-btn {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* 小型可点元素触控区 ≥44px */
+    .device-remove {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* 功能宫格 1×4 → 2×2（去竖向分隔保持简洁） */
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 8rpx;
+    }
+
+    .grid-item + .grid-item::before {
+        display: none;
+    }
+}

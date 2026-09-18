@@ -821,3 +821,23 @@
     opacity: 0.85;
     transform: scale(0.98);
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    /* .page 是滚动容器，.sheet 为内容层：收窄居中 */
+    .sheet {
+        max-width: 720px;
+        margin: 0 auto;
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+
+    /* 展示型大字号 px 上限（两种皮肤共用基类字号） */
+    .mastTitle {
+        font-size: 44px;
+    }
+
+    .figNum {
+        font-size: 64px;
+    }
+}

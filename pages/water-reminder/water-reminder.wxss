@@ -392,3 +392,54 @@
         transition: none;
     }
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    .page {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    /* 内容列收窄居中 */
+    .timerCard,
+    .sectionKicker,
+    .panel,
+    .notes {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* 横屏：间隔水钟与提醒设置左右并排 */
+    .page {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 24px;
+        align-items: start;
+    }
+
+    .timerCard {
+        grid-column: 1;
+        grid-row: 1 / span 3;
+        max-width: none;
+    }
+
+    .sectionKicker {
+        grid-column: 2;
+        grid-row: 1;
+        max-width: none;
+    }
+
+    .panel {
+        grid-column: 2;
+        grid-row: 2;
+        max-width: none;
+    }
+
+    .notes {
+        grid-column: 1 / -1;
+        grid-row: 4;
+    }
+}

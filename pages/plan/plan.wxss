@@ -1114,3 +1114,36 @@
     background: #1f6e8c;
     transform: scale(0.96);
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    .pageScroll {
+        padding: 32rpx 5% 180rpx;
+    }
+
+    /* 内容列收窄居中（scroll-view 直接子元素即卡片级容器） */
+    .overviewCard,
+    .section {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* 底部弹层保持贴底圆顶形态，横向居中收窄；
+     * 日期下拉 / 日历面板在 sheet 内部随之收窄 */
+    .sheet {
+        left: 0;
+        right: 0;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    /* 展示型大字号 px 上限 */
+    .overviewAmount {
+        font-size: 64px;
+    }
+
+    .reminderTime {
+        font-size: 40px;
+    }
+}

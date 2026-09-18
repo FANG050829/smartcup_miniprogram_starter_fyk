@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="18" viewBox="0 0 600 18">
+  <!-- 双层水波：不同速度漂移形成视差，波形周期 100px，位移 -100 即无缝循环 -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M0 9 Q 25 2 50 9 T 100 9 T 150 9 T 200 9 T 250 9 T 300 9 T 350 9 T 400 9 T 450 9 T 500 9 T 550 9 T 600 9 T 650 9 T 700 9 T 750 9 T 800 9 T 850 9 T 900 9 T 950 9 T 1000 9 T 1050 9 T 1100 9 T 1150 9 T 1200 9" stroke="#bfe3ee" stroke-width="3">
+      <animateTransform attributeName="transform" type="translate" values="0 0;-100 0" dur="2.6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0 10 Q 25 4 50 10 T 100 10 T 150 10 T 200 10 T 250 10 T 300 10 T 350 10 T 400 10 T 450 10 T 500 10 T 550 10 T 600 10 T 650 10 T 700 10 T 750 10 T 800 10 T 850 10 T 900 10 T 950 10 T 1000 10 T 1050 10 T 1100 10 T 1150 10 T 1200 10" stroke="#d9eef5" stroke-width="2.5">
+      <animateTransform attributeName="transform" type="translate" values="0 0;-100 0" dur="3.8s" begin="-1.9s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

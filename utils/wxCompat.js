@@ -33,9 +33,22 @@ function getLayoutMetrics() {
     platform: String(deviceInfo.platform || appBaseInfo.hostPlatform || "").toLowerCase()
   };
 }
+/* 平板/宽窗断点：与各页 wxss 的 @media (min-width:768px) 保持一致 */
+var WIDE_WINDOW_MIN_PX = 768;
+
+function isWideWindow(windowWidth) {
+  var w = Number(windowWidth);
+  if (!w) {
+    w = getLayoutMetrics().windowWidth;
+  }
+  return w >= WIDE_WINDOW_MIN_PX;
+}
+
 module.exports = {
   getWindowInfo: getWindowInfo,
   getDeviceInfo: getDeviceInfo,
   getAppBaseInfo: getAppBaseInfo,
-  getLayoutMetrics: getLayoutMetrics
+  getLayoutMetrics: getLayoutMetrics,
+  isWideWindow: isWideWindow,
+  WIDE_WINDOW_MIN_PX: WIDE_WINDOW_MIN_PX
 };

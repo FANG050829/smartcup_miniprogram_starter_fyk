@@ -560,3 +560,23 @@
     transform: scale(0.98);
     opacity: 0.92;
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    .page {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    /* 内容列收窄居中（背景光斑为绝对定位装饰，不参与流式布局） */
+    .sectionCard {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* 展示型大字号 px 上限 */
+    .heroValue {
+        font-size: 64px;
+    }
+}

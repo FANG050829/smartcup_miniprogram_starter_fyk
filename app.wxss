@@ -199,3 +199,14 @@ wx-button::after {
         will-change: auto;
     }
 }
+
+/* ===== 平板 / 宽窗适配（断点与 utils/wxCompat.js isWideWindow 一致）===== */
+/* rpx 在 ≥768px 窗口下约 1.02px/单位，卡片圆角/阴影等变量在此收敛为桌面级观感，
+ * 各页消费 var(--r)/var(--shadow) 的 .card 自动跟随；覆盖值一律用 px */
+@media (min-width: 768px) {
+    page {
+        --r: 22px;
+        --shadow: 0 18px 44px rgba(0, 0, 0, 0.07);
+        -webkit-font-smoothing: antialiased;
+    }
+}

@@ -300,18 +300,22 @@ var GLANCE_INTROS = {
   ]
 };
 var TAP_LINES = [
-  "戳我干嘛，怪痒的",
-  "我在认真看家呢",
-  "再戳就要罢工啦～",
-  "喝口水，休息一下",
-  "哈哈，好痒好痒",
-  "有事启奏？",
   "今天也要好好喝水哦",
-  "戳一下，年轻一秒",
-  "别戳了，水都洒出来了",
-  "我在呢，我在呢",
-  "你戳的样子像在浇水",
-  "换个手指戳，这个累了"
+  "嘿嘿，好痒好痒～",
+  "我在呢，一直陪着你",
+  "喝口水，休息一下吧",
+  "轻轻一戳，开心一整天",
+  "咕嘟咕嘟，一起喝水吧",
+  "想我了就随时戳戳我",
+  "你喝水的时候最可爱啦",
+  "今天辛苦啦，抱抱你",
+  "慢慢喝，别着急哦",
+  "我会守好这杯水的",
+  "是你的专属小水杯哟",
+  "累了就歇一歇，别硬撑",
+  "陪你喝好每一杯水",
+  "喝饱水，才有好心情",
+  "悄悄给你加油打气～"
 ];
 /* 打开加热面板时伙伴的台词（跟着球飞进面板凹座） */
 var HEAT_LINES = [
@@ -619,7 +623,9 @@ Page({
         }
       }
     } catch (e) {}
-    var homePageBottomPaddingPx = HOME_TAB_BAR_HEIGHT_PX + HOME_TAB_BAR_CLEARANCE_PX + safeInsetBottom;
+    /* 平板/宽窗下 TabBar 是 72px 悬浮胶囊（见 custom-tab-bar/index.wxss），
+     * 手机仍是 64px；旋转切换断点时随 onResize 一起重算 */
+    var homePageBottomPaddingPx = (wxCompat.isWideWindow() ? 72 : HOME_TAB_BAR_HEIGHT_PX) + HOME_TAB_BAR_CLEARANCE_PX + safeInsetBottom;
     this.setData({
       navStatusBarHeight: statusBarHeight,
       navBarHeight: navBarHeight,

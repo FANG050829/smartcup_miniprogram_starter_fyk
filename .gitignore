@@ -9,6 +9,8 @@ npm-debug.log*
 # 本地工具与工作区元数据
 .freebuff/
 .impeccable/
+__pycache__/
+.trae/
 
 # 意外生成的临时文件
 %1

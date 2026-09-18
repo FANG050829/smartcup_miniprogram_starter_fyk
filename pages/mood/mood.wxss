@@ -882,3 +882,43 @@
     color: rgba(23, 36, 43, 0.3);
     letter-spacing: 0.5rpx;
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    /* 内容列收窄居中 */
+    .scrollInner {
+        max-width: 760px;
+        margin: 0 auto;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    /* 舞台高度收敛（rpx 已随屏宽放大），canvas 尺寸由 onResize 重建 */
+    .stageCanvas {
+        height: 480px;
+    }
+
+    .stageShadow {
+        width: 240px;
+    }
+
+    /* 展示型大字号 px 上限 */
+    .aboutName {
+        font-size: 56px;
+    }
+
+    .watermark {
+        font-size: 160px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .stageCanvas {
+        height: 420px;
+    }
+
+    /* 情绪墙 4 列 → 8 列 */
+    .pick {
+        width: 12.5%;
+    }
+}

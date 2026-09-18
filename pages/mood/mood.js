@@ -324,6 +324,25 @@ Page({
     }
   },
 
+  /* 旋转：舞台 canvas 的 backing store 与引擎映射重建（机制同 pet-ball，
+   * CSS 尺寸 width:100%/660rpx 随窗口宽变化）。快照 canvas 固定 140px 免疫 */
+  onResize: function onResize() {
+    var self = this;
+    if (!this._stageCanvas || !this._engine) return;
+    this.createSelectorQuery().select("#moodStage").fields({ size: true }).exec(function(res) {
+      var item = res && res[0];
+      var canvas = self._stageCanvas;
+      if (!item || !item.width || !canvas) return;
+      var dpr = self._stageDpr || 2;
+      var w = Math.floor(item.width * dpr);
+      var h = Math.floor(item.height * dpr);
+      if (Math.abs(w - canvas.width) < 2 && Math.abs(h - canvas.height) < 2) return;
+      canvas.width = w;
+      canvas.height = h;
+      if (self._engine && self._engine.resize) self._engine.resize();
+    });
+  },
+
   onReady: function onReady() {
     if (!emotionEngine && !matesEngine) return;
     var self = this;
@@ -338,6 +357,7 @@ Page({
       var canvas = item.node;
       var info = wx.getWindowInfo ? wx.getWindowInfo() : { pixelRatio: 2 };
       var dpr = Math.min(info.pixelRatio || 2, 3);
+      self._stageDpr = dpr;
       canvas.width = Math.floor(item.width * dpr);
       canvas.height = Math.floor(item.height * dpr);
       var ctx = canvas.getContext("2d");

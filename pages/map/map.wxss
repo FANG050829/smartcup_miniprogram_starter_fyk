@@ -645,3 +645,23 @@ page {
         transition: none;
     }
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    /* 地图本体保持全出血；底部 dock 从通栏圆顶改为居中悬浮卡片 */
+    .dock {
+        left: 0;
+        right: 0;
+        max-width: 560px;
+        margin: 0 auto;
+        bottom: calc(env(safe-area-inset-bottom) + 14px);
+        border-radius: 24px;
+        padding-bottom: 16rpx;
+        box-shadow: 0 18px 44px rgba(13, 70, 92, 0.14);
+    }
+
+    .topBar {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}

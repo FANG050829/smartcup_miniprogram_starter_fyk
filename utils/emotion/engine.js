@@ -584,6 +584,10 @@
     setFade: function (v) {
       if (this.ball && this.ball.setFade) this.ball.setFade(v);
     },
+    /* 旋转/分屏 resize 透传：ball-canvas 闭包内的映射常量重算（无入参） */
+    resize: function () {
+      if (this.ball && this.ball.resize) this.ball.resize();
+    },
     replay: function () {
       if (this._def) this.setEmotion(this._def.id, { auto: true });
     },

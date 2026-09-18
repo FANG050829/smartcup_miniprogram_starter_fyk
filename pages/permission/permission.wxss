@@ -166,3 +166,21 @@
         transition: none;
     }
 }
+
+/* ===== 平板 / 宽窗适配 ===== */
+@media (min-width: 768px) {
+    .page {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    /* 内容列收窄居中 */
+    .headNote,
+    .section,
+    .btn,
+    .foot {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

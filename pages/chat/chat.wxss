@@ -544,3 +544,35 @@ page {
     background-size: contain;
     background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23ffffff'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cline%20x1='22'%20y1='2'%20x2='11'%20y2='13'/%3E%3Cpolygon%20points='22%202%2015%2022%2011%2013%202%209%2022%202'/%3E%3C/svg%3E");
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    /* 对话列收窄居中（页面背景同为白色，两侧留白无接缝）；
+     * 顶栏内容用 calc 与 760px 对话列对齐 */
+    .header {
+        padding-left: calc((100% - 760px) / 2);
+        padding-right: calc((100% - 760px) / 2);
+    }
+
+    .chat-list {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
+    /* 输入区背景/分隔线保持通栏，仅内容收窄居中 */
+    .quick-actions {
+        max-width: 760px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .input-bar {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+
+    /* 历史面板不再吃 86vw 上限，固定 px 宽 */
+    .history-panel {
+        max-width: 480px;
+    }
+}

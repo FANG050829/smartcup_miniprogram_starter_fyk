@@ -135,6 +135,13 @@ Component({
       this._measureHomeRect();
     },
     resize: function() {
+      /* 画布/引擎映射按新窗口尺寸重建（内部有尺寸未变短路） */
+      this._resizeCanvas();
+      /* 悬浮中的球在旋转后可能落在新的钳制区间外，直接归位；
+       * 原位矩形由下面的 _measureHomeRect 延迟 450ms 重标定 */
+      if ((this.data.dragX || 0) !== 0 || (this.data.dragY || 0) !== 0) {
+        this.snapHome();
+      }
       this._measureHomeRect();
     }
   },
@@ -345,6 +352,25 @@ Component({
         bootLog.breadcrumb("pet-ball:引擎就绪(" + self.data.pageKey + ")");
         flog(self.data.pageKey, "engine ready");
         if (typeof ready === "function") ready(eng);
+      });
+    },
+
+    /* 旋转/分屏 resize：canvas CSS 尺寸是 rpx（随窗口宽度变化），backing
+     * store 与引擎的 viewBox 映射都在创建时定格，不重建会发糊且点击判定
+     * 圆错位。窗口尺寸未变（如仅安全区变化）时跳过 */
+    _resizeCanvas: function() {
+      var self = this;
+      if (!this._engine || !this._canvasNode) return;
+      var query = this.createSelectorQuery();
+      query.select("#petBallCanvas").fields({ size: true }).exec(function(res) {
+        var item = res && res[0];
+        if (!item || !item.width || !self._canvasNode || !self._engine) return;
+        if (Math.abs(item.width - self._canvasCssW) < 0.5) return;
+        self._canvasCssW = item.width;
+        /* 与 _ensureEngine 一致的 3x 超采样 */
+        self._canvasNode.width = Math.floor(item.width * 3);
+        self._canvasNode.height = Math.floor(item.height * 3);
+        if (self._engine.resize) self._engine.resize();
       });
     },
 

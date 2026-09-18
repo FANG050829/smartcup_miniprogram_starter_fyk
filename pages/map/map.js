@@ -210,6 +210,10 @@ Page({
     this._loadPreferredLocationMode();
     this._loadTrackedDevices();
   },
+  /* 旋转/分屏：顶部浮层的 pageTopPx 随安全区重算（地图本体 100% 自适应） */
+  onResize: function onResize() {
+    this._applyLayoutMetrics();
+  },
   onReady: function onReady() {
     var self = this;
     this._mapCtx = wx.createMapContext("cupMap", this);

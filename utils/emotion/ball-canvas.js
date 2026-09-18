@@ -682,7 +682,15 @@
       confPieces.length = 0;
     }
 
-    return { applyPose: applyPose, burst: burst, destroy: destroy, setFade: setFade };
+    /* 旋转/分屏 resize：组件已按新 CSS 尺寸重设 backing store 后调用，
+     * 重算 viewBox→物理像素映射（k/origin 是创建时闭包常量，不重算则
+     * 球体缩放错位）。无入参，直接读 canvas.width */
+    function resize() {
+      k = canvas.width / (289 * margin);
+      origin = canvas.width / 2 - 114.5 * k;
+    }
+
+    return { applyPose: applyPose, burst: burst, destroy: destroy, setFade: setFade, resize: resize };
   }
 
   module.exports = { createBall: createBall };

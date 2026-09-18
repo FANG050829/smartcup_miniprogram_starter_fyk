@@ -1396,9 +1396,19 @@
       if (fx) fx.destroy();
     }
 
+    /* 旋转/分屏 resize：组件已按新 CSS 尺寸重设 backing store 后调用，
+     * 重算 viewBox→物理像素映射（k/xOrigin/yOrigin 是创建时闭包常量）。
+     * 无入参，直接读 canvas.width/height */
+    function resize() {
+      k = canvas.width / (240 * margin);
+      xOrigin = canvas.width / 2 - 120 * k;
+      yOrigin = canvas.height / 2 - 120 * k + yBias * k;
+    }
+
     return {
       applyPose: applyPose, burst: burst, signature: signature, destroy: destroy,
       setFade: setFade,
+      resize: resize,
       signatureComplete: !!(fx && fx.signatureComplete)
     };
   }

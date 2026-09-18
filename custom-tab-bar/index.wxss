@@ -243,3 +243,44 @@
     border-top-right-radius: 8px;
     border-bottom: none;
 }
+
+/* ===== 平板/宽窗：底部悬浮胶囊 ===== */
+@media (min-width: 768px) {
+    .tabShell {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .tabBar {
+        max-width: 560px;
+        height: 72px;
+        margin: 0 auto 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(129, 197, 214, 0.22);
+        background: linear-gradient(180deg, #FFFFFF 0%, #F1F4F6 100%);
+        box-shadow: 0 12px 30px rgba(13, 70, 92, 0.10);
+    }
+
+    .tabItem {
+        gap: 4px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .iconPill {
+        width: 36px;
+        height: 36px;
+        border-radius: 18px;
+    }
+
+    /* 图标几何按 18px 画布定位，等比放大保持清晰布局 */
+    .icoWrap {
+        transform: scale(1.2222);
+        transform-origin: center;
+    }
+
+    .tabTxt {
+        font-size: 12px;
+    }
+}

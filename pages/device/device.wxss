@@ -409,3 +409,19 @@
     transform: rotate(45deg);
     margin-left: 16rpx;
 }
+
+/* ===== 平板 / 宽窗适配（覆盖值用 px：rpx 在宽屏随窗口等比放大）===== */
+@media (min-width: 768px) {
+    /* 内容列收窄居中 */
+    .dashboard,
+    .device-list-section {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* 展示型大字号 px 上限 */
+    .header-title {
+        font-size: 36px;
+    }
+}
