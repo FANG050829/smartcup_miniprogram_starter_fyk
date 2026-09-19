@@ -1,18 +1,126 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="180" viewBox="0 0 240 180">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="240" height="180" viewBox="0 0 240 180">
   <defs>
     <radialGradient id="ball" cx="0.38" cy="0.3" r="0.85">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="0.72" stop-color="#f8fcfd"/>
       <stop offset="1" stop-color="#dceef3"/>
     </radialGradient>
-    <linearGradient id="ribbonL" gradientUnits="userSpaceOnUse" x1="62" y1="76.5" x2="94.6" y2="37.6">
-      <stop offset="0" stop-color="#5ec3d8"/>
-      <stop offset="1" stop-color="#7ed6a7"/>
-    </linearGradient>
-    <linearGradient id="ribbonR" gradientUnits="userSpaceOnUse" x1="145.4" y1="37.6" x2="178" y2="76.5">
-      <stop offset="0" stop-color="#f2a0c0"/>
-      <stop offset="1" stop-color="#b39ddb"/>
-    </linearGradient>
+
+    <!-- 拖尾柔化：把多层阶梯揉成连续渐变 -->
+    <filter id="soft" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
+
+    <!-- z=0 分界线 = 投影椭圆长轴：前/后两个半平面裁剪，与引擎按 z 正负拆层一致 -->
+    <clipPath id="clipAF"><polygon points="482.5,-77 651.5,285.5 -73.5,623.5 -242.5,261"/></clipPath>
+    <clipPath id="clipAB"><polygon points="482.5,-77 313.5,-439.5 -411.5,-101.5 -242.5,261"/></clipPath>
+    <clipPath id="clipBF"><polygon points="482.5,261 313.5,623.5 -411.5,285.5 -242.5,-77"/></clipPath>
+    <clipPath id="clipBB"><polygon points="482.5,261 -242.5,-77 -73.5,-439.5 651.5,-101.5"/></clipPath>
+
+    <!-- 拖尾 A：12 层嵌套虚线沿闭合轨道滑行（虚线周期=周长，绕接缝无缝），
+         头层圆帽、其余平头，宽度/透明度小步递减，模糊后即连续锥形尾迹 -->
+    <g id="trailA" filter="url(#soft)">
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#a5e4be" stroke-width="2.4" stroke-dasharray="90 200" stroke-dashoffset="90" opacity="0.16">
+        <animate attributeName="stroke-dashoffset" values="90;-200" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#a5e4be;#acea8a;#a7ecd2;#a5e4be" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#9de0c1" stroke-width="2.7" stroke-dasharray="84 206" stroke-dashoffset="84" opacity="0.2">
+        <animate attributeName="stroke-dashoffset" values="84;-206" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#9de0c1;#a5e78c;#9fe8d4;#9de0c1" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#95dcc3" stroke-width="3" stroke-dasharray="77 213" stroke-dashoffset="77" opacity="0.25">
+        <animate attributeName="stroke-dashoffset" values="77;-213" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#95dcc3;#9ee48e;#97e4d6;#95dcc3" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#8dd8c5" stroke-width="3.3" stroke-dasharray="69 221" stroke-dashoffset="69" opacity="0.31">
+        <animate attributeName="stroke-dashoffset" values="69;-221" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#8dd8c5;#97e190;#8fe0d8;#8dd8c5" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#85d4c7" stroke-width="3.7" stroke-dasharray="61 229" stroke-dashoffset="61" opacity="0.38">
+        <animate attributeName="stroke-dashoffset" values="61;-229" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#85d4c7;#90de92;#87dcda;#85d4c7" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#7dd0c9" stroke-width="4.1" stroke-dasharray="53 237" stroke-dashoffset="53" opacity="0.45">
+        <animate attributeName="stroke-dashoffset" values="53;-237" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#7dd0c9;#89db94;#7fd8dc;#7dd0c9" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#75cccb" stroke-width="4.5" stroke-dasharray="45 245" stroke-dashoffset="45" opacity="0.53">
+        <animate attributeName="stroke-dashoffset" values="45;-245" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#75cccb;#82d896;#77d4de;#75cccb" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#6dc8ce" stroke-width="4.9" stroke-dasharray="37 253" stroke-dashoffset="37" opacity="0.62">
+        <animate attributeName="stroke-dashoffset" values="37;-253" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#6dc8ce;#7bd598;#6fd0e0;#6dc8ce" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#65c4d0" stroke-width="5.4" stroke-dasharray="29 261" stroke-dashoffset="29" opacity="0.71">
+        <animate attributeName="stroke-dashoffset" values="29;-261" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#65c4d0;#74d29a;#67cce2;#65c4d0" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#5dc0d2" stroke-width="5.9" stroke-dasharray="21 269" stroke-dashoffset="21" opacity="0.8">
+        <animate attributeName="stroke-dashoffset" values="21;-269" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#5dc0d2;#6dcf9c;#5fc8e4;#5dc0d2" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#55bcd4" stroke-width="6.4" stroke-dasharray="14 276" stroke-dashoffset="14" opacity="0.9">
+        <animate attributeName="stroke-dashoffset" values="14;-276" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#55bcd4;#66cc9e;#57c4e6;#55bcd4" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 179.8 64.1 A 66 20 -25 1 1 60.2 119.9 A 66 20 -25 1 1 179.8 64.1" fill="none" stroke="#4db8d6" stroke-width="7" stroke-linecap="round" stroke-dasharray="7 283" stroke-dashoffset="7" opacity="1">
+        <animate attributeName="stroke-dashoffset" values="7;-283" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#4db8d6;#5fc9a0;#4fc0e8;#4db8d6" dur="9s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+    <!-- 拖尾 B：反向轨道，异向色相漂移 -->
+    <g id="trailB" filter="url(#soft)">
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#bbb6d6" stroke-width="2.4" stroke-dasharray="90 202" stroke-dashoffset="90" opacity="0.16">
+        <animate attributeName="stroke-dashoffset" values="90;-202" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#bbb6d6;#c1c6c4;#b0b6c4;#bbb6d6" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#c0b4d4" stroke-width="2.7" stroke-dasharray="84 208" stroke-dashoffset="84" opacity="0.2">
+        <animate attributeName="stroke-dashoffset" values="84;-208" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#c0b4d4;#c6c4c0;#b4b4c8;#c0b4d4" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#c5b2d2" stroke-width="3" stroke-dasharray="77 215" stroke-dashoffset="77" opacity="0.25">
+        <animate attributeName="stroke-dashoffset" values="77;-215" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#c5b2d2;#cbc2bc;#b8b2cc;#c5b2d2" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#cab0d0" stroke-width="3.3" stroke-dasharray="69 223" stroke-dashoffset="69" opacity="0.31">
+        <animate attributeName="stroke-dashoffset" values="69;-223" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#cab0d0;#d0c0b8;#bcb0d0;#cab0d0" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#cfaece" stroke-width="3.7" stroke-dasharray="61 231" stroke-dashoffset="61" opacity="0.38">
+        <animate attributeName="stroke-dashoffset" values="61;-231" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#cfaece;#d5beb4;#c0aed4;#cfaece" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#d4accc" stroke-width="4.1" stroke-dasharray="53 239" stroke-dashoffset="53" opacity="0.45">
+        <animate attributeName="stroke-dashoffset" values="53;-239" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#d4accc;#dabcb0;#c4acd8;#d4accc" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#d9aaca" stroke-width="4.5" stroke-dasharray="45 247" stroke-dashoffset="45" opacity="0.53">
+        <animate attributeName="stroke-dashoffset" values="45;-247" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#d9aaca;#dfbaac;#c8aadc;#d9aaca" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#dea8c8" stroke-width="4.9" stroke-dasharray="37 255" stroke-dashoffset="37" opacity="0.62">
+        <animate attributeName="stroke-dashoffset" values="37;-255" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#dea8c8;#e4b8a8;#cca8e0;#dea8c8" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#e3a6c6" stroke-width="5.4" stroke-dasharray="29 263" stroke-dashoffset="29" opacity="0.71">
+        <animate attributeName="stroke-dashoffset" values="29;-263" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#e3a6c6;#e9b6a4;#d0a6e4;#e3a6c6" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#e8a4c4" stroke-width="5.9" stroke-dasharray="21 271" stroke-dashoffset="21" opacity="0.8">
+        <animate attributeName="stroke-dashoffset" values="21;-271" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#e8a4c4;#eeb4a0;#d4a4e8;#e8a4c4" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#eda2c2" stroke-width="6.4" stroke-dasharray="14 278" stroke-dashoffset="14" opacity="0.9">
+        <animate attributeName="stroke-dashoffset" values="14;-278" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#eda2c2;#f3b29c;#d8a2ec;#eda2c2" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 60.2 64.1 A 66 21 25 1 0 179.8 119.9 A 66 21 25 1 0 60.2 64.1" fill="none" stroke="#f2a0c0" stroke-width="7" stroke-linecap="round" stroke-dasharray="7 285" stroke-dashoffset="7" opacity="1">
+        <animate attributeName="stroke-dashoffset" values="7;-285" dur="3.4s" begin="-1.7s" repeatCount="indefinite"/>
+        <animate attributeName="stroke" values="#f2a0c0;#f8b098;#dca0f0;#f2a0c0" dur="9s" begin="-4.5s" repeatCount="indefinite"/>
+      </path>
+    </g>
   </defs>
 
   <!-- 背景上升的小气泡（画在球后面） -->
@@ -40,15 +148,12 @@
   <!-- 表情球：整体上下漂浮 -->
   <g>
     <animateTransform attributeName="transform" type="translate" values="0 0;0 -8;0 0" dur="3.6s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
-    <circle cx="120" cy="92" r="54" fill="url(#ball)" stroke="#e4f2f6" stroke-width="2"/>
 
-    <!-- 彩带：两条等长圆弧对称贴着球缘（左上 / 右上），交替呼吸 -->
-    <path d="M 62 76.5 A 60 60 0 0 1 94.6 37.6" fill="none" stroke="url(#ribbonL)" stroke-width="5" stroke-linecap="round" opacity="0.95">
-      <animate attributeName="opacity" values="0.95;0.55;0.95" dur="4.2s" repeatCount="indefinite"/>
-    </path>
-    <path d="M 145.4 37.6 A 60 60 0 0 1 178 76.5" fill="none" stroke="url(#ribbonR)" stroke-width="5" stroke-linecap="round" opacity="0.55">
-      <animate attributeName="opacity" values="0.55;0.95;0.55" dur="4.2s" repeatCount="indefinite"/>
-    </path>
+    <!-- 背层拖尾：只渲染 z<0 的半平面，被球体自然遮挡 -->
+    <use xlink:href="#trailA" href="#trailA" clip-path="url(#clipAB)"/>
+    <use xlink:href="#trailB" href="#trailB" clip-path="url(#clipBB)"/>
+
+    <circle cx="120" cy="92" r="54" fill="url(#ball)" stroke="#e4f2f6" stroke-width="2"/>
 
     <!-- 眼睛：周期性眨一下 -->
     <g fill="#1c2f3a">
@@ -59,5 +164,9 @@
         <animate attributeName="ry" values="9;9;1;9;9" keyTimes="0;0.44;0.48;0.52;1" dur="5s" repeatCount="indefinite"/>
       </ellipse>
     </g>
+
+    <!-- 前层拖尾：只渲染 z≥0 的半平面，横掠球身下缘 -->
+    <use xlink:href="#trailA" href="#trailA" clip-path="url(#clipAF)"/>
+    <use xlink:href="#trailB" href="#trailB" clip-path="url(#clipBF)"/>
   </g>
 </svg>
