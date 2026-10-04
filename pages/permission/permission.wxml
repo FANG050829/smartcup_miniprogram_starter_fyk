@@ -16,7 +16,7 @@
         </view>
     </view>
 
-    <view class="section fx fx-d2">
+    <view class="section fx fx-d3">
         <text class="secLabel">系统权限</text>
         <view class="panel">
             <view class="row" hoverClass="rowActive" hoverStayTime="60" bindtap="openSetting" aria-role="button" aria-label="蓝牙，{{permBluetooth ? '已开启' : '未开启'}}，点击前往设置">

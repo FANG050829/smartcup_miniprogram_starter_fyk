@@ -88,6 +88,16 @@
     animation: iconPulse 0.28s ease;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .tabItem,
+    .iconPill,
+    .tabItem.pulse,
+    .tabItem.pulse .iconPill.active {
+        animation: none;
+        transition: none;
+    }
+}
+
 .iconPill {
     width: 28px;
     height: 28px;
@@ -182,12 +192,12 @@
 }
 
 .clockHandMin {
-    left: 8rpx;
-    top: 8rpx;
-    width: 5rpx;
-    height: 2rpx;
+    left: 8px;
+    top: 8px;
+    width: 5px;
+    height: 2px;
     background: currentColor;
-    border-radius: 1rpx;
+    border-radius: 1px;
 }
 
 .moodFace {

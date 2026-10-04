@@ -128,6 +128,8 @@
     line-height: 1.2;
     font-weight: 800;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .stripL {
@@ -324,6 +326,18 @@
     margin-top: 10rpx;
 }
 
+/* 趋势/明细区的骨架与空态（骨架复用 AI 建议区样式语言） */
+
+.chartEmpty {
+    margin-top: 28rpx;
+    padding: 24rpx 0;
+    font-size: 24rpx;
+    line-height: 1.6;
+    color: inherit;
+    opacity: 0.66;
+    text-align: center;
+}
+
 .noteItem {
     display: flex;
     align-items: flex-start;
@@ -384,6 +398,14 @@
 
 .skin-print .skinOpt {
     color: #6b675c;
+}
+
+.skin-print .skinSwitch {
+    background: #e7e2d6;
+    border: 1rpx solid #dad5c8;
+    border-radius: 14rpx;
+    padding: 6rpx;
+    margin-bottom: 20rpx;
 }
 
 .skin-print .skinOpt.on {
@@ -596,14 +618,14 @@
 .skin-classic .skinOpt.on {
     background: #ffffff;
     border: 1rpx solid #c9dce6;
-    color: #1f6e8c;
+    color: var(--teal);
     font-weight: 800;
 }
 
 .skin-classic .masthead {
     padding: 32rpx 30rpx 30rpx;
     border-radius: 24rpx;
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .kicker {
@@ -634,7 +656,7 @@
 }
 
 .skin-classic .figNum {
-    color: #1f6e8c;
+    color: var(--teal);
 }
 
 .skin-classic .figUnit,
@@ -649,7 +671,7 @@
 
 .skin-classic .gaugeFill {
     border-radius: 999rpx;
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .strip {
@@ -699,7 +721,7 @@
 
 .skin-classic .colBar {
     border-radius: 6rpx 6rpx 0 0;
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .colBar.good {
@@ -707,7 +729,7 @@
 }
 
 .skin-classic .colBar.steady {
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .colBar.low {
@@ -719,7 +741,7 @@
 }
 
 .skin-classic .colLabel.today {
-    color: #1f6e8c;
+    color: var(--teal);
 }
 
 .skin-classic .lgSwatch {
@@ -731,7 +753,7 @@
 }
 
 .skin-classic .lgSwatch.steady {
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .lgSwatch.low {
@@ -764,7 +786,7 @@
 }
 
 .skin-classic .tRow.today .tCell.date {
-    color: #1f6e8c;
+    color: var(--teal);
 }
 
 .skin-classic .tCell.dim,
@@ -776,7 +798,7 @@
     border: none;
     border-radius: 8rpx;
     color: #ffffff;
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .skLine {
@@ -793,7 +815,7 @@
 }
 
 .skin-classic .noteIdx {
-    color: #1f6e8c;
+    color: var(--teal);
 }
 
 .skin-classic .noteText {
@@ -807,14 +829,14 @@
 .skin-classic .btn {
     border: 1rpx solid #c9dce6;
     border-radius: 16rpx;
-    color: #1f6e8c;
+    color: var(--teal);
     background: #ffffff;
 }
 
 .skin-classic .btn.primary {
-    border: 1rpx solid #1f6e8c;
+    border: 1rpx solid var(--teal);
     color: #ffffff;
-    background: #1f6e8c;
+    background: var(--teal);
 }
 
 .skin-classic .press {

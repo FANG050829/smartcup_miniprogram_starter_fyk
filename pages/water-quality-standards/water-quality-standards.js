@@ -42,7 +42,7 @@ Page({
     }],
     ppmExplainRows: [{
       title: "测量对象",
-      desc: "本程序 ppm 来自 TDS 探针，反映水中溶解性总固体（Total Dissolved Solids）的估算浓度。"
+      desc: "App 内 ppm 来自 TDS 探针，反映水中溶解性总固体（Total Dissolved Solids）的估算浓度。"
     }, {
       title: "换算方式",
       desc: "固件基于电导相关信号进行 TDS 估算并输出 ppm，通常可近似理解为 mg/L。"

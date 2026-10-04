@@ -1,7 +1,7 @@
 <view class="page">
     <view class="header">
         <text class="headerTitle">设置</text>
-        <text class="headerSub">自定义你的智能水杯体验</text>
+        <text class="headerSub">管理设备与偏好设置</text>
     </view>
     <view class="card">
         <view class="cardHead">
@@ -38,7 +38,7 @@
                 <text class="cardTitle">表情伙伴</text>
                 <text class="cardSub">关闭后首页、聊天和设备页将不再显示表情球</text>
             </view>
-            <switch class="petSwitch" checked="{{petEnabled}}" bindchange="onPetSwitchChange" color="#102a43" aria-label="表情伙伴开关"/>
+            <switch class="petSwitch" checked="{{petEnabled}}" bindchange="onPetSwitchChange" color="#0f8ea8" aria-label="表情伙伴开关"/>
         </view>
     </view>
     <view bindtap="goPermission" class="card permCard" hoverClass="permCardHover" hoverStayTime="60">

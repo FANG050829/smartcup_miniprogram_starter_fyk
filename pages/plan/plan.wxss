@@ -1,8 +1,8 @@
 .page {
     position: relative;
     min-height: 100vh;
-    background: #FFFFFF;
-    color: #111111;
+    background: var(--bg);
+    color: var(--fg);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC",
     "Helvetica Neue", "Microsoft YaHei", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -17,45 +17,46 @@
     z-index: 1;
     height: 100vh;
     padding: 24rpx 24rpx 160rpx;
+    padding-bottom: calc(160rpx + constant(safe-area-inset-bottom));
+    padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
     box-sizing: border-box;
 }
 
-.anim-fadeInUp {
-    animation: fadeInUp 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-    will-change: opacity, transform;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20rpx);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* prefers-reduced-motion：停用本页全部无限循环动画
+ * （orb 浮动 ×2 / 大数字脉冲 / 状态呼吸 / 空态呼吸 / 虚线环旋转），
+ * 并定格到首帧姿态作静态兜底 */
 @media (prefers-reduced-motion: reduce) {
-    .anim-fadeInUp {
+    .overviewOrb.orb1,
+    .overviewOrb.orb2,
+    .overviewAmount,
+    .overviewStatus,
+    .emptyIcon,
+    .emptyIconRing {
         animation: none;
         will-change: auto;
+    }
+
+    .overviewOrb.orb1 {
+        opacity: 0.7;
+        transform: none;
+    }
+
+    .overviewOrb.orb2 {
+        opacity: 0.6;
+        transform: none;
     }
 }
 
 .overviewCard {
-    background: #FFFFFF;
-    border: 1rpx solid rgba(31, 110, 140, 0.08);
-    border-radius: 44rpx;
+    background: var(--card);
+    border: 1rpx solid var(--line);
+    border-radius: var(--r);
     padding: 48rpx 44rpx;
-    color: #111111;
+    color: var(--fg);
     margin-bottom: 36rpx;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 24rpx 68rpx rgba(31, 110, 140, 0.1),
-    0 12rpx 32rpx rgba(31, 110, 140, 0.06),
-    0 4rpx 12rpx rgba(31, 110, 140, 0.03);
+    box-shadow: var(--shadow);
 }
 
 .overviewBg {
@@ -76,7 +77,7 @@
 .overviewOrb.orb1 {
     width: 320rpx;
     height: 320rpx;
-    background: radial-gradient(circle, rgba(93, 173, 226, 0.22) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(127, 190, 216, 0.22) 0%, transparent 70%);
     top: -100rpx;
     right: -80rpx;
     animation: orbFloat1 12s ease-in-out infinite;
@@ -85,7 +86,7 @@
 .overviewOrb.orb2 {
     width: 240rpx;
     height: 240rpx;
-    background: radial-gradient(circle, rgba(41, 128, 185, 0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(31, 110, 140, 0.18) 0%, transparent 70%);
     bottom: -80rpx;
     left: -60rpx;
     animation: orbFloat2 16s ease-in-out infinite;
@@ -117,10 +118,9 @@
 
 .overviewLabel {
     font-size: 22rpx;
-    color: #9aa6b0;
+    color: var(--muted);
     font-weight: 500;
-    letter-spacing: 4rpx;
-    text-transform: uppercase;
+    letter-spacing: 2rpx;
     display: block;
     margin-bottom: 24rpx;
     position: relative;
@@ -141,33 +141,19 @@
     font-weight: 700;
     letter-spacing: -4rpx;
     line-height: 1;
-    background: linear-gradient(180deg, #111111 0%, #1f6e8c 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: numberPulse 4s ease-in-out infinite;
-}
-
-@keyframes numberPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.015);
-    }
+    color: var(--teal);
 }
 
 .overviewUnit {
     font-size: 28rpx;
-    color: #6b7a85;
+    color: var(--muted);
     font-weight: 500;
     letter-spacing: 1rpx;
 }
 
 .overviewGoal {
     font-size: 24rpx;
-    color: #9aa6b0;
+    color: var(--muted);
     margin-bottom: 36rpx;
     letter-spacing: 0.5rpx;
     position: relative;
@@ -186,44 +172,10 @@
 
 .overviewFill {
     height: 100%;
-    background: linear-gradient(90deg, #7FBED8 0%, #CEECF5 100%);
+    background: var(--teal-soft);
     border-radius: 999rpx;
+    /* 有意用 width 过渡：条高仅 10rpx 级、单次状态过渡；scaleX 会压扁胶囊圆头 */
     transition: width 1s cubic-bezier(0.22, 0.61, 0.36, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.overviewFill::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-    animation: shimmer 2.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        left: -100%;
-    }
-
-    60%, 100% {
-        left: 100%;
-    }
-}
-
-.overviewFill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 24rpx;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 50%;
-    filter: blur(6rpx);
 }
 
 .overviewFooter {
@@ -236,7 +188,7 @@
 
 .overviewPercent {
     font-size: 28rpx;
-    color: #111111;
+    color: var(--fg);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.5rpx;
@@ -250,7 +202,7 @@
     border-radius: 999rpx;
     font-weight: 500;
     letter-spacing: 1rpx;
-    color: #1f6e8c;
+    color: var(--teal-deep);
     animation: statusBreathe 3s ease-in-out infinite;
 }
 
@@ -279,7 +231,7 @@
     font-size: 38rpx;
     font-weight: 700;
     letter-spacing: -0.5rpx;
-    color: #111111;
+    color: var(--fg);
 }
 
 .sectionAction {
@@ -287,33 +239,11 @@
     color: #ffffff;
     font-weight: 500;
     padding: 14rpx 30rpx;
-    background: #7FBED8;
+    background: var(--teal);
     border-radius: 999rpx;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 1rpx;
-    box-shadow: 0 8rpx 20rpx rgba(41, 128, 185, 0.28);
-}
-
-.sectionAction:active {
-    transform: scale(0.93);
-    background: #1f6e8c;
-}
-
-.sectionAction::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-    transform: scale(0);
-    opacity: 0;
-    transition: all 0.5s ease;
-}
-
-.sectionAction:active::after {
-    transform: scale(2.5);
-    opacity: 1;
+    box-shadow: 0 8rpx 20rpx rgba(15, 142, 168, 0.28);
 }
 
 .reminderList {
@@ -323,30 +253,15 @@
 }
 
 .reminderItem {
-    background: #ffffff;
-    border: 1rpx solid rgba(31, 110, 140, 0.06);
-    border-radius: 32rpx;
+    background: var(--card);
+    border: 1rpx solid var(--line);
+    border-radius: var(--r);
     padding: 32rpx;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
-    box-shadow: 0 12rpx 32rpx rgba(31, 110, 140, 0.06),
-    0 4rpx 12rpx rgba(31, 110, 140, 0.03);
-    animation: itemSlideIn 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-@keyframes itemSlideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-24rpx);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    box-shadow: var(--shadow);
 }
 
 .reminderItem::before {
@@ -356,29 +271,16 @@
     left: 0;
     width: 4rpx;
     height: 100%;
-    background: linear-gradient(180deg, #7FBED8 0%, #CEECF5 100%);
+    background: var(--teal-soft);
     opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.reminderItem:active {
-    transform: scale(0.98) translateY(-2rpx);
-    border-color: rgba(41, 128, 185, 0.16);
-    box-shadow: 0 16rpx 40rpx rgba(31, 110, 140, 0.1),
-    0 6rpx 16rpx rgba(31, 110, 140, 0.06);
-}
-
-.reminderItem:active::before {
-    opacity: 1;
 }
 
 .reminderItem.isDone {
-    background: #f7fafb;
+    background: var(--bg);
 }
 
 .reminderItem.isDone::before {
     opacity: 0.4;
-    background: #CEECF5;
 }
 
 .reminderLeft {
@@ -398,20 +300,12 @@
     font-weight: 700;
     letter-spacing: -1.5rpx;
     font-variant-numeric: tabular-nums;
-    background: linear-gradient(180deg, #111111 0%, #1f6e8c 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transition: transform 0.3s ease;
-}
-
-.reminderItem:active .reminderTime {
-    transform: scale(0.97);
+    color: var(--fg);
 }
 
 .reminderRepeat {
     font-size: 24rpx;
-    color: #6b7a85;
+    color: var(--muted);
     letter-spacing: 0.5rpx;
 }
 
@@ -426,13 +320,13 @@
 
 .reminderBadge.upcoming {
     background: rgba(31, 110, 140, 0.06);
-    color: #6b7a85;
+    color: var(--muted);
 }
 
 .reminderBadge.completed {
-    background: rgba(41, 128, 185, 0.1);
-    color: #7FBED8;
-    border: 1rpx solid rgba(41, 128, 185, 0.2);
+    background: rgba(15, 142, 168, 0.1);
+    color: var(--teal-deep);
+    border: 1rpx solid rgba(15, 142, 168, 0.2);
 }
 
 .reminderActions {
@@ -441,77 +335,51 @@
 }
 
 .reminderBtn {
-    width: 64rpx;
+    min-width: 96rpx;
     height: 64rpx;
-    border-radius: 18rpx;
+    padding: 0 24rpx;
+    border-radius: 999rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.reminderBtn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, transparent 70%);
-    transform: scale(0);
-    opacity: 0;
-    transition: all 0.4s ease;
-}
-
-.reminderBtn:active::after {
-    transform: scale(1.5);
-    opacity: 1;
+    transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .reminderBtn.edit {
-    background: rgba(41, 128, 185, 0.08);
-}
-
-.reminderBtn.edit:active {
-    background: rgba(41, 128, 185, 0.16);
-    transform: scale(0.88) rotate(10deg);
+    background: rgba(15, 142, 168, 0.08);
 }
 
 .reminderBtn.delete {
-    background: rgba(217, 96, 88, 0.08);
+    background: rgba(239, 68, 68, 0.08);
 }
 
-.reminderBtn.delete:active {
-    background: rgba(217, 96, 88, 0.16);
-    transform: scale(0.88) rotate(-10deg);
-}
-
-.btnIcon {
-    font-size: 28rpx;
+.reminderBtnText {
+    font-size: 24rpx;
     line-height: 1;
-    position: relative;
-    z-index: 1;
+    font-weight: 500;
+    letter-spacing: 1rpx;
 }
 
-.reminderBtn.edit .btnIcon {
-    color: #7FBED8;
+.reminderBtn.edit .reminderBtnText {
+    color: var(--teal-deep);
 }
 
-.reminderBtn.delete .btnIcon {
-    color: #d96058;
+.reminderBtn.delete .reminderBtnText {
+    color: var(--bad-ink);
 }
 
 .emptyState {
     text-align: center;
     padding: 100rpx 60rpx;
-    background: #ffffff;
-    border-radius: 32rpx;
-    border: 1rpx dashed rgba(31, 110, 140, 0.16);
+    background: var(--card);
+    border-radius: var(--r);
+    border: 1rpx dashed var(--line);
 }
 
 .emptyIcon {
     width: 140rpx;
     height: 140rpx;
-    background: linear-gradient(135deg, rgba(41, 128, 185, 0.06) 0%, rgba(93, 173, 226, 0.06) 100%);
+    background: rgba(15, 142, 168, 0.06);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -524,12 +392,12 @@
 @keyframes emptyBreathe {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(41, 128, 185, 0);
+        box-shadow: 0 0 0 0 rgba(15, 142, 168, 0);
     }
 
     50% {
         transform: scale(1.05);
-        box-shadow: 0 0 0 16rpx rgba(41, 128, 185, 0.04);
+        box-shadow: 0 0 0 16rpx rgba(15, 142, 168, 0.04);
     }
 }
 
@@ -537,7 +405,7 @@
     position: absolute;
     inset: -8rpx;
     border-radius: 50%;
-    border: 2rpx dashed rgba(41, 128, 185, 0.3);
+    border: 2rpx dashed rgba(15, 142, 168, 0.3);
     animation: rotate 20s linear infinite;
 }
 
@@ -553,7 +421,7 @@
 
 .emptyIconText {
     font-size: 56rpx;
-    color: #7FBED8;
+    color: var(--teal-soft);
     font-weight: 300;
     line-height: 1;
     position: relative;
@@ -562,7 +430,7 @@
 
 .emptyText {
     font-size: 28rpx;
-    color: #6b7a85;
+    color: var(--muted);
     display: block;
     margin-bottom: 36rpx;
     letter-spacing: 0.5rpx;
@@ -573,34 +441,12 @@
     font-size: 26rpx;
     font-weight: 500;
     color: #ffffff;
-    background: #7FBED8;
+    background: var(--teal);
     padding: 22rpx 52rpx;
     border-radius: 999rpx;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 1rpx;
-    box-shadow: 0 12rpx 28rpx rgba(41, 128, 185, 0.28);
-}
-
-.emptyBtn:active {
-    transform: scale(0.93);
-    background: #1f6e8c;
-}
-
-.emptyBtn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-    transform: scale(0);
-    opacity: 0;
-    transition: all 0.5s ease;
-}
-
-.emptyBtn:active::after {
-    transform: scale(2.5);
-    opacity: 1;
+    box-shadow: 0 12rpx 28rpx rgba(15, 142, 168, 0.28);
 }
 
 .editRow {
@@ -608,7 +454,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 28rpx 0;
-    border-bottom: 1rpx solid rgba(31, 110, 140, 0.06);
+    border-bottom: 1rpx solid var(--line);
     transition: background 0.2s ease;
 }
 
@@ -616,20 +462,16 @@
     border-bottom: none;
 }
 
-.editRow:active {
-    background: rgba(31, 110, 140, 0.02);
-}
-
 .editLabel {
     font-size: 28rpx;
-    color: #6b7a85;
+    color: var(--muted);
     letter-spacing: 0.5rpx;
 }
 
 .editValue {
     font-size: 28rpx;
     font-weight: 500;
-    color: #111111;
+    color: var(--fg);
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.5rpx;
 }
@@ -641,20 +483,15 @@
 }
 
 .editArrow {
-    color: #b5bec5;
+    color: var(--muted);
     font-size: 32rpx;
     font-weight: 300;
-    transition: transform 0.2s ease;
-}
-
-.editRow:active .editArrow {
-    transform: translateX(4rpx);
 }
 
 .repeatMenu {
     margin-top: 16rpx;
     background: rgba(31, 110, 140, 0.03);
-    border-radius: 22rpx;
+    border-radius: var(--r);
     padding: 8rpx;
     animation: menuIn 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
@@ -672,23 +509,19 @@
 }
 
 .repeatOption {
-    padding: 24rpx 28rpx;
+    /* 小控件保留小圆角（14rpx），不收敛到全局 --r */
     border-radius: 14rpx;
     font-size: 28rpx;
-    color: #111111;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: var(--fg);
+    transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 0.5rpx;
 }
 
-.repeatOption:active {
-    transform: scale(0.97);
-}
-
 .repeatOption.on {
-    background: #7FBED8;
+    background: var(--teal);
     color: #ffffff;
     font-weight: 500;
-    box-shadow: 0 8rpx 20rpx rgba(41, 128, 185, 0.28);
+    box-shadow: 0 8rpx 20rpx rgba(15, 142, 168, 0.28);
 }
 
 .dateRow {
@@ -696,13 +529,13 @@
     align-items: center;
     gap: 20rpx;
     padding: 28rpx 0;
-    border-bottom: 1rpx solid rgba(31, 110, 140, 0.06);
+    border-bottom: 1rpx solid var(--line);
 }
 
 .dateSummary {
     flex: 1;
     font-size: 28rpx;
-    color: #111111;
+    color: var(--fg);
     letter-spacing: 0.5rpx;
 }
 
@@ -710,16 +543,12 @@
     font-size: 24rpx;
     color: #ffffff;
     padding: 14rpx 28rpx;
+    /* 小控件保留小圆角（14rpx），不收敛到全局 --r */
     border-radius: 14rpx;
-    background: #7FBED8;
+    background: var(--teal);
     font-weight: 500;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 0.5rpx;
-}
-
-.dateBtn:active {
-    transform: scale(0.93);
-    background: #1f6e8c;
 }
 
 .dateDropdown {
@@ -737,11 +566,11 @@
     font-size: 22rpx;
     padding: 12rpx 24rpx;
     border-radius: 999rpx;
-    background: #7FBED8;
+    background: var(--teal);
     color: #ffffff;
     letter-spacing: 0.5rpx;
-    animation: chipIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    box-shadow: 0 4rpx 12rpx rgba(41, 128, 185, 0.2);
+    animation: chipIn 0.25s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    box-shadow: 0 4rpx 12rpx rgba(15, 142, 168, 0.2);
 }
 
 @keyframes chipIn {
@@ -758,7 +587,7 @@
 
 .dateEmpty {
     font-size: 24rpx;
-    color: #9aa6b0;
+    color: var(--muted);
     padding: 20rpx 0;
     letter-spacing: 0.5rpx;
 }
@@ -774,33 +603,25 @@
     text-align: center;
     font-size: 26rpx;
     padding: 20rpx 0;
+    /* 小控件保留小圆角（14rpx），不收敛到全局 --r */
     border-radius: 14rpx;
     background: rgba(31, 110, 140, 0.05);
-    color: #111111;
+    color: var(--fg);
     font-weight: 500;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 0.5rpx;
 }
 
-.dateEditBtn:active {
-    transform: scale(0.95);
-    background: rgba(31, 110, 140, 0.1);
-}
-
 .dateEditBtn.primary {
-    background: #7FBED8;
+    background: var(--teal);
     color: #ffffff;
-    box-shadow: 0 6rpx 16rpx rgba(41, 128, 185, 0.24);
-}
-
-.dateEditBtn.primary:active {
-    background: #1f6e8c;
+    box-shadow: 0 6rpx 16rpx rgba(15, 142, 168, 0.24);
 }
 
 .calendarPanel {
     margin-top: 24rpx;
     background: rgba(31, 110, 140, 0.03);
-    border-radius: 24rpx;
+    border-radius: var(--r);
     padding: 28rpx;
     box-sizing: border-box;
     animation: calendarIn 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) both;
@@ -833,20 +654,15 @@
     text-align: center;
     line-height: 68rpx;
     font-size: 28rpx;
-    color: #6b7a85;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    border: 1rpx solid rgba(31, 110, 140, 0.06);
-}
-
-.calNav:active {
-    background: rgba(31, 110, 140, 0.05);
-    transform: scale(0.9);
+    color: var(--muted);
+    transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+    border: 1rpx solid var(--line);
 }
 
 .calTitle {
     font-size: 30rpx;
     font-weight: 600;
-    color: #111111;
+    color: var(--fg);
     letter-spacing: 0.5rpx;
 }
 
@@ -859,7 +675,7 @@
 .calWeek wx-text {
     text-align: center;
     font-size: 22rpx;
-    color: #9aa6b0;
+    color: var(--muted);
     padding: 12rpx 0;
     letter-spacing: 0.5rpx;
 }
@@ -867,34 +683,27 @@
 .calCell {
     text-align: center;
     padding: 22rpx 0;
+    /* 小控件保留小圆角（14rpx），不收敛到全局 --r */
     border-radius: 14rpx;
     font-size: 26rpx;
-    color: #111111;
+    color: var(--fg);
     background: #ffffff;
     font-variant-numeric: tabular-nums;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
     border: 1rpx solid transparent;
 }
 
-.calCell:active {
-    transform: scale(0.9);
-}
-
 .calCell.muted {
-    color: #c4ccd2;
+    color: var(--muted);
     background: transparent;
 }
 
 .calCell.on {
-    background: #7FBED8;
+    background: var(--teal);
     color: #ffffff;
     font-weight: 600;
-    border-color: #7FBED8;
-    box-shadow: 0 6rpx 16rpx rgba(41, 128, 185, 0.28);
-}
-
-.calCell.on:active {
-    background: #1f6e8c;
+    border-color: var(--teal);
+    box-shadow: 0 6rpx 16rpx rgba(15, 142, 168, 0.28);
 }
 
 .calEdit, .calConfirm {
@@ -902,32 +711,23 @@
     text-align: center;
     font-size: 28rpx;
     padding: 22rpx 0;
+    /* 小控件保留小圆角（14rpx），不收敛到全局 --r */
     border-radius: 14rpx;
     font-weight: 500;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 0.5rpx;
 }
 
 .calEdit {
     background: #ffffff;
-    color: #111111;
-    border: 1rpx solid rgba(31, 110, 140, 0.08);
-}
-
-.calEdit:active {
-    transform: scale(0.95);
-    background: rgba(31, 110, 140, 0.03);
+    color: var(--fg);
+    border: 1rpx solid var(--line);
 }
 
 .calConfirm {
-    background: #7FBED8;
+    background: var(--teal);
     color: #ffffff;
-    box-shadow: 0 6rpx 16rpx rgba(41, 128, 185, 0.24);
-}
-
-.calConfirm:active {
-    transform: scale(0.95);
-    background: #1f6e8c;
+    box-shadow: 0 6rpx 16rpx rgba(15, 142, 168, 0.24);
 }
 
 .editorActions {
@@ -944,46 +744,19 @@
     font-weight: 500;
     padding: 28rpx 0;
     border-radius: 18rpx;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
     letter-spacing: 1rpx;
-}
-
-.editorBtn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-    transform: scale(0);
-    opacity: 0;
-    transition: all 0.4s ease;
-}
-
-.editorBtn:active::after {
-    transform: scale(2);
-    opacity: 1;
 }
 
 .editorBtn.ghost {
     background: rgba(31, 110, 140, 0.05);
-    color: #111111;
-}
-
-.editorBtn.ghost:active {
-    background: rgba(31, 110, 140, 0.1);
-    transform: scale(0.96);
+    color: var(--fg);
 }
 
 .editorBtn.primary {
-    background: #7FBED8;
+    background: var(--teal);
     color: #ffffff;
-    box-shadow: 0 8rpx 20rpx rgba(41, 128, 185, 0.28);
-}
-
-.editorBtn.primary:active {
-    background: #1f6e8c;
-    transform: scale(0.96);
+    box-shadow: 0 8rpx 20rpx rgba(15, 142, 168, 0.28);
 }
 
 .sheetMask {
@@ -1011,12 +784,12 @@
     bottom: 0;
     z-index: 61;
     background: #ffffff;
-    border-radius: 44rpx 44rpx 0 0;
+    border-radius: var(--r) var(--r) 0 0;
     padding: 20rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
     box-sizing: border-box;
     animation: sheetUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-    box-shadow: 0 -24rpx 68rpx rgba(31, 110, 140, 0.12),
-    0 -12rpx 32rpx rgba(31, 110, 140, 0.08);
+    box-shadow: 0 -24rpx 68rpx rgba(0, 0, 0, 0.1),
+    0 -12rpx 32rpx rgba(0, 0, 0, 0.06);
     max-height: 85vh;
     overflow-y: auto;
 }
@@ -1043,29 +816,29 @@
 .sheetTitle {
     font-size: 38rpx;
     font-weight: 700;
-    color: #111111;
+    color: var(--fg);
     margin-bottom: 24rpx;
     letter-spacing: -0.5rpx;
 }
 
 .sectionActionPress {
     transform: scale(0.93);
-    background: #1f6e8c;
+    background: var(--teal-deep);
 }
 
 .reminderBtnEditPress {
-    background: rgba(41, 128, 185, 0.16);
-    transform: scale(0.88) rotate(10deg);
+    background: rgba(15, 142, 168, 0.16);
+    transform: scale(0.92);
 }
 
 .reminderBtnDeletePress {
-    background: rgba(217, 96, 88, 0.16);
-    transform: scale(0.88) rotate(-10deg);
+    background: rgba(239, 68, 68, 0.16);
+    transform: scale(0.92);
 }
 
 .emptyBtnPress {
     transform: scale(0.93);
-    background: #1f6e8c;
+    background: var(--teal-deep);
 }
 
 .editRowPress {
@@ -1078,7 +851,7 @@
 
 .dateBtnPress {
     transform: scale(0.93);
-    background: #1f6e8c;
+    background: var(--teal-deep);
 }
 
 .dateEditBtnPress {
@@ -1102,7 +875,7 @@
 
 .calConfirmPress {
     transform: scale(0.95);
-    background: #1f6e8c;
+    background: var(--teal-deep);
 }
 
 .editorBtnGhostPress {
@@ -1111,7 +884,7 @@
 }
 
 .editorBtnPrimaryPress {
-    background: #1f6e8c;
+    background: var(--teal-deep);
     transform: scale(0.96);
 }
 
@@ -1119,6 +892,8 @@
 @media (min-width: 768px) {
     .pageScroll {
         padding: 32rpx 5% 180rpx;
+        padding-bottom: calc(180rpx + constant(safe-area-inset-bottom));
+        padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
     }
 
     /* 内容列收窄居中（scroll-view 直接子元素即卡片级容器） */

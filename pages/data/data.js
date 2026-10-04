@@ -291,7 +291,7 @@ Page({
   loadAdvice: function loadAdvice(force, model) {
     var _this2 = this;
     return _asyncToGenerator2( /*#__PURE__*/ _regeneratorRuntime2().mark(function _callee2() {
-      var result, adviceLines;
+      var result, adviceLines, adviceTimedOut, adviceTimer;
       return _regeneratorRuntime2().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -304,6 +304,17 @@ Page({
             _this2.setData({
               aiLoading: true
             });
+            // 一次性超时兜底：云函数 12s 未返回就落下本地建议，避免骨架屏永挂
+            adviceTimedOut = false;
+            adviceTimer = setTimeout(function() {
+              if (!_this2._alive || adviceTimedOut) return;
+              adviceTimedOut = true;
+              _this2.setData({
+                aiLoading: false,
+                adviceLines: fallbackAdvice(model),
+                aiMetaText: "AI 响应超时，已生成本地建议"
+              });
+            }, 12000);
             _context2.prev = 3;
             _context2.next = 6;
             return drinkData.getHydrationAdvice({
@@ -311,7 +322,8 @@ Page({
             });
           case 6:
             result = _context2.sent;
-            if (_this2._alive) {
+            clearTimeout(adviceTimer);
+            if (!adviceTimedOut && _this2._alive) {
               _context2.next = 9;
               break;
             }
@@ -328,8 +340,9 @@ Page({
           case 13:
             _context2.prev = 13;
             _context2.t0 = _context2["catch"](3);
+            clearTimeout(adviceTimer);
             console.warn("[data] hydration advice unavailable", _context2.t0);
-            if (_this2._alive) {
+            if (!adviceTimedOut && _this2._alive) {
               _context2.next = 18;
               break;
             }

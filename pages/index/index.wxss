@@ -1080,7 +1080,7 @@
     font-size: 22rpx;
     font-weight: 500;
     line-height: 1.6;
-    color: #102a43;
+    color: var(--fg);
     text-align: center;
     word-break: keep-all;
 }
@@ -1531,7 +1531,7 @@
     line-height: 1.15;
     font-weight: 800;
     letter-spacing: 0.5rpx;
-    color: #102a43;
+    color: var(--fg);
 }
 
 .heatPanelHint {
@@ -1668,7 +1668,7 @@
     justify-content: space-between;
     background: linear-gradient(135deg, rgba(53, 196, 216, 0.06), rgba(15, 142, 168, 0.03));
     border: 1px solid rgba(15, 142, 168, 0.12);
-    color: #102a43;
+    color: var(--fg);
 }
 
 .heatPresetName {

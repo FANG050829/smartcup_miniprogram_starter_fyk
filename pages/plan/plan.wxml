@@ -1,6 +1,6 @@
 <view class="page {{pageAnim}}">
     <scroll-view class="pageScroll" scrollY="true">
-        <view class="overviewCard anim-fadeInUp fx fx-d1">
+        <view class="overviewCard fx fx-d1">
             <view class="overviewBg">
                 <view class="overviewOrb orb1"></view>
                 <view class="overviewOrb orb2"></view>
@@ -19,13 +19,13 @@
                 <view class="overviewStatus">{{todayProgress.statusText}}</view>
             </view>
         </view>
-        <view class="section anim-fadeInUp fx fx-d2" style="animation-delay:0.1s;">
+        <view class="section fx fx-d2">
             <view class="sectionHeader">
                 <text class="sectionTitle">提醒</text>
                 <view bindtap="startNewReminder" class="sectionAction" hoverClass="sectionActionPress" hoverStayTime="80">+ 新建</view>
             </view>
             <view class="reminderList fx fx-d3" wx:if="{{reminders.length}}">
-                <view class="reminderItem {{reminderStatus[item.id]==='done'?'isDone':''}}" style="animation-delay:{{0.15+index*0.05}}s;" wx:for="{{reminders}}" wx:key="id">
+                <view class="reminderItem {{reminderStatus[item.id]==='done'?'isDone':''}}" wx:for="{{reminders}}" wx:key="id">
                     <view class="reminderLeft">
                         <view class="reminderTimeWrapper">
                             <text class="reminderTime">{{item.time}}</text>
@@ -37,10 +37,10 @@
                     </view>
                     <view class="reminderActions">
                         <view bindtap="editReminder" class="reminderBtn edit" data-id="{{item.id}}" hoverClass="reminderBtnEditPress" hoverStayTime="80">
-                            <text class="btnIcon">✎</text>
+                            <text class="reminderBtnText">编辑</text>
                         </view>
                         <view bindtap="deleteReminder" class="reminderBtn delete" data-id="{{item.id}}" hoverClass="reminderBtnDeletePress" hoverStayTime="80">
-                            <text class="btnIcon">✕</text>
+                            <text class="reminderBtnText">删除</text>
                         </view>
                     </view>
                 </view>

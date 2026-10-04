@@ -1,12 +1,12 @@
 <scroll-view class="page skin-{{skin}}" scrollY="true">
     <view class="sheet">
 
-        <view class="skinSwitch">
+        <view class="skinSwitch fx fx-d1">
             <view class="skinOpt {{skin === 'classic' ? 'on' : ''}}" data-skin="classic" bindtap="switchSkin" hover-class="press" hover-stay-time="80">主题版</view>
             <view class="skinOpt {{skin === 'print' ? 'on' : ''}}" data-skin="print" bindtap="switchSkin" hover-class="press" hover-stay-time="80">印刷版</view>
         </view>
 
-        <view class="masthead">
+        <view class="masthead fx fx-d2">
             <view class="mastTop">
                 <text class="kicker">饮水记录 · 近 7 日</text>
                 <text class="mastMeta">{{sourceLabel}}</text>
@@ -14,7 +14,7 @@
             <text class="mastTitle">AI 周报</text>
         </view>
 
-        <view class="statsBlock">
+        <view class="statsBlock fx fx-d3">
             <view class="figures">
             <view class="figMain">
                 <view class="figNumWrap">
@@ -50,20 +50,28 @@
                 <text class="secTitle">本周趋势</text>
                 <text class="secMeta">合计 {{summary.total}}ml · {{updatedText}}</text>
             </view>
-            <view class="chart">
-                <view class="col" wx:for="{{days}}" wx:key="dateKey">
-                    <view class="colBox">
-                        <text class="colVal">{{item.total}}</text>
-                        <view class="colBar {{item.tone}}" style="height:{{item.barHeight}}rpx;"></view>
+            <view class="skeleton" wx:if="{{loading}}">
+                <view class="skLine w90"></view>
+                <view class="skLine w70"></view>
+                <view class="skLine w80"></view>
+            </view>
+            <view class="chartEmpty" wx:elif="{{!days.length}}">近 7 日还没有记录，记上第一笔，趋势就画出来了。</view>
+            <block wx:else>
+                <view class="chart">
+                    <view class="col" wx:for="{{days}}" wx:key="dateKey">
+                        <view class="colBox">
+                            <text class="colVal">{{item.total}}</text>
+                            <view class="colBar {{item.tone}}" style="height:{{item.barHeight}}rpx;"></view>
+                        </view>
+                        <text class="colLabel {{item.isToday ? 'today' : ''}}">{{item.dayLabel}}</text>
                     </view>
-                    <text class="colLabel {{item.isToday ? 'today' : ''}}">{{item.dayLabel}}</text>
                 </view>
-            </view>
-            <view class="legend">
-                <view class="lgItem"><view class="lgSwatch good"></view><text class="lgText">达标</text></view>
-                <view class="lgItem"><view class="lgSwatch steady"></view><text class="lgText">接近</text></view>
-                <view class="lgItem"><view class="lgSwatch low"></view><text class="lgText">偏低</text></view>
-            </view>
+                <view class="legend">
+                    <view class="lgItem"><view class="lgSwatch good"></view><text class="lgText">达标</text></view>
+                    <view class="lgItem"><view class="lgSwatch steady"></view><text class="lgText">接近</text></view>
+                    <view class="lgItem"><view class="lgSwatch low"></view><text class="lgText">偏低</text></view>
+                </view>
+            </block>
         </view>
 
         <view class="sec">
@@ -71,7 +79,13 @@
                 <text class="secTitle">逐日明细</text>
                 <text class="secMeta">单位 ml</text>
             </view>
-            <view class="table">
+            <view class="skeleton" wx:if="{{loading}}">
+                <view class="skLine w80"></view>
+                <view class="skLine w90"></view>
+                <view class="skLine w70"></view>
+            </view>
+            <view class="chartEmpty" wx:elif="{{!days.length}}">本周水账还是空白，记录饮水后会逐日入账。</view>
+            <view class="table" wx:else>
                 <view class="tRow tHead">
                     <text class="tCell date">日期</text>
                     <text class="tCell num">饮水</text>

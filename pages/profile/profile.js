@@ -258,6 +258,7 @@ Page({
   },
   manualBind: function manualBind() {
     var _this3 = this;
+    if (this.data.bindingBusy) return;
     var token = this.data.bindCodeInput;
     if (!token) {
       wx.showToast({

@@ -94,15 +94,13 @@
     color: #102a43;
 }
 
+/* 描述文字允许换行，窄屏长句（如蓝牙未开启提示）不被截断 */
 .rowDesc {
     display: block;
     margin-top: 4rpx;
     font-size: 22rpx;
     line-height: 1.4;
     color: #5a6b7b;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 /* 状态读数：纯文字，绿色=就绪、琥珀=缺项 */

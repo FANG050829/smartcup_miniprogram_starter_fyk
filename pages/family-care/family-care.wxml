@@ -1,11 +1,11 @@
 <view class="page">
     <scroll-view class="pageScroll" scrollY="true">
-        <view class="head enter enter-d1">
+        <view class="head fx fx-d1">
             <text class="headTitle">家庭关怀</text>
             <text class="headSub">{{nickName?nickName+' 的饮水主页':'设置昵称后即可开启家庭关怀'}}</text>
         </view>
 
-        <view class="section enter enter-d2">
+        <view class="section fx fx-d2">
             <text class="secLabel">昵称</text>
             <view class="panel pad">
                 <view class="inputRow">
@@ -17,7 +17,7 @@
             </view>
         </view>
 
-        <view class="section enter enter-d3" wx:if="{{bindCode}}">
+        <view class="section fx fx-d3" wx:if="{{bindCode}}">
             <view class="secTitleRow">
                 <text class="secLabel">我的绑定码</text>
                 <text class="secNote">{{deviceName || '我的水杯'}}</text>
@@ -40,25 +40,25 @@
             </view>
         </view>
 
-        <view class="section enter enter-d3" wx:elif="{{!loading && !hasCup}}">
+        <view class="section fx fx-d3" wx:elif="{{!loading && !hasCup}}">
             <text class="secLabel">开始使用</text>
             <view class="panel pad">
                 <text class="panelText">还没有绑定水杯</text>
-                <text class="panelSub">家庭关怀以杯子为单位：先添加你的水杯，家人才能看到它的饮水数据</text>
+                <text class="panelSub">家庭关怀以水杯为单位：先添加你的水杯，家人才能看到它的饮水数据</text>
                 <view bindtap="goDevice" class="btn ghost" hoverClass="press" hoverStayTime="60" aria-role="button" aria-label="去添加水杯">
                     <text class="btnGhostText">去添加水杯</text>
                 </view>
             </view>
         </view>
 
-        <view class="section enter enter-d3" wx:elif="{{!loading}}">
+        <view class="section fx fx-d3" wx:elif="{{!loading}}">
             <text class="secLabel">我的绑定码</text>
             <view class="panel pad">
                 <text class="panelText">保存昵称后将自动生成绑定码</text>
             </view>
         </view>
 
-        <view class="section enter enter-d4">
+        <view class="section fx fx-d4">
             <view class="secTitleRow">
                 <text class="secLabel">我的饮水状态</text>
                 <text class="secNote">同步给关怀你的家人</text>
@@ -87,7 +87,7 @@
             </view>
         </view>
 
-        <view class="section enter enter-d5">
+        <view class="section fx fx-d5">
             <view class="secTitleRow">
                 <text class="secLabel">绑定家人</text>
                 <text class="secNote">输入家人的绑定码</text>
@@ -101,7 +101,7 @@
             </view>
         </view>
 
-        <view class="section enter enter-d6">
+        <view class="section fx fx-d6">
             <view class="secTitleRow">
                 <text class="secLabel">我关怀的家人</text>
                 <text class="secNote" wx:if="{{careTargets.length}}">共 {{careTargets.length}} 人</text>
@@ -146,7 +146,7 @@
             </view>
         </view>
 
-        <view class="section enter enter-d7" wx:if="{{careViewers.length}}">
+        <view class="section fx fx-d7" wx:if="{{careViewers.length}}">
             <view class="secTitleRow">
                 <text class="secLabel">关怀我的家人</text>
                 <text class="secNote">可随时停止分享</text>
@@ -165,6 +165,6 @@
             </view>
         </view>
 
-        <text class="foot enter enter-d7">家庭关怀数据通过云函数加密存储，仅互相关注的家人可见。</text>
+        <text class="foot fx fx-d7">家庭关怀数据通过云函数加密存储，仅互相关注的家人可见。</text>
     </scroll-view>
 </view>

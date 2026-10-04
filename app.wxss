@@ -1,7 +1,8 @@
 page {
     --bg: #F7F9FA;
     --fg: #1a1a1a;
-    --muted: rgba(26, 26, 26, 0.56);
+    /* 次级文字：白底 4.9:1、浅灰底 ≥4.6:1，均过 4.5:1 底线 */
+    --muted: rgba(26, 26, 26, 0.62);
     --card: rgba(255, 255, 255, 0.86);
     --card2: rgba(255, 255, 255, 0.94);
     --line: rgba(0, 0, 0, 0.06);
@@ -9,9 +10,17 @@ page {
     --r: 18px;
     --accent: #8fbfff;
     --accent2: #5a90eb;
+    /* 主行动色全局唯一：teal。deep 只作按压/强对比态，soft 只作浅底填充 */
+    --teal: #0f8ea8;
+    --teal-deep: #1f6e8c;
+    --teal-soft: #7fbed8;
+    /* 语义三色：填充用 ok/warn/bad；作正文文字时必须用 *-ink（浅底可读档） */
     --ok: #22c55e;
     --warn: #f59e0b;
     --bad: #ef4444;
+    --ok-ink: #15803d;
+    --warn-ink: #b45309;
+    --bad-ink: #b91c1c;
     background: var(--bg);
     color: var(--fg);
     /* 关闭所有元素的 WebView 默认点按高亮（否则点按处出现方形色块） */
@@ -75,6 +84,20 @@ wx-button::after {
 .page.fx-out .fx {
     animation-name: moduleFadeOut;
     animation-duration: 260ms;
+}
+
+/* 非 tab 页（诊断/数据/水质百科等）没有 pageAnim 触发，入场错峰作为默认行为；
+   tab 页由 onShow/onHide 写入 fx-on/fx-on2/fx-out，本规则随即不再命中、由上面接管 */
+.page:not(.fx-on):not(.fx-on2):not(.fx-out) .fx {
+    animation-name: moduleFadeIn;
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    animation-fill-mode: both;
+}
+
+.page:not(.fx-on):not(.fx-on2):not(.fx-out) .ballWrap {
+    animation: ballFuseIn 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: inherit;
 }
 
 .fx-d1 { animation-delay: 0ms !important; }
@@ -189,13 +212,16 @@ wx-button::after {
 
 @media (prefers-reduced-motion: reduce) {
     .page,
+    .page .fx,
+    .page .ballWrap,
     .page.fx-on .fx,
     .page.fx-on2 .fx,
     .page.fx-out .fx,
     .page.fx-on .ballWrap,
     .page.fx-on2 .ballWrap,
     .page.fx-out .ballWrap {
-        animation: none;
+        /* !important 压过上面的高特异性默认入场规则 */
+        animation: none !important;
         will-change: auto;
     }
 }

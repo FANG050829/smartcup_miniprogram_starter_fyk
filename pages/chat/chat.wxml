@@ -16,7 +16,7 @@
         </view>
     </view>
     <view bindtap="closeHistory" class="history-mask" wx:if="{{historyOpen}}"></view>
-    <view class="history-panel" wx:if="{{historyOpen}}">
+    <view class="history-panel card" wx:if="{{historyOpen}}">
         <view bindtap="openHistory" class="history-item" data-id="current" hoverClass="item-hover">
             <view class="history-info">
                 <text class="history-title">今日对话</text>

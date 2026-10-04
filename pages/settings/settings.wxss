@@ -2,7 +2,7 @@ page {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     color: #111111;
-    background: #FFFFFF;
+    background: var(--bg);
     letter-spacing: 0.5rpx;
     font-variant-numeric: tabular-nums;
 }
@@ -11,7 +11,7 @@ page {
     min-height: 100vh;
     box-sizing: border-box;
     padding: 56rpx 32rpx calc(env(safe-area-inset-bottom) + 32rpx);
-    background: #FFFFFF;
+    background: var(--bg);
 }
 
 .header {
@@ -70,16 +70,10 @@ page {
     transform: scale(0.9);
 }
 
+/* 卡片壳交给全局 .card（var(--card)/var(--line)/var(--r)/var(--shadow)），这里只留页内布局 */
 .card {
     margin: 0 0 32rpx;
     padding: 36rpx 32rpx;
-    background: #FFFFFF;
-    border-radius: 44rpx;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 24rpx 68rpx rgba(13, 70, 92, 0.12),
-    0 12rpx 32rpx rgba(13, 70, 92, 0.08),
-    0 4rpx 12rpx rgba(13, 70, 92, 0.04),
-    inset 0 1rpx 0 rgba(255, 255, 255, 0.96);
     box-sizing: border-box;
 }
 

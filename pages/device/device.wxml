@@ -18,7 +18,7 @@
             <view class="hero-icon {{scanning||connecting?'icon-bluetooth':'icon-cup'}}"></view>
         </view>
         <text class="hero-title">{{connecting?'正在连接设备':scanning?'正在寻找水杯':'连接你的智能水杯'}}</text>
-        <text class="hero-desc">{{connecting?'请保持手机与设备靠近':scanning?devices.length?'已发现 '+devices.length+' 个设备':'请确保设备已开启并靠近手机':'开启蓝牙，体验智能饮水生活'}}</text>
+        <text class="hero-desc">{{connecting?'请保持手机与设备靠近':scanning?devices.length?'已发现 '+devices.length+' 个设备':'请确保设备已开启并靠近手机':'开启蓝牙，搜索附近的水杯'}}</text>
         <view class="action-area" wx:if="{{!connecting}}">
             <view bindtap="{{scanning?'stopScan':'startScan'}}" class="btn-primary" hoverClass="btn-hover">{{scanning?'停止扫描':'开始扫描'}}</view>
         </view>
@@ -63,7 +63,7 @@
         <block wx:if="{{pairedDevices.length}}">
             <text class="section-title">我的设备</text>
             <view class="device-list">
-                <view bindtap="connectPaired" class="device-card" data-id="{{item.id}}" data-name="{{item.name}}" hoverClass="card-hover" wx:for="{{pairedDevices}}" wx:key="id">
+                <view bindtap="connectPaired" class="device-card card" data-id="{{item.id}}" data-name="{{item.name}}" hoverClass="card-hover" wx:for="{{pairedDevices}}" wx:key="id">
                     <view class="device-card-icon icon-cup"></view>
                     <view class="device-card-info">
                         <text class="device-name">{{item.name||'SmartCup'}}</text>
@@ -76,7 +76,7 @@
         <block wx:if="{{devices.length}}">
             <text class="section-title mt-32">发现的设备</text>
             <view class="device-list">
-                <view bindtap="connect" class="device-card" data-id="{{item.deviceId}}" data-name="{{item.name||item.localName}}" hoverClass="card-hover" wx:for="{{devices}}" wx:key="deviceId">
+                <view bindtap="connect" class="device-card card" data-id="{{item.deviceId}}" data-name="{{item.name||item.localName}}" hoverClass="card-hover" wx:for="{{devices}}" wx:key="deviceId">
                     <view class="device-card-icon icon-bluetooth new"></view>
                     <view class="device-card-info">
                         <text class="device-name">{{item.name||item.localName||'未知设备'}}</text>

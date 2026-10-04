@@ -19,155 +19,13 @@
     height: 520rpx;
     top: -220rpx;
     right: -180rpx;
-    background: radial-gradient(circle at 35% 35%, rgba(61, 205, 221, 0.24), rgba(61, 205, 221, 0));
-}
-
-.b2 {
-    width: 680rpx;
-    height: 680rpx;
-    bottom: -360rpx;
-    left: -280rpx;
-    background: radial-gradient(circle at 68% 30%, rgba(16, 142, 171, 0.12), rgba(16, 142, 171, 0));
-}
-
-.b3 {
-    width: 420rpx;
-    height: 420rpx;
-    top: 220rpx;
-    left: 520rpx;
-    background: radial-gradient(circle at 45% 42%, rgba(63, 207, 224, 0.14), rgba(63, 207, 224, 0));
-    opacity: 0.75;
-}
-
-.card {
-    position: relative;
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.84);
-    border: 1px solid rgba(255, 255, 255, 0.95);
-    border-radius: 28rpx;
-    box-shadow: 0 24rpx 68rpx rgba(13, 70, 92, 0.10), 0 10rpx 24rpx rgba(13, 70, 92, 0.05), inset 0 1rpx 0 rgba(255, 255, 255, 0.96);
-    margin-bottom: 20rpx;
-}
-
-.heroCard {
-    padding: 24rpx;
-}
-
-.heroHead {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.heroTitle {
-    font-size: 38rpx;
-    font-weight: 800;
-    color: #111111;
-}
-
-.heroSub {
-    display: block;
-    margin-top: 8rpx;
-    font-size: 24rpx;
-    color: rgba(17, 17, 17, 0.52);
-}
-
-.goalChip {
-    min-width: 180rpx;
-    height: 62rpx;
-    border-radius: 999rpx;
-    padding: 0 22rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24rpx;
-    font-weight: 700;
-    color: #2f5f95;
-    background: rgba(140, 188, 255, 0.26);
-    border: 1px solid rgba(140, 188, 255, 0.45);
-}
-
-.heroBody {
-    margin-top: 22rpx;
-}
-
-.heroMain {
-    display: flex;
-    align-items: baseline;
-}
-
-.heroValue {
-    font-size: 96rpx;
-    line-height: 1;
-    font-weight: 800;
-    color: #111111;
-}
-
-.heroUnit {
-    margin-left: 10rpx;
-    font-size: 32rpx;
-    color: rgba(17, 17, 17, 0.6);
-}
-
-.heroHint {
-    display: block;
-    margin-top: 8rpx;
-    margin-bottom: 14rpx;
-    font-size: 23rpx;
-    color: rgba(17, 17, 17, 0.56);
-}
-
-.progressTrack {
-    position: relative;
-    height: 18rpx;
-    border-radius: 999rpx;
-    overflow: hidden;
-    background: rgba(17, 17, 17, 0.08);
-}
-
-.progressFill {
-    height: 100%;
-    border-radius: 999rpx;
-    background: linear-gradient(90deg, #92c3ff 0%, #6ea4f6 55%, #c9ddff 100%);
-}
-
-.progressText {
-    margin-top: 10rpx;
-    font-size: 23rpx;
-    color: rgba(17, 17, 17, 0.55);
-}
-
-.statsRow {
-    margin-top: 18rpx;
-    display: flex;
-    justify-content: space-between;
-    gap: 12rpx;
-}
-
-.statItem {
-    flex: 1;
-    min-width: 0;
-    border-radius: 20rpx;
-    padding: 14rpx 16rpx;
-    background: rgba(255, 255, 255, 0.76);
-    border: 1px solid rgba(255, 255, 255, 0.95);
-}
-
-.statLabel {
-    display: block;
-    font-size: 22rpx;
-    color: rgba(17, 17, 17, 0.5);
-}
-
-.statValue {
-    display: block;
-    margin-top: 8rpx;
-    font-size: 30rpx;
-    font-weight: 800;
-    color: rgba(17, 17, 17, 0.86);
+    background: radial-gradient(circle at 35% 35%, rgba(15, 142, 168, 0.14), rgba(15, 142, 168, 0));
 }
 
 .sectionCard {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20rpx;
     padding: 20rpx;
 }
 
@@ -196,7 +54,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 23rpx;
+    font-size: 24rpx;
     color: rgba(17, 17, 17, 0.65);
     background: rgba(17, 17, 17, 0.08);
 }
@@ -205,7 +63,7 @@
     margin-top: 16rpx;
     border-radius: 20rpx;
     padding: 24rpx 20rpx;
-    font-size: 25rpx;
+    font-size: 24rpx;
     color: rgba(17, 17, 17, 0.5);
     background: rgba(255, 255, 255, 0.72);
 }
@@ -305,7 +163,7 @@
 
 .trendLabel {
     margin-top: 4rpx;
-    font-size: 21rpx;
+    font-size: 22rpx;
     color: rgba(17, 17, 17, 0.48);
 }
 
@@ -540,7 +398,7 @@
 
 .dayMl {
     margin-top: 4rpx;
-    font-size: 19rpx;
+    font-size: 20rpx;
     color: rgba(17, 17, 17, 0.52);
 }
 
@@ -573,10 +431,5 @@
         max-width: 720px;
         margin-left: auto;
         margin-right: auto;
-    }
-
-    /* 展示型大字号 px 上限 */
-    .heroValue {
-        font-size: 64px;
     }
 }

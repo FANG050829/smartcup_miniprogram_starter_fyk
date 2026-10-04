@@ -1,4 +1,23 @@
 .page {
+    /* 个性页墨/纸体系：本页是「白底黑球杂志」页，墨(#17242B 系)/纸白(#FAF7F1 系)
+     * 自成一体，仅页内引用、不并入全局 token；数值与收敛前完全一致 */
+    --ink: #17242B;
+    --paper: #FAF7F1;
+    --ink-045: rgba(23, 36, 43, 0.045);
+    --ink-08: rgba(23, 36, 43, 0.08);
+    --ink-10: rgba(23, 36, 43, 0.1);
+    --ink-14: rgba(23, 36, 43, 0.14);
+    --ink-16: rgba(23, 36, 43, 0.16);
+    --ink-22: rgba(23, 36, 43, 0.22);
+    --ink-28: rgba(23, 36, 43, 0.28);
+    --ink-30: rgba(23, 36, 43, 0.3);
+    --ink-50: rgba(23, 36, 43, 0.5);
+    --ink-55: rgba(23, 36, 43, 0.55);
+    --ink-60: rgba(23, 36, 43, 0.6);
+    --ink-62: rgba(23, 36, 43, 0.62);
+    --ink-66: rgba(23, 36, 43, 0.66);
+    /* planet 五官的 em 缩放基准：球体 82rpx = 8em，五官按 em 相对缩放 */
+    --planet-unit: 10.25rpx;
     height: 100vh;
     box-sizing: border-box;
     display: flex;
@@ -6,7 +25,7 @@
     overflow: hidden;
     position: relative;
     background: #FFFFFF;
-    color: #17242B;
+    color: var(--ink);
 }
 
 /* 进场可见性兜底：内容默认即可见，进场动画由纯 CSS 完成（fadeIn 配 both
@@ -34,7 +53,7 @@
 }
 
 .page.is-enter .groups {
-    animation: popIn 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation: popIn 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 .page.is-enter .foot {
@@ -111,7 +130,7 @@
     font-weight: 900;
     line-height: 1;
     letter-spacing: -6rpx;
-    color: rgba(23, 36, 43, 0.045);
+    color: var(--ink-045);
     pointer-events: none;
     font-variant-numeric: tabular-nums;
     z-index: 0;
@@ -127,12 +146,6 @@
     padding-top: 16rpx;
 }
 
-.headTitle {
-    font-size: 30rpx;
-    font-weight: 800;
-    letter-spacing: 4rpx;
-}
-
 /* ---------- 角色切换（身体形态） ---------- */
 .charRow {
     display: flex;
@@ -140,28 +153,29 @@
     gap: 8rpx;
 }
 
+/* 胶囊细边用 1px 而非 rpx：跨屏密（宽窗 rpx 放大）下保持发丝级清晰，charChip/tour 同 */
 .charChip {
     padding: 10rpx 22rpx;
     border-radius: 999rpx;
-    border: 1px solid rgba(23, 36, 43, 0.14);
+    border: 1px solid var(--ink-14);
     transition: background-color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1),
         border-color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
 }
 
 .charChip text {
-    font-size: 23rpx;
+    font-size: 22rpx;
     font-weight: 700;
-    color: rgba(23, 36, 43, 0.55);
+    color: var(--ink-55);
     transition: color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
 }
 
 .charChip.on {
-    background: #17242B;
-    border-color: #17242B;
+    background: var(--ink);
+    border-color: var(--ink);
 }
 
 .charChip.on text {
-    color: #FAF7F1;
+    color: var(--paper);
 }
 
 .tour {
@@ -170,35 +184,34 @@
     gap: 10rpx;
     padding: 10rpx 22rpx;
     border-radius: 999rpx;
-    border: 1px solid rgba(23, 36, 43, 0.16);
+    border: 1px solid var(--ink-16);
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .tour text {
-    font-size: 21rpx;
+    font-size: 22rpx;
     font-weight: 700;
-    color: rgba(23, 36, 43, 0.66);
+    color: var(--ink-66);
 }
 
 .tourDot {
     width: 11rpx;
     height: 11rpx;
     border-radius: 50%;
-    background: rgba(23, 36, 43, 0.3);
+    background: var(--ink-30);
 }
 
 .tour.on {
-    background: #17242B;
-    border-color: #17242B;
+    background: var(--ink);
+    border-color: var(--ink);
 }
 
 .tour.on text {
-    color: #FAF7F1;
+    color: var(--paper);
 }
 
 .tour.on .tourDot {
     background: #35c4d8;
-    box-shadow: 0 0 12rpx rgba(53, 196, 216, 0.8);
     animation: blinkDot 1s ease-in-out infinite;
 }
 
@@ -280,7 +293,7 @@
     height: 44rpx;
     margin: -30rpx auto 0;
     border-radius: 50%;
-    background: radial-gradient(ellipse at center, rgba(23, 36, 43, 0.16), transparent 68%);
+    background: radial-gradient(ellipse at center, var(--ink-16), transparent 68%);
     transition: opacity 0.28s ease;
 }
 
@@ -302,7 +315,7 @@
     line-height: 1.05;
     font-weight: 900;
     letter-spacing: -1rpx;
-    color: #17242B;
+    color: var(--ink);
 }
 
 .aboutHead {
@@ -314,8 +327,8 @@
 .foldArrow {
     width: 18rpx;
     height: 18rpx;
-    border-right: 3rpx solid rgba(23, 36, 43, 0.5);
-    border-bottom: 3rpx solid rgba(23, 36, 43, 0.5);
+    border-right: 3rpx solid var(--ink-50);
+    border-bottom: 3rpx solid var(--ink-50);
     transform: rotate(45deg);
     transition: transform 0.2s ease;
     margin-right: 10rpx;
@@ -337,27 +350,27 @@
     font-size: 22rpx;
     font-weight: 800;
     letter-spacing: 2rpx;
-    color: #0f8ea8;
+    color: var(--teal);
 }
 
 .metaDot {
     width: 7rpx;
     height: 7rpx;
     border-radius: 50%;
-    background: rgba(23, 36, 43, 0.28);
+    background: var(--ink-28);
 }
 
 .aboutGroup {
     font-size: 22rpx;
-    color: rgba(23, 36, 43, 0.55);
+    color: var(--ink-55);
 }
 
 .aboutDesc {
     display: block;
     margin-top: 16rpx;
-    font-size: 24rpx;
+    font-size: 22rpx;
     line-height: 1.65;
-    color: rgba(23, 36, 43, 0.62);
+    color: var(--ink-62);
     max-width: 560rpx;
 }
 
@@ -375,7 +388,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #17242B;
+    background: var(--ink);
     transition: transform 0.18s ease, opacity 0.18s ease;
 }
 
@@ -388,20 +401,20 @@
     width: 26rpx;
     height: 26rpx;
     border-radius: 50%;
-    border: 5rpx solid #FAF7F1;
+    border: 5rpx solid var(--paper);
     border-left-color: transparent;
 }
 
 .burstGlyph {
     font-size: 30rpx;
-    color: #FAF7F1;
+    color: var(--paper);
     line-height: 1;
 }
 
 .actionsHint {
     margin-left: 6rpx;
-    font-size: 19rpx;
-    color: rgba(23, 36, 43, 0.38);
+    font-size: 22rpx;
+    color: var(--ink-60);
     letter-spacing: 0.5rpx;
 }
 
@@ -467,7 +480,7 @@
     gap: 10rpx;
     margin-top: 52rpx;
     padding-top: 34rpx;
-    border-top: 2rpx solid rgba(23, 36, 43, 0.08);
+    border-top: 2rpx solid var(--ink-08);
 }
 
 .gChip {
@@ -477,18 +490,18 @@
 }
 
 .gChip text {
-    font-size: 24rpx;
+    font-size: 22rpx;
     font-weight: 700;
-    color: rgba(23, 36, 43, 0.55);
+    color: var(--ink-55);
     transition: color 0.2s cubic-bezier(0.22, 0.9, 0.32, 1);
 }
 
 .gChip.on {
-    background: #17242B;
+    background: var(--ink);
 }
 
 .gChip.on text {
-    color: #FAF7F1;
+    color: var(--paper);
 }
 
 /* ---------- 球阵（无卡片，颜色来自内容） ---------- */
@@ -525,11 +538,7 @@
 .pickImg {
     width: 100rpx;
     height: 100rpx;
-    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.cell.sel .pickImg {
-    transform: scale(1.18);
+    transition: transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .planet {
@@ -537,14 +546,15 @@
     width: 82rpx;
     height: 82rpx;
     border-radius: 50%;
-    font-size: 10.25rpx;
+    /* em 缩放基准：五官(eye/mouth 等)全按 em 相对球体缩放，改这一个值即整体缩放 */
+    font-size: var(--planet-unit);
     background: #FFFFFF;
-    border: 2rpx solid rgba(23, 36, 43, 0.10);
+    border: 2rpx solid var(--ink-10);
     box-shadow:
-        inset -6rpx -10rpx 18rpx rgba(23, 36, 43, 0.10),
+        inset -6rpx -10rpx 18rpx var(--ink-10),
         inset 6rpx 8rpx 16rpx rgba(255, 255, 255, 0.9),
-        0 12rpx 24rpx rgba(23, 36, 43, 0.10);
-    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+        0 12rpx 24rpx var(--ink-10);
+    transition: transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.22s ease;
 }
 
 /* ---------- 静态五官预览（em 相对球体缩放） ---------- */
@@ -798,7 +808,7 @@
 .planet.sel {
     transform: scale(1.22);
     box-shadow:
-        inset -6rpx -10rpx 18rpx rgba(23, 36, 43, 0.10),
+        inset -6rpx -10rpx 18rpx var(--ink-10),
         0 0 0 7rpx rgba(15, 142, 168, 0.22),
         0 18rpx 40rpx rgba(15, 142, 168, 0.22);
 }
@@ -806,7 +816,7 @@
 .pickName {
     font-size: 20rpx;
     font-weight: 600;
-    color: rgba(23, 36, 43, 0.6);
+    color: var(--ink-60);
     max-width: 140rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -820,17 +830,17 @@
 }
 
 .pick.sel .pickName {
-    color: #0f8ea8;
+    color: var(--teal);
 }
 
 .pickDot {
     width: 10rpx;
     height: 10rpx;
     border-radius: 50%;
-    background: #0f8ea8;
+    background: var(--teal);
     opacity: 0;
     transform: scale(0.3);
-    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .pick.sel .pickDot {
@@ -872,14 +882,15 @@
     }
 }
 
+/* 开发者注脚（表情引擎署名）：刻意弱化为辅助档小字、最淡墨色，不与内容抢视线 */
 .foot {
     margin-top: 40rpx;
     text-align: center;
 }
 
 .foot text {
-    font-size: 18rpx;
-    color: rgba(23, 36, 43, 0.3);
+    font-size: 20rpx;
+    color: var(--ink-22);
     letter-spacing: 0.5rpx;
 }
 

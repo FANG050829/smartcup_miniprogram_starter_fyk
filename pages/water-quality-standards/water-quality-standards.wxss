@@ -4,7 +4,7 @@
     min-height: 100vh;
     box-sizing: border-box;
     padding: 40rpx 32rpx calc(env(safe-area-inset-bottom) + 40rpx);
-    background: #f7f9fa;
+    background: var(--bg);
     font-variant-numeric: tabular-nums;
 }
 
@@ -17,7 +17,7 @@
     font-size: 44rpx;
     line-height: 1.25;
     font-weight: 800;
-    color: #102a43;
+    color: var(--fg);
 }
 
 .headSub {
@@ -25,7 +25,7 @@
     margin-top: 8rpx;
     font-size: 22rpx;
     line-height: 1.5;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 .section {
@@ -38,7 +38,7 @@
     font-size: 22rpx;
     font-weight: 700;
     letter-spacing: 2rpx;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 .secTitleRow {
@@ -74,7 +74,7 @@
     font-size: 72rpx;
     line-height: 1.1;
     font-weight: 800;
-    color: #102a43;
+    color: var(--fg);
     font-variant-numeric: tabular-nums;
 }
 
@@ -83,7 +83,7 @@
     margin-top: 12rpx;
     font-size: 22rpx;
     line-height: 1.6;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 /* 区间条形图 */
@@ -107,7 +107,7 @@
     width: 160rpx;
     font-size: 22rpx;
     font-weight: 600;
-    color: #102a43;
+    color: var(--fg);
     font-variant-numeric: tabular-nums;
 }
 
@@ -125,9 +125,9 @@
 }
 
 .barFill.info { background: #0e7490; }
-.barFill.good { background: #15803d; }
-.barFill.warn { background: #b45309; }
-.barFill.bad { background: #b91c1c; }
+.barFill.good { background: var(--ok); }
+.barFill.warn { background: var(--warn); }
+.barFill.bad { background: var(--bad); }
 
 .barDesc {
     flex-shrink: 0;
@@ -168,16 +168,16 @@
 }
 
 .rowDot.tone0 { background: #0e7490; }
-.rowDot.tone1 { background: #15803d; }
-.rowDot.tone2 { background: #b45309; }
-.rowDot.tone3 { background: #b91c1c; }
+.rowDot.tone1 { background: var(--ok); }
+.rowDot.tone2 { background: var(--warn); }
+.rowDot.tone3 { background: var(--bad); }
 
 .rowRange {
     flex-shrink: 0;
     width: 190rpx;
     font-size: 24rpx;
     font-weight: 600;
-    color: #102a43;
+    color: var(--fg);
     line-height: 1.5;
     font-variant-numeric: tabular-nums;
 }
@@ -191,7 +191,7 @@
     display: block;
     font-size: 24rpx;
     font-weight: 600;
-    color: #102a43;
+    color: var(--fg);
     margin-bottom: 6rpx;
 }
 
@@ -199,7 +199,7 @@
     flex: 1;
     min-width: 0;
     font-size: 22rpx;
-    color: #5a6b7b;
+    color: var(--muted);
     line-height: 1.6;
 }
 

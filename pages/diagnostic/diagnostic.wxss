@@ -4,7 +4,7 @@
     min-height: 100vh;
     box-sizing: border-box;
     padding: 40rpx 32rpx calc(env(safe-area-inset-bottom) + 40rpx);
-    background: #f7f9fa;
+    background: var(--bg);
 }
 
 .head {
@@ -25,7 +25,7 @@
     font-size: 44rpx;
     line-height: 1.25;
     font-weight: 800;
-    color: #102a43;
+    color: var(--fg);
 }
 
 .headSub {
@@ -33,7 +33,7 @@
     margin-top: 8rpx;
     font-size: 22rpx;
     line-height: 1.5;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 .refreshBtn {
@@ -57,7 +57,7 @@
 .refreshText {
     font-size: 26rpx;
     font-weight: 700;
-    color: #102a43;
+    color: var(--fg);
     white-space: nowrap;
 }
 
@@ -65,7 +65,7 @@
     width: 12rpx;
     height: 12rpx;
     border-radius: 50%;
-    background: #102a43;
+    background: var(--fg);
 }
 
 .refreshDot.spin {
@@ -87,7 +87,7 @@
     font-size: 22rpx;
     font-weight: 700;
     letter-spacing: 2rpx;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 .panel {
@@ -114,13 +114,13 @@
 .sumLabel {
     font-size: 24rpx;
     font-weight: 600;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 .sumValue {
     font-size: 24rpx;
     font-weight: 700;
-    color: #102a43;
+    color: var(--fg);
     text-align: right;
 }
 
@@ -129,11 +129,11 @@
     font-weight: 700;
 }
 
-.sumState.ok { color: #15803d; }
-.sumState.fail { color: #b91c1c; }
+.sumState.ok { color: var(--ok-ink); }
+.sumState.fail { color: var(--bad-ink); }
 .sumState.checking { color: #0e7490; }
-.sumState.pending { color: #b45309; }
-.sumState.idle { color: #5a6b7b; }
+.sumState.pending { color: var(--warn-ink); }
+.sumState.idle { color: var(--muted); }
 
 /* 检测项列表 */
 .row {
@@ -156,10 +156,10 @@
     background: #b9c4ce;
 }
 
-.dot.ok { background: #16a34a; }
-.dot.fail { background: #dc2626; }
+.dot.ok { background: var(--ok); }
+.dot.fail { background: var(--bad); }
 .dot.checking { background: #0891b2; animation: blink 0.9s ease-in-out infinite; }
-.dot.pending { background: #d97706; }
+.dot.pending { background: var(--warn); }
 .dot.idle { background: #b9c4ce; }
 
 .rowBody {
@@ -178,7 +178,7 @@
     font-size: 28rpx;
     line-height: 1.3;
     font-weight: 600;
-    color: #102a43;
+    color: var(--fg);
 }
 
 .rowState {
@@ -187,24 +187,24 @@
     font-weight: 700;
 }
 
-.rowState.ok { color: #15803d; }
-.rowState.fail { color: #b91c1c; }
+.rowState.ok { color: var(--ok-ink); }
+.rowState.fail { color: var(--bad-ink); }
 .rowState.checking { color: #0e7490; }
-.rowState.pending { color: #b45309; }
-.rowState.idle { color: #5a6b7b; }
+.rowState.pending { color: var(--warn-ink); }
+.rowState.idle { color: var(--muted); }
 
 .rowDetail {
     display: block;
     margin-top: 6rpx;
     font-size: 22rpx;
     line-height: 1.55;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
-.rowDetail.ok { color: #15803d; }
-.rowDetail.fail { color: #b91c1c; }
+.rowDetail.ok { color: var(--ok-ink); }
+.rowDetail.fail { color: var(--bad-ink); }
 .rowDetail.checking { color: #0e7490; }
-.rowDetail.pending { color: #b45309; }
+.rowDetail.pending { color: var(--warn-ink); }
 
 .rowActionWrap {
     margin-top: 16rpx;
@@ -230,12 +230,12 @@
 .actionBtnText {
     font-size: 24rpx;
     font-weight: 700;
-    color: #b45309;
+    color: var(--warn-ink);
     white-space: nowrap;
 }
 
 .actionBtn.disabled .actionBtnText {
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 /* 提示 */
@@ -243,7 +243,7 @@
     padding: 22rpx 24rpx;
     background: #ffffff;
     border: 1rpx solid rgba(16, 42, 67, 0.10);
-    border-left: 6rpx solid #b45309;
+    border-left: 6rpx solid var(--warn);
     border-radius: 16rpx;
 }
 
@@ -252,14 +252,14 @@
     font-size: 22rpx;
     font-weight: 700;
     letter-spacing: 2rpx;
-    color: #b45309;
+    color: var(--warn-ink);
     margin-bottom: 8rpx;
 }
 
 .tipText {
     font-size: 22rpx;
     line-height: 1.6;
-    color: #5a6b7b;
+    color: var(--muted);
 }
 
 .press {

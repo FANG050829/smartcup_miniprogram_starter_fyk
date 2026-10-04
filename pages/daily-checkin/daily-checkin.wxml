@@ -30,7 +30,7 @@
             <text class="goalStepUnit">100ml</text>
         </view>
         <view class="goalSaveBtn {{goalSaving ? 'off' : ''}}" hoverClass="press" hoverStayTime="80" bindtap="onGoalSave" aria-role="button" aria-label="保存目标">
-            <text class="goalSaveText">{{goalSaving ? '存着…' : '存'}}</text>
+            <text class="goalSaveText">{{goalSaving ? '保存中…' : '存'}}</text>
         </view>
     </view>
     <text class="goalHint" wx:if="{{goalEditing}}">范围 {{GOAL_MIN}}–{{GOAL_MAX}}ml，步进 100ml</text>
