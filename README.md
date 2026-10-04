@@ -1,14 +1,15 @@
 <div align="center">
 
-<img src="images/weixin_cup/pet-hero.svg" width="200" alt="SmartCup 表情宠物球"/>
+<img src="images/weixin_cup/hero-banner.svg" width="100%" alt="SmartCup 主视觉：晨光浅水的水场上，表情水球悬在一条 teal 水线之上"/>
 
 # SmartCup 智能水杯小程序
 
-围绕「喝水」这一件事，提供饮水记录与提醒、饮水计划、水温 / 水量 / TDS 水质展示、心情宠物、AI 聊天助手、地图定位与家人关爱等功能。
+围绕「喝水」这一件事：饮水记录与提醒、饮水计划、水温 / 水量 / TDS 水质、心情宠物、AI 聊天助手、地图定位与家人关爱。
 
 [![platform](https://img.shields.io/badge/platform-WeChat%20Mini%20Program-07C160?logo=wechat&logoColor=white)](https://developers.weixin.qq.com/miniprogram/dev/framework/)
 [![cloud](https://img.shields.io/badge/cloud-WeChat%20CloudBase-1AAD19)](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
-[![canvas](https://img.shields.io/badge/render-Canvas%202D-2563EB)]()
+![canvas](https://img.shields.io/badge/render-Canvas%202D-2563EB)
+![license](https://img.shields.io/badge/license-仅供学习交流-lightgrey)
 
 </div>
 
@@ -16,19 +17,12 @@
 
 ## 功能一览
 
-### TabBar 导航（4 入口）
-
-| Tab | 页面 | 核心功能 |
-| --- | --- | --- |
-| 首页 | `pages/index/` | 今日饮水量、目标完成度、水温 / 水量 / TDS 水质卡片、中央表情宠物球、四宫格快捷入口 |
-| 计划 | `pages/plan/` | 饮水计划制定、喝水提醒管理（订阅消息 / 前台提醒） |
-| 心情 | `pages/mood/` | 三形态虚拟宠物（球球 / 云宝 / 亮亮）、Canvas 表情引擎 |
-| 我的 | `pages/profile/` | 个人中心、数据概览、功能入口集合 |
-
-### 全模块索引
-
 | 模块 | 页面 | 说明 |
 | --- | --- | --- |
+| **首页** | `pages/index/` | 今日饮水量、目标完成度、水温 / 水量 / TDS 水质卡片、中央表情宠物球、四宫格快捷入口 |
+| **计划** | `pages/plan/` | 饮水计划制定、喝水提醒管理（订阅消息 / 前台提醒） |
+| **心情** | `pages/mood/` | 三形态虚拟宠物（球球 / 云宝 / 亮亮）、Canvas 表情引擎 |
+| **我的** | `pages/profile/` | 个人中心、数据概览、功能入口集合 |
 | 启动 | `pages/launch/` | 加载动画 → 自动跳转首页 |
 | 数据统计 | `pages/data/` | 饮水历史图表、趋势统计 |
 | 设备连接 | `pages/device/` | BLE 扫描 / 连接水杯，读取水量 / 水温 / TDS |
@@ -43,6 +37,8 @@
 | 权限管理 | `pages/permission/` | 蓝牙 / 定位 / 通知权限统一管理 |
 | 设置 | `pages/settings/` | 全局设置与诊断入口 |
 
+<sub>加粗四项为底部 Tab；其余页面由首页宫格、「我的」页与各功能入口进入。</sub>
+
 ### 模块说明
 
 - **首页**：水质检测与温度卡片实时展示 TDS 与水温；设备 / 定位 / 智聊 / 加热四宫格快捷入口环绕中央表情宠物球；下方「自动饮水记录」卡片汇总今日饮水量、当前杯中水量、目标完成度、剩余量、连续达标天数与今日打卡次数，核心数据一屏尽览。
@@ -55,8 +51,6 @@
 
 ## 界面预览
 
-> 需要特别说明的是，当前所展示的界面仅为系统中的部分代表性界面示例，并非系统包含的全部界面内容。
-
 <div align="center">
 
 <table>
@@ -67,7 +61,7 @@
     </tr>
     <tr>
         <td><a href="images/weixin_cup/home_page_image.png"><img src="images/weixin_cup/home_page_image.png" width="252" alt="首页"/></a></td>
-        <td><a href="images/weixin_cup/paln_image.png"><img src="images/weixin_cup/paln_image.png" width="252" alt="计划"/></a></td>
+        <td><a href="images/weixin_cup/plan_image.png"><img src="images/weixin_cup/plan_image.png" width="252" alt="计划"/></a></td>
         <td><a href="images/weixin_cup/expression_image.png"><img src="images/weixin_cup/expression_image.png" width="252" alt="心情"/></a></td>
     </tr>
     <tr>
@@ -82,7 +76,7 @@
     </tr>
 </table>
 
-<sub>点击任意截图可在新页面查看原图</sub>
+<sub>以上为部分代表性界面，并非全部页面 · 点击任意截图可查看原图</sub>
 
 </div>
 
@@ -95,36 +89,11 @@
 
 ## 架构总览
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         微信小程序客户端                          │
-│                                                                 │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────────────┐ │
-│  │  pages/  │  │components│  │custom-tab │  │    utils/      │ │
-│  │  17 页面 │  │pet-ball  │  │  -bar     │  │ emotion·mates  │ │
-│  └─────┬────┘  └─────┬────┘  └─────┬────┘  │ ble·llm·remind │ │
-│        │              │              │       │ drinkData·log  │ │
-│        └──────────┬──┴──────────────┘       └──────┬─────────┘ │
-│                   │                                 │           │
-│  ┌────────────────┴─────────────────────────────────┴────────┐ │
-│  │                    app.js / app.json                        │ │
-│  │           云环境初始化 · 全局状态 · 提醒调度                │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│         │                      │                      │         │
-│         ▼                      ▼                      ▼         │
-│  ┌──────────┐          ┌──────────┐          ┌──────────┐       │
-│  │ wx.ble   │          │ wx.cloud │          │ wx.llm    │       │
-│  │ BLE 协议 │          │ 云开发   │          │ 不可直连 │       │
-│  └────┬─────┘          └────┬─────┘          └────┬─────┘       │
-└───────┼──────────────────────┼─────────────────────┼───────────┘
-        │                      │                     │
-        ▼                      ▼                     ▼
-┌──────────────┐     ┌───────────────────┐    ┌──────────────┐
-│ 智能水杯 BLE │     │   微信云开发      │    │ LLM API      │
-│ FFF0/FFF1/   │     │ 7 个云函数        │    │ (DeepSeek)   │
-│ FFF2/FFF3    │     │ CloudDB + Storage │    │              │
-└──────────────┘     └───────────────────┘    └──────────────┘
-```
+<div align="center">
+
+<img src="images/weixin_cup/architecture.svg" width="100%" alt="架构总览：小程序客户端经 BLE、云开发与 LLM 代理三条链路连接水杯硬件与云端服务"/>
+
+</div>
 
 ### 表情引擎（`utils/emotion`）
 
@@ -229,14 +198,6 @@
      envId: "cloud1-xxxxx"  // 留空则使用开发者工具当前选择的云环境
    }
    ```
-
-4. 如需使用 npm 依赖，在项目根目录执行：
-
-   ```bash
-   npm install
-   ```
-
-   然后在微信开发者工具中执行「工具 → 构建 npm」。
 
 ### 3. 部署云函数
 
